@@ -1,0 +1,47 @@
+/* เรียกใช้ฟอนต์ Inter เป็นค่าเริ่มต้น */
+* {
+  font-family: "Inter", Helvetica, Arial, sans-serif;
+}
+
+/* กำหนดขนาดฟอนต์เฉพาะ h1, h2 */
+h1 {
+  font-size: 15px;
+}
+
+h2 {
+  font-size: 14px;
+}
+
+/* class สำหรับฟอนต์ขนาด 14px */
+.fs-14 {
+  font-size: 14px !important;
+}
+
+/* จัดการเมนูให้ชิดซ้าย และอยู่ตรงกลางแนวตั้ง */
+.menu-list {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+
+/* กล่องเมนูแบบมี transition สวยงาม */
+.menu-item-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+  width: 170px;
+  border-radius: 0.75rem;
+  transition: box-shadow 0.2s, background 0.2s;
+  background: transparent;
+  cursor: pointer; /* แนะนำเพิ่ม cursor pointer */
+}
+
+/* hover, focus style กล่องเมนู */
+.menu-item-wrapper:hover,
+.menu-item-wrapper:focus-within {
+  background: #a30619;
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.28);
+}

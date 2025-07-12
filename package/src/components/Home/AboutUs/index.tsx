@@ -16,9 +16,9 @@ const Aboutus = () => {
             alt="dots-image"
             className="absolute bottom-1 -left-20"
           />
-          <p className="text-center text-primary text-18 tracking-widest uppercase mt-10">
-            about us
-          </p>
+          {/* <p className="text-center text-primary text-18 tracking-widest uppercase mt-10">
+            เกี่ยวกับเรา
+          </p> */}
           <h4 className="text-center text-4xl lg:text-65 font-bold pb-12">
             Know more about us.
           </h4>

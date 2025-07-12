@@ -5,48 +5,22 @@ import { motion } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 const Hero = () => {
-  const leftAnimation = {
-    initial: { x: "-100%", opacity: 0 },
-    animate: { x: 0, opacity: 1 },
-    exit: { x: "-100%", opacity: 0 },
-    transition: { duration: 0.6 },
-  };
-
-  const rightAnimation = {
-    initial: { x: "100%", opacity: 0 },
-    animate: { x: 0, opacity: 1 },
-    exit: { x: "100%", opacity: 0 },
-    transition: { duration: 0.6 },
-  };
-
   return (
     <section
-      className="relative md:pt-40 md:pb-28 py-20 overflow-hidden z-1"
+      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden z-1"
       id="main-banner"
     >
-      <div className="container mx-auto lg:max-w-(--breakpoint-xl) px-4">
-        <div className="grid grid-cols-12 justify-center items-center">
-          <div className="col-span-5">
-            <div className="py-2 px-5 bg-primary/15 rounded-full w-fit">
-              <p className="text-primary text-lg font-bold">DESIGN AGENCY</p>
-            </div>
-            <h1 className="text-80 font-bold">
-              Dedicated to bring your ideas to life.
-            </h1>
-            <button className="bg-primary text-white text-xl font-semibold py-5 px-12 rounded-full hover:bg-darkmode">
-              Get started
-            </button>
-          </div>
-          <div className="col-span-7">
-            <Image
-              src="/images/hero/banner-image.png"
-              alt="banner image"
-              width={600}
-              height={600}
-              className="w-full"
-            />
-          </div>
-        </div>
+      <video
+        src="/images/video/banner-video.mp4"
+        className="w-full h-full object-cover absolute top-0 left-0"
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
+      {/* ถ้ามี content ทับ video เพิ่ม absolute z-index ได้ */}
+      <div className="relative z-10 w-full flex justify-center items-center">
+        {/* Content ใส่ตรงนี้ */}
       </div>
     </section>
   );

@@ -1,29 +1,33 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-export const ProductType: { id: number; section: string; link: string[]; }[] = [
+export const ProductType: { id: number; section: string; link: string[] }[] = [
   {
     id: 1,
     section: "Menu",
-    link: ['Home', 'Popular', 'About', 'Contact'],
+    link: ["Home", "Popular", "About", "Contact"],
   },
   {
     id: 2,
     section: "Category",
-    link: ['Design', 'Mockup', 'View all', 'Log In']
+    link: ["Design", "Mockup", "View all", "Log In"],
   },
   {
     id: 3,
     section: "Pages",
-    link: ['404', 'Instructions', 'License']
+    link: ["404", "Instructions", "License"],
   },
   {
     id: 4,
     section: "Others",
-    link: ['Styleguide', 'Changelog']
-  }
+    link: ["Styleguide", "Changelog"],
+  },
 ];
 
-
-export const Aboutdata: { heading: string; imgSrc: string; paragraph: string; link: string; }[] = [
+export const Aboutdata: {
+  heading: string;
+  imgSrc: string;
+  paragraph: string;
+  link: string;
+}[] = [
   {
     heading: "About us.",
     imgSrc: "/images/aboutus/imgOne.svg",
@@ -47,40 +51,41 @@ export const Aboutdata: { heading: string; imgSrc: string; paragraph: string; li
   },
 ];
 
-export const DataType: { profession: string; name: string; imgSrc: string; }[] = [
-  {
-    profession: "Co-founder",
-    name: "John Doe",
-    imgSrc: "/images/wework/avatar.svg",
-  },
-  {
-    profession: "Co-founder",
-    name: "John Doe",
-    imgSrc: "/images/wework/avatar3.svg",
-  },
-  {
-    profession: "Co-founder",
-    name: "John Doe",
-    imgSrc: "/images/wework/avatar4.svg",
-  },
-  {
-    profession: "Co-founder",
-    name: "John Doe",
-    imgSrc: "/images/wework/avatar.svg",
-  },
-  {
-    profession: "Co-founder",
-    name: "John Doe",
-    imgSrc: "/images/wework/avatar3.svg",
-  },
-  {
-    profession: "Co-founder",
-    name: "John Doe",
-    imgSrc: "/images/wework/avatar4.svg",
-  },
-];
+export const DataType: { profession: string; name: string; imgSrc: string }[] =
+  [
+    {
+      profession: "Co-founder",
+      name: "John Doe",
+      imgSrc: "/images/wework/avatar.svg",
+    },
+    {
+      profession: "Co-founder",
+      name: "John Doe",
+      imgSrc: "/images/wework/avatar3.svg",
+    },
+    {
+      profession: "Co-founder",
+      name: "John Doe",
+      imgSrc: "/images/wework/avatar4.svg",
+    },
+    {
+      profession: "Co-founder",
+      name: "John Doe",
+      imgSrc: "/images/wework/avatar.svg",
+    },
+    {
+      profession: "Co-founder",
+      name: "John Doe",
+      imgSrc: "/images/wework/avatar3.svg",
+    },
+    {
+      profession: "Co-founder",
+      name: "John Doe",
+      imgSrc: "/images/wework/avatar4.svg",
+    },
+  ];
 
-export const postData: { heading: string; imgSrc: string; }[] = [
+export const postData: { heading: string; imgSrc: string }[] = [
   {
     heading: "Brand design for a computer brand.",
     imgSrc: "/images/featured/feat1.jpg",
@@ -99,7 +104,13 @@ export const postData: { heading: string; imgSrc: string; }[] = [
   },
 ];
 
-export const Testimonials: { profession: string; comment: string; imgSrc: string; name: string; rating: number }[] = [
+export const Testimonials: {
+  profession: string;
+  comment: string;
+  imgSrc: string;
+  name: string;
+  rating: number;
+}[] = [
   {
     name: "Robert Fox",
     profession: "CEO, Parkview Int.Ltd",
@@ -150,8 +161,14 @@ export const Testimonials: { profession: string; comment: string; imgSrc: string
   },
 ];
 
-
-export const Article: { time: string; heading: string; heading2: string; date: string; imgSrc: string; name: string; }[] = [
+export const Article: {
+  time: string;
+  heading: string;
+  heading2: string;
+  date: string;
+  imgSrc: string;
+  name: string;
+}[] = [
   {
     time: "5 min",
     heading: "We Launch Delia",

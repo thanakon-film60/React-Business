@@ -74,6 +74,7 @@ const Header: React.FC = () => {
       className={`fixed top-0 z-40 w-full transition-all duration-300 border-b border-black/60 ${
         sticky ? " shadow-lg bg-white" : "shadow-none"
       }`}
+      style={{ backgroundColor: "#D6001C" }}
     >
       <div className="lg:py-0 py-2">
         <div className="flex items-center justify-between px-4 w-full">
@@ -81,24 +82,26 @@ const Header: React.FC = () => {
             <Logo />
           </div>
 
-          <nav className="hidden lg:flex grow items-center gap-8 justify-center">
+          <nav className="hidden lg:flex grow items-center gap-1 justify-center">
             {headerData.map((item, index) => (
               <HeaderLink key={index} item={item} />
             ))}
           </nav>
           <div
-            className={`flex items-center gap-4 pl-16 border-l border-black/60 duration-300 ${
+            className={`flex items-center gap-4 pl-16  duration-300 ${
               sticky ? "py-3" : "py-7"
             }`}
           >
-            <button
+            {/* <button
               className="hidden lg:block bg-transparent text-darkmode border hover:bg-darkmode border-darkmode hover:text-white px-4 py-2 rounded-lg"
               onClick={() => {
                 setIsSignInOpen(true);
               }}
             >
               Sign In
-            </button>
+            </button> */}
+
+            {/* หลับไปก่อนไอน้อง */}
             {isSignInOpen && (
               <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50">
                 <div
@@ -119,14 +122,15 @@ const Header: React.FC = () => {
                 </div>
               </div>
             )}
-            <button
+            {/* <button
               className="hidden lg:block bg-darkmode text-white hover:bg-transparent hover:text-darkmode border border-darkmode px-4 py-2 rounded-lg"
               onClick={() => {
                 setIsSignUpOpen(true);
               }}
             >
               Sign Up
-            </button>
+            </button> */}
+            {/* ตามเพื่อนลื้อไปเลย */}
             {isSignUpOpen && (
               <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50">
                 <div
@@ -179,7 +183,7 @@ const Header: React.FC = () => {
               aria-label="Close menu Modal"
             ></button>
           </div>
-          <nav className="flex flex-col items-start p-4">
+          {/* <nav className="flex flex-col items-start p-4">
             {headerData.map((item, index) => (
               <MobileHeaderLink key={index} item={item} />
             ))}
@@ -205,7 +209,7 @@ const Header: React.FC = () => {
                 Sign Up
               </Link>
             </div>
-          </nav>
+          </nav> */}
         </div>
       </div>
     </header>

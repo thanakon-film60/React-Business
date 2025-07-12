@@ -14,6 +14,7 @@ import Articles from "@/components/Home/Articles";
 import Join from "@/components/Home/Joinus";
 import Insta from "@/components/Home/Insta";
 import { Metadata } from "next";
+import "../Style/style.css";
 export const metadata: Metadata = {
   title: "Desgy Solutions",
 };
