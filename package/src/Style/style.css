@@ -45,3 +45,16 @@ h2 {
   background: #a30619;
   box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.28);
 }
+
+.w-100 {
+  width: 100% !important;
+}
+.d-flex {
+  display: flex !important;
+}
+.align-items-center {
+  align-items: center !important;
+}
+.gap-3 {
+  gap: 1rem !important; /* Bootstrap 5 gap-3 คือ 1rem */
+}

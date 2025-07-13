@@ -7,8 +7,8 @@ import { Aboutdata } from "@/app/api/data";
 const Aboutus = () => {
   return (
     <section className=" bg-cover bg-center dark:bg-darkmode overflow-hidden">
-      <div className="container mx-auto lg:max-w-(--breakpoint-xl) relative z-1 md:max-w-(--breakpoint-md)">
-        <div className="lg:p-12 px-2 bg-grey dark:bg-darkmode rounded-3xl">
+      <div className="container mx-auto lg:max-w-(--breakpoint-xl) relative z-1 md:max-w-(--breakpoint-md)" style={{ maxWidth: "100%" }}>
+        <div className="lg:p-12 px-2 bg-grey dark:bg-darkmode rounded-3xl position-relative " style={{ maxWidth: "100%" }}>
           <Image
             src="/images/aboutus/dots.svg"
             width={100}
@@ -20,37 +20,42 @@ const Aboutus = () => {
             เกี่ยวกับเรา
           </p> */}
           <h4 className="text-center text-4xl lg:text-65 font-bold pb-12">
-            Know more about us.
+            เกี่ยวกับเรา
           </h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-16 lg:gap-x-32 mt-16">
-            {Aboutdata.map((item, i) => (
-              <div
-                key={i}
-                className="hover:bg-darkmode bg-white rounded-3xl p-8 shadow-xl group mb-28"
-              >
-                <h4 className="text-4xl font-semibold  text-black group-hover:text-white mb-5">
-                  {item.heading}
-                </h4>
+          <div className="container ">
+            <div className="w-100 hover:bg-darkmode bg-white rounded-3xl p-4 shadow-xl group mb-5 ">
+              <div className="d-flex align-items-center gap-3">
                 <Image
-                  src={item.imgSrc}
-                  alt={item.imgSrc}
-                  width={100}
-                  height={100}
-                  className="mb-5"
+                  src="/images/team/TPP-1.jpg"
+                  width={500}
+                  height={500}
+                  alt="team-member"
+                  className="mb-0"
+                  style={{ objectFit: "cover" }}
                 />
-                <h4 className="text-lg font-normal text-black group-hover:text-white mb-5">
-                  {item.paragraph}
-                </h4>
-                <Link
-                  href="#"
-                  className="text-18 font-semibold text-primary hover-underline flex items-center"
-                >
-                  {item.link}
-                  <Icon icon="tabler:chevron-right" width="20" height="20" />
-                </Link>
+                <div>
+                  <h4 className="text-4xl font-semibold text-black group-hover:text-white mb-1">
+                    บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)
+                  </h4>
+                  <a className="text-lg font-normal text-black group-hover:text-white mb-1" style={{ display: 'block', maxWidth: 1000 }}>
+                    ก่อตั้งขึ้นเมื่อปี 2526 เป็นผู้นำด้านการผลิตและออกแบบกล่องบรรจุภัณฑ์กระดาษลอนลูกฟูกและกล่องกระดาษแข็ง พร้อมงานพิมพ์ออฟเซ็ทคุณภาพสูง สำหรับลูกค้าในหลากหลายอุตสาหกรรม เช่น อาหาร เครื่องดื่ม อิเล็กทรอนิกส์ ยานยนต์ และยารักษาโรค บริษัทมีความมุ่งมั่นในการพัฒนาเทคโนโลยีการผลิตและนวัตกรรมด้านบรรจุภัณฑ์อย่างต่อเนื่อง ได้รับการรับรองมาตรฐานคุณภาพ ISO 9001:2015, ISO 14001:2015 และ GMP/HACCP
+                    ตลอดจนให้บริการออกแบบผลิตภัณฑ์ตามความต้องการของลูกค้า โดยคำนึงถึงประสิทธิภาพและความปลอดภัย นอกจากนี้
+                    ยังเน้นสร้างสรรค์บรรจุภัณฑ์ที่เป็นมิตรกับสิ่งแวดล้อม
+                    เพื่อตอบสนองกระแสรักษ์โลกและสร้างความยั่งยืนให้กับองค์กรและสังคม<br />
+
+                  </a>
+                </div>
               </div>
-            ))}
+              <Link
+                href="#"
+                className="text-18 font-semibold text-primary hover-underline d-inline-flex align-items-center mt-3"
+              >
+                อ่านต่อ
+                <Icon icon="tabler:chevron-right" width="20" height="20" />
+              </Link>
+            </div>
           </div>
+
         </div>
       </div>
     </section>
