@@ -1483,7 +1483,7 @@ body.dark-theme.body-style1 {
 
 /*---- Bg-Image ---*/
 .leftbgimage1 .app-sidebar {
-    background: url(../../assets/img/backgrounds/01.png) !important;
+    background: url(../img/backgrounds/01.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1534,7 +1534,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftbgimage2 .app-sidebar {
-    background: url(../../assets/img/backgrounds/02.png) !important;
+    background: url(../img/backgrounds/02.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1583,7 +1583,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftbgimage3 .app-sidebar {
-    background: url(../../assets/img/backgrounds/03.png) !important;
+    background: url(../img/backgrounds/03.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1630,7 +1630,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftbgimage4 .app-sidebar {
-    background: url(../../assets/img/backgrounds/04.png) !important;
+    background: url(../img/backgrounds/04.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1677,7 +1677,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftbgimage5 .app-sidebar {
-    background: url(../../assets/img/backgrounds/05.png) !important;
+    background: url(../img/backgrounds/05.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1725,7 +1725,7 @@ body.dark-theme.body-style1 {
 
 /* Dark left-menu*/
 .dark-theme.leftbgimage1 .app-sidebar {
-    background: url(../../assets/img/backgrounds/01.png) !important;
+    background: url(../img/backgrounds/01.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1746,7 +1746,7 @@ body.dark-theme.body-style1 {
 }
 
 .dark-theme.leftbgimage2 .app-sidebar {
-    background: url(../../assets/img/backgrounds/02.png) !important;
+    background: url(../img/backgrounds/02.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1767,7 +1767,7 @@ body.dark-theme.body-style1 {
 }
 
 .dark-theme.leftbgimage3 .app-sidebar {
-    background: url(../../assets/img/backgrounds/03.png) !important;
+    background: url(../img/backgrounds/03.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1788,7 +1788,7 @@ body.dark-theme.body-style1 {
 }
 
 .dark-theme.leftbgimage4 .app-sidebar {
-    background: url(../../assets/img/backgrounds/04.png) !important;
+    background: url(../img/backgrounds/04.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1809,7 +1809,7 @@ body.dark-theme.body-style1 {
 }
 
 .dark-theme.leftbgimage5 .app-sidebar {
-    background: url(../../assets/img/backgrounds/05.png) !important;
+    background: url(../img/backgrounds/05.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1831,7 +1831,7 @@ body.dark-theme.body-style1 {
 
 /* Left menu color */
 .leftmenu-color.leftbgimage1 .app-sidebar {
-    background: url(../../assets/img/backgrounds/01.png) !important;
+    background: url(../img/backgrounds/01.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1856,7 +1856,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-color.leftbgimage2 .app-sidebar {
-    background: url(../../assets/img/backgrounds/02.png) !important;
+    background: url(../img/backgrounds/02.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1881,7 +1881,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-color.leftbgimage3 .app-sidebar {
-    background: url(../../assets/img/backgrounds/03.png) !important;
+    background: url(../img/backgrounds/03.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1906,7 +1906,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-color.leftbgimage4 .app-sidebar {
-    background: url(../../assets/img/backgrounds/04.png) !important;
+    background: url(../img/backgrounds/04.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1931,7 +1931,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-color.leftbgimage5 .app-sidebar {
-    background: url(../../assets/img/backgrounds/05.png) !important;
+    background: url(../img/backgrounds/05.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1957,7 +1957,7 @@ body.dark-theme.body-style1 {
 
 /* Left menu Dark */
 .leftmenu-dark.leftbgimage1 .app-sidebar {
-    background: url(../../assets/img/backgrounds/01.png) !important;
+    background: url(../img/backgrounds/01.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -1982,7 +1982,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-dark.leftbgimage2 .app-sidebar {
-    background: url(../../assets/img/backgrounds/02.png) !important;
+    background: url(../img/backgrounds/02.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -2007,7 +2007,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-dark.leftbgimage3 .app-sidebar {
-    background: url(../../assets/img/backgrounds/03.png) !important;
+    background: url(../img/backgrounds/03.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -2032,7 +2032,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-dark.leftbgimage4 .app-sidebar {
-    background: url(../../assets/img/backgrounds/04.png) !important;
+    background: url(../img/backgrounds/04.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -2059,7 +2059,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-dark.leftbgimage5 .app-sidebar {
-    background: url(../../assets/img/backgrounds/05.png) !important;
+    background: url(../img/backgrounds/05.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -2089,7 +2089,7 @@ body.dark-theme.body-style1 {
 
 /* Left menu Gradient */
 .leftmenu-gradient.leftbgimage1 .app-sidebar {
-    background: url(../../assets/img/backgrounds/01.png) !important;
+    background: url(../img/backgrounds/01.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -2114,7 +2114,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-gradient.leftbgimage2 .app-sidebar {
-    background: url(../../assets/img/backgrounds/02.png) !important;
+    background: url(../img/backgrounds/02.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -2139,7 +2139,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-gradient.leftbgimage3 .app-sidebar {
-    background: url(../../assets/img/backgrounds/03.png) !important;
+    background: url(../img/backgrounds/03.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -2164,7 +2164,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-gradient.leftbgimage4 .app-sidebar {
-    background: url(../../assets/img/backgrounds/04.png) !important;
+    background: url(../img/backgrounds/04.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -2189,7 +2189,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-gradient.leftbgimage5 .app-sidebar {
-    background: url(../../assets/img/backgrounds/05.png) !important;
+    background: url(../img/backgrounds/05.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -2215,7 +2215,7 @@ body.dark-theme.body-style1 {
 
 /* Left menu Light */
 .leftmenu-light.leftbgimage1 .app-sidebar {
-    background: url(../../assets/img/backgrounds/01.png) !important;
+    background: url(../img/backgrounds/01.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -2240,7 +2240,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-light.leftbgimage2 .app-sidebar {
-    background: url(../../assets/img/backgrounds/02.png) !important;
+    background: url(../img/backgrounds/02.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -2265,7 +2265,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-light.leftbgimage3 .app-sidebar {
-    background: url(../../assets/img/backgrounds/03.png) !important;
+    background: url(../img/backgrounds/03.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -2290,7 +2290,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-light.leftbgimage4 .app-sidebar {
-    background: url(../../assets/img/backgrounds/04.png) !important;
+    background: url(../img/backgrounds/04.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
@@ -2315,7 +2315,7 @@ body.dark-theme.body-style1 {
 }
 
 .leftmenu-light.leftbgimage5 .app-sidebar {
-    background: url(../../assets/img/backgrounds/05.png) !important;
+    background: url(../img/backgrounds/05.png) !important;
     background-size: cover;
     height: 100%;
     width: 240px;
