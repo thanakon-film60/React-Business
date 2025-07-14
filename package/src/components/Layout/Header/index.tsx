@@ -69,6 +69,9 @@ const Header: React.FC = () => {
     }
   }, [isSignInOpen, isSignUpOpen, navbarOpen]);
 
+   const menu1 = headerData.slice(0, 3); 
+   const menu2 = headerData.slice(3);
+
   return (
     <header
       className={`fixed top-0 z-40 w-full transition-all duration-300 border-b border-black/60 ${
@@ -77,14 +80,18 @@ const Header: React.FC = () => {
       style={{ backgroundColor: "#D6001C" }}
     >
       <div className="lg:py-0 py-2">
-        <div className="flex items-center justify-between px-4 w-full">
-          <div className={`pr-16 duration-300 ${sticky ? "py-3" : "py-7"}`}>
+        <div className="flex items-center justify-between px-4 w-full h-[110px]">
+          {/* <div className={`pr-16 duration-300 ${sticky ? "py-3" : "py-7"}`}>
             <Logo />
-          </div>
+          </div> */}
 
-          <nav className="hidden lg:flex grow items-center gap-1 justify-center">
-            {headerData.map((item, index) => (
-              <HeaderLink key={index} item={item} />
+          <nav className="hidden lg:flex grow items-center gap-20 justify-center d-flex ">
+            {menu1.map((item, i) => (
+              <HeaderLink key={i} item={item} />
+            ))}
+             <Logo />
+            {menu2.map((item, i) => (
+              <HeaderLink key={menu1.length + i} item={item} />
             ))}
           </nav>
           <div

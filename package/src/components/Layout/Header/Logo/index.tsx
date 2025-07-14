@@ -1,29 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
-import "../../../../Style/style.css";
 
 const Logo: React.FC = () => {
   return (
-    <div className="flex items-center gap-4 ">
-      {" "}
-      {/* flex row + เว้นช่อง */}
-      <Link href="/" className="inline-block">
+    <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
+      {/* โลโก้ */}
+      <Link href="/" className="inline-block flex-shrink-0 ">
         <Image
           src="/images/logo/logo.png"
           alt="Desgy Solutions"
-          width={60}
-          height={40}
+          width={120}
+          height={80}
           priority
+          className="w-[120px] h-[80px] object-contain"
         />
       </Link>
-      <div>
-        <h1 className="logo-title text-lg font-semibold text-white">
-          THAI PACKAGING & PRINTING PCL
-        </h1>
-        <h2 className="logo-subtitle text-sm text-gray-600 text-white">
-          บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)
-        </h2>
-      </div>
     </div>
   );
 };
