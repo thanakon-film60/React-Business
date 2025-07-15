@@ -28,7 +28,7 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
             className={`fw-bold fs-8 text-black-50 d-flex align-items-center text-truncate text-gray-979797 ellipsis-text${
               path === item.href 
             }`}    
-          >
+          style={{ fontSize: "18px", fontWeight: "bold" }}>
             {item.label}
             {item.submenu && (
               <svg

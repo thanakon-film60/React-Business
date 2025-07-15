@@ -4,8 +4,8 @@
   src: url("fonts/materialdesignicons-webfont.eot");
   src: url("fonts/materialdesignicons-webfont.eot") format("embedded-opentype"), 
   url("fonts/materialdesignicons-webfont.woff2") format("woff2"), 
-  /* url("fonts/materialdesignicons/materialdesignicons-webfont.woff") format("woff"),  */
-  /* url("fonts/materialdesignicons/materialdesignicons-webfont.ttf") format("truetype"), */
+  url("../materialdesignicons/materialdesignicons-webfont.ttf")format("truetype"),
+  url("../materialdesignicons/materialdesignicons-webfont.woff") format("woff")
   ;
   font-weight: normal;
   font-style: normal;
