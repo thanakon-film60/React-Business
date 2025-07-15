@@ -18,9 +18,7 @@ const Hero = () => {
         muted
         playsInline
       />
-      {/* ถ้ามี content ทับ video เพิ่ม absolute z-index ได้ */}
       <div className="relative z-10 w-full flex justify-center items-center">
-        {/* Content ใส่ตรงนี้ */}
       </div>
     </section>
   );

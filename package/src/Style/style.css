@@ -36,13 +36,12 @@ h2 {
   border-radius: 0.75rem;
   transition: box-shadow 0.2s, background 0.2s;
   background: transparent;
-  cursor: pointer; /* แนะนำเพิ่ม cursor pointer */
+  cursor: pointer;
 }
 
-/* hover, focus style กล่องเมนู */
 .menu-item-wrapper:hover,
 .menu-item-wrapper:focus-within {
-  background: #a30619;
+  background: #ddd8d94d;
   box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.28);
 }
 
@@ -56,5 +55,17 @@ h2 {
   align-items: center !important;
 }
 .gap-3 {
-  gap: 1rem !important; /* Bootstrap 5 gap-3 คือ 1rem */
+  gap: 1rem !important; 
+}
+
+/* สี */
+.text-gray-979797 {
+  color: #979797 !important;
+}
+
+/* โคลงสร้าง  */
+.ellipsis-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

@@ -10,14 +10,12 @@ const Aboutus = () => {
       <div className="container mx-auto lg:max-w-(--breakpoint-xl) relative z-1 md:max-w-(--breakpoint-md)" style={{ maxWidth: "100%" }}>
         <div className="lg:p-12 px-2 bg-grey dark:bg-darkmode rounded-3xl position-relative mx-auto" style={{ maxWidth: "100%" }}>
 
-          {/* <p className="text-center text-primary text-18 tracking-widest uppercase mt-10">
-            เกี่ยวกับเรา
-          </p> */}
+
           <h4 className="text-center text-4xl lg:text-65 font-bold pb-12">
             เกี่ยวกับเรา
           </h4>
           <div className="container fluid px-0">
-            <div className="w-[1800px] hover:bg-darkmode bg-white rounded-3xl p-4 shadow-xl group mb-5 ">
+            <div className=" hover:bg-darkmode bg-white rounded-3xl p-4 shadow-xl group mb-5 ">
               <div className="d-flex align-items-center gap-3">
                 <Image
                   src="/images/team/TPP-1.jpg"
@@ -28,7 +26,7 @@ const Aboutus = () => {
                   style={{ objectFit: "cover" }}
                 />
                 <div>
-                  <h4 className="text-4xl font-semibold text-black group-hover:text-white mb-1">
+                  <h4 className="text-4xl font-semibold text-black group-hover:text-gray-500 mb-1">
                     บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)
                   </h4>
                   <a className="text-lg font-normal text-black group-hover:text-white mb-1" style={{ display: 'block', maxWidth: 1245 }}>
