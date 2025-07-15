@@ -36,10 +36,9 @@ h2 {
   border-radius: 0.75rem;
   transition: box-shadow 0.2s, background 0.2s;
   background: transparent;
-  cursor: pointer; /* แนะนำเพิ่ม cursor pointer */
+  cursor: pointer;
 }
 
-/* hover, focus style กล่องเมนู */
 .menu-item-wrapper:hover,
 .menu-item-wrapper:focus-within {
   background: #ddd8d94d;
@@ -59,4 +58,14 @@ h2 {
   gap: 1rem !important; 
 }
 
+/* สี */
+.text-gray-979797 {
+  color: #979797 !important;
+}
 
+/* โคลงสร้าง  */
+.ellipsis-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

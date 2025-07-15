@@ -11,6 +11,7 @@ import Signin from "@/components/Auth/SignIn";
 import SignUp from "@/components/Auth/SignUp";
 import { useTheme } from "next-themes";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import CartButton from "@/components/CartButton";
 
 const Header: React.FC = () => {
   const pathUrl = usePathname();
@@ -69,6 +70,10 @@ const Header: React.FC = () => {
     }
   }, [isSignInOpen, isSignUpOpen, navbarOpen]);
 
+    useEffect(() => {
+      // @ts-ignore
+  import("bootstrap/dist/js/bootstrap.bundle.min.js");
+}, []);
    const menu1 = headerData.slice(0, 3); 
    const menu2 = headerData.slice(3);
 
@@ -80,104 +85,133 @@ const Header: React.FC = () => {
     >
       <div className="lg:py-0 py-2">
         <div className="flex items-center justify-between px-4 w-full h-[110px]">
-          {/* <div className={`pr-16 duration-300 ${sticky ? "py-3" : "py-7"}`}>
-            <Logo />
-          </div> */}
 
-          <nav className="hidden lg:flex grow items-center gap-20 justify-center d-flex ">
-            {menu1.map((item, i) => (
-              <HeaderLink key={i} item={item} />
-            ))}
-             <Logo />
-            {menu2.map((item, i) => {
-              if (item.label === "ข่าวสารและกิจกรรม-บทความ") {
-                return (
-                  <div className="w-[190px]" key={menu1.length + i}>
-                    <HeaderLink item={item} />
-                  </div>
-                );
-              }
-              return <HeaderLink key={menu1.length + i} item={item} />;
-            })} 
-          </nav>
-          <div
-            className={`flex items-center gap-4 pl-16  duration-300 ${
-              sticky ? "py-3" : "py-7"
-            }`}
-          >
-            {/* <button
-              className="hidden lg:block bg-transparent text-darkmode border hover:bg-darkmode border-darkmode hover:text-white px-4 py-2 rounded-lg"
-              onClick={() => {
-                setIsSignInOpen(true);
-              }}
-            >
-              Sign In
-            </button> */}
-
-            {/* หลับไปก่อนไอน้อง */}
-            {isSignInOpen && (
-              <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50">
-                <div
-                  ref={signInRef}
-                  className="relative mx-auto w-full max-w-md overflow-hidden rounded-lg px-8 pt-14 pb-8 text-center bg-dark_grey/90 backdrop-blur-md"
+      <nav className="hidden lg:flex grow items-center gap-20 justify-center d-flex">
+        {menu1.map((item, i) =>
+          item.submenu ? (
+            <div className="menu-item-wrapper" key={i}>
+              <div className="dropdown w-full h-full">
+                <button
+                  className="btn btn-link dropdown-toggle text-gray-979797 w-full h-full"
+                  type="button"
+                  id={`dropdownMenuButton-${i}`}
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  style={{
+                    borderRadius: "0.75rem",
+                    fontWeight: 500,
+                    fontSize: "16px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
                 >
-                  <button
-                    onClick={() => setIsSignInOpen(false)}
-                    className="absolute top-0 right-0 mr-8 mt-8 dark:invert"
-                    aria-label="Close Sign In Modal"
-                  >
-                    <Icon
-                      icon="tabler:currency-xrp"
-                      className="text-white hover:text-primary text-24 inline-block me-2"
-                    />
-                  </button>
-                  <Signin />
-                </div>
+                  {item.label}
+                </button>
+                <ul className="dropdown-menu" aria-labelledby={`dropdownMenuButton-${i}`}>
+                  {item.submenu.map((sub, j) => (
+                    <li key={j}>
+                      <Link className="dropdown-item" href={sub.href}>
+                        {sub.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            )}
-            {/* <button
-              className="hidden lg:block bg-darkmode text-white hover:bg-transparent hover:text-darkmode border border-darkmode px-4 py-2 rounded-lg"
-              onClick={() => {
-                setIsSignUpOpen(true);
-              }}
-            >
-              Sign Up
-            </button> */}
-            {/* ตามเพื่อนลื้อไปเลย */}
-            {isSignUpOpen && (
-              <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50">
-                <div
-                  ref={signUpRef}
-                  className="relative mx-auto w-full max-w-md overflow-hidden rounded-lg bg-dark_grey/90 backdrop-blur-md px-8 pt-14 pb-8 text-center"
-                >
-                  <button
-                    onClick={() => setIsSignUpOpen(false)}
-                    className="absolute top-0 right-0 mr-8 mt-8 dark:invert"
-                    aria-label="Close Sign Up Modal"
-                  >
-                    <Icon
-                      icon="tabler:currency-xrp"
-                      className="text-white hover:text-primary text-24 inline-block me-2"
-                    />
-                  </button>
-                  <SignUp />
-                </div>
-              </div>
-            )}
-            <button
-              onClick={() => setNavbarOpen(!navbarOpen)}
-              className="block lg:hidden p-2 rounded-lg"
-              aria-label="Toggle mobile menu"
-            >
-              <span className="block w-6 h-0.5 bg-white"></span>
-              <span className="block w-6 h-0.5 bg-white mt-1.5"></span>
-              <span className="block w-6 h-0.5 bg-white mt-1.5"></span>
-            </button>
-          </div>
-        </div>
-        {navbarOpen && (
-          <div className="fixed top-0 left-0 w-full h-full bg-black/50 z-40" />
+            </div>
+          ) : (
+            <div className="menu-item-wrapper" key={i}>
+              <HeaderLink item={item} />
+            </div>
+          )
         )}
+
+        <Logo />
+
+        {menu2.map((item, i) =>
+          item.submenu ? (
+            <div className="menu-item-wrapper" key={menu1.length + i}>
+              <div className="dropdown w-full h-full">
+                <button
+                  className="btn btn-link dropdown-toggle text-gray-979797 w-full h-full"
+                  type="button"
+                  id={`dropdownMenuButton-${menu1.length + i}`}
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  style={{
+                    borderRadius: "0.75rem",
+                    fontWeight: 500,
+                    fontSize: "16px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  {item.label}
+                </button>
+                <ul className="dropdown-menu" aria-labelledby={`dropdownMenuButton-${menu1.length + i}`}>
+                  {item.submenu.map((sub, j) => (
+                    <li key={j}>
+                      <Link className="dropdown-item" href={sub.href}>
+                        {sub.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <div className="menu-item-wrapper" key={menu1.length + i}>
+              <HeaderLink item={item} />
+            </div>
+          )
+        )}
+      </nav>
+
+
+
+                    
+            <div className="flex flex-col items-end gap-2 pl-16 ">
+              {/* Row 1: CartButton */}
+              {/* <div>
+                <CartButton />
+              </div> */}
+              {/* Row 2: Language Switcher */}
+              <div className="flex items-center gap-4">
+                {/* English */}
+                <Link href="/en" className="flex items-center gap-2 hover:opacity-80">
+                  <Image
+                    src="/images/icons/us.svg"
+                    alt="US Flag"
+                    width={24}
+                    height={16}
+                    style={{ borderRadius: '2px' }}
+                  />
+                  <span>English</span>
+                </Link>
+                {/* Thai */}
+                <Link href="/th" className="flex items-center gap-2 hover:opacity-80">
+                  <Image
+                    src="/images/icons/th.svg"
+                    alt="TH Flag"
+                    width={24}
+                    height={16}
+                    style={{ borderRadius: '2px' }}
+                  />
+                  <span>Thai</span>
+                </Link>
+              </div>
+            </div>
+
+
+        </div>
+
         <div
           ref={mobileMenuRef}
           className={`lg:hidden fixed top-0 right-0 h-full w-full bg-darkmode shadow-lg transform transition-transform duration-300 max-w-xs ${
@@ -196,33 +230,6 @@ const Header: React.FC = () => {
               aria-label="Close menu Modal"
             ></button>
           </div>
-          {/* <nav className="flex flex-col items-start p-4">
-            {headerData.map((item, index) => (
-              <MobileHeaderLink key={index} item={item} />
-            ))}
-            <div className="mt-4 flex flex-col space-y-4 w-full">
-              <Link
-                href="#"
-                className="bg-transparent border border-primary text-primary px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white"
-                onClick={() => {
-                  setIsSignInOpen(true);
-                  setNavbarOpen(false);
-                }}
-              >
-                Sign In
-              </Link>
-              <Link
-                href="#"
-                className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                onClick={() => {
-                  setIsSignUpOpen(true);
-                  setNavbarOpen(false);
-                }}
-              >
-                Sign Up
-              </Link>
-            </div>
-          </nav> */}
         </div>
       </div>
     </header>

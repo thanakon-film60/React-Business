@@ -10,9 +10,7 @@ const Aboutus = () => {
       <div className="container mx-auto lg:max-w-(--breakpoint-xl) relative z-1 md:max-w-(--breakpoint-md)" style={{ maxWidth: "100%" }}>
         <div className="lg:p-12 px-2 bg-grey dark:bg-darkmode rounded-3xl position-relative mx-auto" style={{ maxWidth: "100%" }}>
 
-          {/* <p className="text-center text-primary text-18 tracking-widest uppercase mt-10">
-            เกี่ยวกับเรา
-          </p> */}
+
           <h4 className="text-center text-4xl lg:text-65 font-bold pb-12">
             เกี่ยวกับเรา
           </h4>

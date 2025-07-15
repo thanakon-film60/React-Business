@@ -6616,7 +6616,7 @@ pre code {
 
 .dropend button:focus,
 .dropdown button:focus {
-    color: #fff !important;
+    color: #606060 !important;
 }
 
 /* ###### 3.5 Dropdown ###### */
@@ -15825,7 +15825,7 @@ body {
 }
 
 .header-megamenu-dropdown .nav-item .btn-link {
-    color: #031b4e;
+    color: #979797;
 }
 
 .wordpress-project {

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { HeaderItem } from "../../../../types/menu";
 import { usePathname } from "next/navigation";
 import "../../../../Style/style.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
   const [submenuOpen, setSubmenuOpen] = useState(false);
@@ -24,10 +25,9 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
         <div className="menu-item-wrapper" style={{width: "auto", minWidth: 0, overflow: "hidden"}}>
           <Link
             href={item.href}
-            className={`fw-bold fs-8 text-black-50 d-flex align-items-center text-truncate ${
-              path === item.href ? " active" : ""
-            }`}
-            style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}
+            className={`fw-bold fs-8 text-black-50 d-flex align-items-center text-truncate text-gray-979797 ellipsis-text${
+              path === item.href 
+            }`}    
           >
             {item.label}
             {item.submenu && (
