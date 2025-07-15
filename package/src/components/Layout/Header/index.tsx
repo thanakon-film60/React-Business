@@ -76,7 +76,7 @@ const Header: React.FC = () => {
     <header
       className={`fixed top-0 z-40 w-full transition-all duration-300 border-b border-black/60 
       }`}
-      style={{ backgroundColor: "#D6001C" }}
+      style={{ backgroundColor:  "#fff" }}
     >
       <div className="lg:py-0 py-2">
         <div className="flex items-center justify-between px-4 w-full h-[110px]">
