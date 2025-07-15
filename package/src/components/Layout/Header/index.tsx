@@ -90,9 +90,16 @@ const Header: React.FC = () => {
               <HeaderLink key={i} item={item} />
             ))}
              <Logo />
-            {menu2.map((item, i) => (
-              <HeaderLink key={menu1.length + i} item={item} />
-            ))}
+            {menu2.map((item, i) => {
+              if (item.label === "ข่าวสารและกิจกรรม-บทความ") {
+                return (
+                  <div className="w-[190px]" key={menu1.length + i}>
+                    <HeaderLink item={item} />
+                  </div>
+                );
+              }
+              return <HeaderLink key={menu1.length + i} item={item} />;
+            })} 
           </nav>
           <div
             className={`flex items-center gap-4 pl-16  duration-300 ${

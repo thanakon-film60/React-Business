@@ -21,13 +21,13 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
       onMouseLeave={handleMouseLeave}
     >
       <div className="menu-list">
-        <div className="menu-item-wrapper" style={{maxWidth: 180, minWidth: 0, overflow: "hidden"}}>
+        <div className="menu-item-wrapper" style={{width: "auto", minWidth: 0, overflow: "hidden"}}>
           <Link
             href={item.href}
             className={`fw-bold fs-8 text-white d-flex align-items-center text-truncate ${
               path === item.href ? " active" : ""
             }`}
-            style={{ maxWidth: 170, overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}
+            style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}
           >
             {item.label}
             {item.submenu && (
