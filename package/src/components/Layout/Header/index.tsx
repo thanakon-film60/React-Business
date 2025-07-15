@@ -74,9 +74,10 @@ const Header: React.FC = () => {
       // @ts-ignore
   import("bootstrap/dist/js/bootstrap.bundle.min.js");
 }, []);
-   const menu1 = headerData.slice(0, 3); 
-   const menu2 = headerData.slice(3);
+   const menu1 = headerData.slice(0, 4); 
+   const menu2 = headerData.slice(4);
 
+   
   return (
     <header
       className={`fixed top-0 z-40 w-full transition-all duration-300 border-b border-black/60 
@@ -89,18 +90,18 @@ const Header: React.FC = () => {
       <nav className="hidden lg:flex grow items-center gap-20 justify-center d-flex">
         {menu1.map((item, i) =>
           item.submenu ? (
-            <div className="menu-item-wrapper" key={i}>
+            <div className="menu-item-wrapper with-dropdown" key={i}>
               <div className="dropdown w-full h-full">
                 <button
-                  className="btn btn-link dropdown-toggle text-gray-979797 w-full h-full"
+                  className="btn btn-link dropdown-toggle text-gray-979797 w-full h-full font-bold"
                   type="button"
                   id={`dropdownMenuButton-${i}`}
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                   style={{
                     borderRadius: "0.75rem",
-                    fontWeight: 500,
-                    fontSize: "16px",
+                    fontWeight: "bold",
+                    fontSize: "18px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -111,7 +112,13 @@ const Header: React.FC = () => {
                 >
                   {item.label}
                 </button>
-                <ul className="dropdown-menu" aria-labelledby={`dropdownMenuButton-${i}`}>
+                <ul className="dropdown-menu rounded-2xl border-0 py-2" 
+                  style={{
+                    background: "rgba(253, 251, 251, 1)",
+                    boxShadow: "rgba(0, 0, 0, 0.28) 0px 4px 24px 0px",
+                    border: "none",           // Optional
+                    padding: "0.5rem 0",      // Optional
+                  }} aria-labelledby={`dropdownMenuButton-${i}`}>
                   {item.submenu.map((sub, j) => (
                     <li key={j}>
                       <Link className="dropdown-item" href={sub.href}>
@@ -133,7 +140,7 @@ const Header: React.FC = () => {
 
         {menu2.map((item, i) =>
           item.submenu ? (
-            <div className="menu-item-wrapper" key={menu1.length + i}>
+            <div className="menu-item-wrapper with-dropdown" key={menu1.length + i}>
               <div className="dropdown w-full h-full">
                 <button
                   className="btn btn-link dropdown-toggle text-gray-979797 w-full h-full"
@@ -143,8 +150,8 @@ const Header: React.FC = () => {
                   aria-expanded="false"
                   style={{
                     borderRadius: "0.75rem",
-                    fontWeight: 500,
-                    fontSize: "16px",
+                    fontWeight: "bold",
+                    fontSize: "18px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -173,6 +180,7 @@ const Header: React.FC = () => {
           )
         )}
       </nav>
+
 
 
 

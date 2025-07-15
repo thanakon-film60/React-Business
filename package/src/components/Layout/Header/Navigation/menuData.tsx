@@ -1,6 +1,7 @@
 import { HeaderItem } from "@/types/menu";
 
 export const headerData: HeaderItem[] = [
+    { label: "หน้าแรก", href: "" },
   {
     label: "เกี่ยวกับเรา",
     href: "#",
@@ -32,6 +33,25 @@ export const headerData: HeaderItem[] = [
     ],
   },
   { label: "ข่าวสารและกิจกรรม-บทความ", href: "#" },
-  { label: "นักลงทุนสัมพันธ์", href: "/documentation" },
-  { label: "ติดต่อเรา", href: "" },
+  {
+  label: "นักลงทุนสัมพันธ์",
+  href: "#",
+  submenu: [
+    { label: "ข้อมูลทางการเงิน", href: "/investor-financials" },
+    { label: "การกำกับดูแลกิจการที่ดี", href: "/investor-governance" },
+    { label: "ข้อมูลผู้ถือหุ้น", href: "/investor-shareholders" },
+    { label: "เอกสารเผยแพร่และดาวน์โหลด", href: "/investor-downloads" },
+    { label: "ติดต่อนักลงทุนสัมพันธ์", href: "/investor-contact" },
+  ],
+},
+
+  {
+  label: "ติดต่อเรา",
+  href: "#",
+  submenu: [
+    { label: "ร่วมงานกับเรา", href: "/careers" },
+    { label: "ติดต่อสอบถาม", href: "/contact-inquiry" },
+  ],
+},
+
 ];
