@@ -58,3 +58,17 @@ h2 { font-size: 14px; }
     margin-bottom: 0px;
     margin-top: -75px;
 }
+/* -------------------------------------------------- */
+.about-bg-image {
+  background-image: url('/images/team/TPP_HOME.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* เพิ่มเติมเช่นขอบมนหรือเงา */
+  border-radius: 1.5rem; /* ถ้าต้องการโค้งเหมือนของเดิม */
+  min-height: 400px;      /* กำหนดความสูงขั้นต่ำ */
+}
+
+.transparent-bg {
+  background-color: #ffffff00 !important;
+}
