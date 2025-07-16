@@ -18,7 +18,7 @@ const Aboutus = () => {
             <div className=" hover:bg-darkmode bg-white rounded-3xl p-4 shadow-xl group mb-5 ">
               <div className="d-flex align-items-center gap-3">
                 <Image
-                  src="/images/team/TPP-1.jpg"
+                  src="/images/team/TPP_HOME.png"
                   width={500}
                   height={500}
                   alt="team-member"

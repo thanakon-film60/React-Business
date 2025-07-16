@@ -1,74 +1,60 @@
-/* เรียกใช้ฟอนต์ Inter เป็นค่าเริ่มต้น */
-* {
-  font-family: "Inter", Helvetica, Arial, sans-serif;
-}
+/* ฟอนต์ Inter */
+* { font-family: "Inter", Helvetica, Arial, sans-serif; }
 
-/* กำหนดขนาดฟอนต์เฉพาะ h1, h2 */
-h1 {
-  font-size: 15px;
-}
+h1 { font-size: 15px; }
+h2 { font-size: 14px; }
+.fs-14 { font-size: 14px !important; }
 
-h2 {
-  font-size: 14px;
-}
 
-/* class สำหรับฟอนต์ขนาด 14px */
-.fs-14 {
-  font-size: 14px !important;
-}
-
-/* จัดการเมนูให้ชิดซ้าย และอยู่ตรงกลางแนวตั้ง */
-.menu-list {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-  color: #979797 !important;
-}
-
-/* กล่องเมนูแบบมี transition สวยงาม */
-.menu-item-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 70px;
-  width: 170px;
-  border-radius: 0.75rem;
-  transition: box-shadow 0.2s, background 0.2s;
-  background: transparent;
-  cursor: pointer;
-}
-
-/* Hover effect เฉพาะอันที่เป็น dropdown */
 .menu-item-wrapper.with-dropdown:hover{
   background: #ddd8d94d;
   box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.28);
 }
 
-/* ----------------------------------------- */
+.text-gray-979797 { color: #979797 !important; }
+.ellipsis-text { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 
-.w-100 {
-  width: 100% !important;
+/* Responsive logo & menu button */
+/* @media (max-width: 1900px) {
+  .header-logo img, .header-logo { width: 48px !important; height: 48px !important; transition: width 0.2s, height 0.2s; }
+  .menu-item-wrapper button { font-size: 15px !important; }
+  .header-main-row { min-height: 70px !important; }
 }
-.d-flex {
-  display: flex !important;
+@media (max-width: 1400px) {
+  .header-logo img, .header-logo { width: 40px !important; height: 40px !important; }
+  .menu-item-wrapper button { font-size: 14px !important; }
 }
-.align-items-center {
-  align-items: center !important;
+@media (max-width: 1200px) {
+  .header-logo img, .header-logo { width: 32px !important; height: 32px !important; }
+  .menu-item-wrapper button { font-size: 13px !important; }
+} */
+
+/* Responsive language menu */
+@media (max-width: 1200px) {
+  .header-lang .lang-link span { font-size: 12px; }
+  .header-lang .lang-flag { width: 13px !important; height: 9px !important; }
 }
-.gap-3 {
-  gap: 1rem !important; 
+@media (max-width: 1400px) {
+  .header-lang .lang-link span { font-size: 14px; }
+  .header-lang .lang-flag { width: 16px !important; height: 11px !important; }
+}
+@media (max-width: 1200px) {
+  .header-lang .lang-link span { font-size: 12px; }
+  .header-lang .lang-flag { width: 13px !important; height: 9px !important; }
+}
+@media (max-width: 1700px) {
+  .header-lang .lang-text { display: none !important; }
 }
 
-/* สี */
-.text-gray-979797 {
-  color: #979797 !important;
+/* Hamburger & desktop menu */
+.menu-desktop { display: flex !important; }
+.burger-mobile { display: none !important; }
+@media (max-width: 1450px) {
+  .menu-desktop { display: none !important; }
+  .burger-mobile { display: flex !important; }
 }
 
-/* โคลงสร้าง  */
-.ellipsis-text {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.language-switcher-btn {
+    margin-bottom: 0px;
+    margin-top: -75px;
 }

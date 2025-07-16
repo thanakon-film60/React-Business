@@ -16,32 +16,10 @@ import Insta from "@/components/Home/Insta";
 import { Metadata } from "next";
 
 // สำหรับ CSS
-import '../Style/css/animate.css';
-import '../Style/css/boxed.css';
-import '../Style/css/closed-sidemenu.css';
-import '../Style/css/dark-boxed.css';
-import '../Style/css/icons.css';
-import '../Style/css/sidemenu-responsive-tabs.css';
-import '../Style/css/sidemenu.css';
-import '../Style/css/sidemenu1.css';
-import '../Style/css/sidemenu3.css';
-import '../Style/css/sidemenu4.css';
-import '../Style/css/skin-modes.css';
-import '../Style/css/style-dark.css';
-import '../Style/css/style.css';
-
-import '../Style/css/boxed.scss';
-import '../Style/css/closed-sidemenu.scss';
-import '../Style/css/dark-boxed.scss';
-import '../Style/css/sidemenu-responsive-tabs.scss';
-import '../Style/css/sidemenu.scss';
-import '../Style/css/sidemenu1.scss';
-import '../Style/css/sidemenu3.scss';
-import '../Style/css/sidemenu4.scss';
-import '../Style/css/skin-modes.scss';
-import '../Style/css/style-dark.scss';
+import '../Style/style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+
 
 
 export const metadata: Metadata = {
