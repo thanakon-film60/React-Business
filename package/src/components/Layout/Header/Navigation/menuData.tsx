@@ -32,7 +32,14 @@ export const headerData: HeaderItem[] = [
       { label: "รางวัลและความภาคภูมิใจ", href: "/awards-achievements" },
     ],
   },
-  { label: "ข่าวสารและกิจกรรม-บทความ", href: "#" },
+  {
+    label: "ข่าวสารและกิจกรรม-บทความ",
+    href: "#",
+    submenu: [
+      { label: "ข่าวสารและกิจกรรม", href: "/news-events" },
+      { label: "บทความ", href: "/articles" },
+    ],
+  },
   {
   label: "นักลงทุนสัมพันธ์",
   href: "#",

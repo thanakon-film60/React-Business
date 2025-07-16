@@ -4,7 +4,7 @@ import Link from "next/link";
 import { HeaderItem } from "../../../../types/menu";
 import { usePathname } from "next/navigation";
 import "../../../../Style/style.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+
 
 const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
   const [submenuOpen, setSubmenuOpen] = useState(false);

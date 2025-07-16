@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 const Hero = () => {
   return (
     <section
-      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden z-1 mt-[110px]"
+      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden z-1 mt-[20px]"
       id="main-banner"
     >
       <video
