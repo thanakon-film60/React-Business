@@ -1,5 +1,22 @@
 /* ฟอนต์ Inter */
-* { font-family: "Inter", Helvetica, Arial, sans-serif; }
+@font-face {
+  font-family: 'Kanit';
+  src: url('/fonts/Kanit-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Kanit';
+  src: url('/fonts/Kanit-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* ตั้งให้ body ใช้ Kanit ทั้งโปรเจ็ค */
+body {
+  font-family: 'Kanit', Tahoma, Arial, sans-serif;
+}
+
 
 h1 { font-size: 15px; }
 h2 { font-size: 14px; }
@@ -70,5 +87,33 @@ h2 { font-size: 14px; }
 }
 
 .transparent-bg {
-  background-color: #ffffff00 !important;
+  background-color: #ffffffad !important;
+}
+
+.no-decoration {
+  text-decoration: none !important;
+}
+
+
+.img-container {
+  position: relative;
+  width: 800px;
+  height: 534px;
+}
+.img-static {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s;
+  z-index: 2;
+}
+.img-container:hover .img-static {
+  opacity: 0;
+}
+.img-gif {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
 }

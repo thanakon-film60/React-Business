@@ -1,14 +1,13 @@
 import { HeaderItem } from "@/types/menu";
 
 export const headerData: HeaderItem[] = [
-    { label: "หน้าแรก", href: "" },
+    { label: "หน้าหลัก", href: "" },
   {
     label: "เกี่ยวกับเรา",
     href: "#",
     submenu: [
       { label: "ปรัชญา วิสัยทัศน์ และพันธกิจ", href: "/about-philosophy" },
       { label: "ประวัติองค์กร", href: "/about-history" },
-      { label: "สารจากกรรมการผู้จัดการ", href: "/about-message" },
       { label: "คณะกรรมการ / ผู้บริหาร", href: "/about-executives" },
       { label: "บริษัทในเครือ", href: "/about-subsidiaries" },
     ],
