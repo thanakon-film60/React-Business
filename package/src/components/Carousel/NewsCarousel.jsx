@@ -19,7 +19,20 @@ const NewsCarousel = () => {
   return (
     <div className="relative w-full" id="indicators-carousel">
       {/* Carousel wrapper */}
-      <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
+      <div className="relative  overflow-hidden rounded-lg"style={{
+    height: "280px",}}>
+      <style jsx>{`
+        @media (min-width: 640px) {
+          .responsive-carousel {
+            height: 180px !important;
+          }
+        }
+        @media (min-width: 1024px) {
+          .responsive-carousel {
+            height: 270px !important;
+          }
+        }
+      `}</style>
         {carouselImages.map((img, idx) => (
           <div
             key={idx}
