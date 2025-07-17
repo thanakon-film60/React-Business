@@ -19,7 +19,7 @@ import { Metadata } from "next";
 import '../Style/style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-
+import '../app/globals.css';
 
 
 export const metadata: Metadata = {

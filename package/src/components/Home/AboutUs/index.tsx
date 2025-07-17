@@ -7,7 +7,7 @@ import { Aboutdata } from "@/app/api/data";
 const Aboutus = () => {
   return (
     <section className=" bg-cover bg-center dark:bg-darkmode overflow-hidden ">
-          <h4 className="text-center text-4xl lg:text-65 font-bold pb-12">
+          <h4 className="text-center font-bold pb-4 underline decoration-red-500 decoration-8 " style={{ fontSize: "34px"}}>
             เกี่ยวกับเรา
           </h4>
       <div className="container mx-auto lg:max-w-(--breakpoint-xl) relative z-1 md:max-w-(--breakpoint-md)" style={{ maxWidth: "100%" }}>
@@ -19,10 +19,10 @@ const Aboutus = () => {
             <div className=" hover:bg-darkmode bg-white rounded-3xl p-4 shadow-xl group mb-5 transparent-bg">
               <div className="d-flex align-items-center gap-3">
                 <div>
-                  <h4 className="text-4xl font-semibold text-black group-hover:text-gray-500 mb-1">
+                  <h4 className="text-4xl font-semibold text-black group-hover:text-gray-500 mb-1 fw-bold">
                     บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)
                   </h4>
-                  <a className="text-lg font-normal fw-bold text-white group-hover:text-white mb-1" style={{ display: 'block', maxWidth: 1245 , textDecoration: "none !important" }}>
+                  <a className="text-lg font-normal fw-bold text-black group-hover:text-white mb-1 no-decoration" style={{ display: 'block', maxWidth: 1245  }}>
                     ก่อตั้งขึ้นเมื่อปี 2526 เป็นผู้นำด้านการผลิตและออกแบบกล่องบรรจุภัณฑ์กระดาษลอนลูกฟูกและกล่องกระดาษแข็ง พร้อมงานพิมพ์ออฟเซ็ทคุณภาพสูง สำหรับลูกค้าในหลากหลายอุตสาหกรรม เช่น อาหาร เครื่องดื่ม อิเล็กทรอนิกส์ ยานยนต์ และยารักษาโรค บริษัทมีความมุ่งมั่นในการพัฒนาเทคโนโลยีการผลิตและนวัตกรรมด้านบรรจุภัณฑ์อย่างต่อเนื่อง ได้รับการรับรองมาตรฐานคุณภาพ ISO 9001:2015, ISO 14001:2015 และ GMP/HACCP
                     ตลอดจนให้บริการออกแบบผลิตภัณฑ์ตามความต้องการของลูกค้า โดยคำนึงถึงประสิทธิภาพและความปลอดภัย นอกจากนี้
                     ยังเน้นสร้างสรรค์บรรจุภัณฑ์ที่เป็นมิตรกับสิ่งแวดล้อม
