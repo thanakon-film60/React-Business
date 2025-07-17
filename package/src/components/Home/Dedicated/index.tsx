@@ -20,6 +20,16 @@ const Dedicated = () => {
               alt="animated"
               className="w-full h-full object-cover"
             />
+            <p className="absolute bottom-0 left-0 m-2 text-white text-3xl font-extrabold drop-shadow-lg" style={{
+                textShadow: `
+                  2px 2px 6px rgba(0,0,0,0.8),
+                  0px 0px 12px #fff,
+                  0px 4px 16px rgba(0,0,0,0.8)
+                `
+              }}>
+              การพัฒนาและการออกแบบ
+            </p>
+
           </div>
             {/*  */}
 
@@ -34,6 +44,15 @@ const Dedicated = () => {
               alt="animated"
               className="w-full h-full object-cover"
             />
+           <p className="absolute bottom-0 left-0 m-2 text-white text-3xl font-extrabold drop-shadow-lg" style={{
+                textShadow: `
+                  2px 2px 6px rgba(0,0,0,0.8),
+                  0px 0px 12px #fff,
+                  0px 4px 16px rgba(0,0,0,0.8)
+                `
+              }}>
+              เตรียมพิมพ์และการพิมพ์
+            </p>
           </div>
             {/*  */}
            <div className="group relative w-[450px] h-[325px] mx-auto">
@@ -47,6 +66,15 @@ const Dedicated = () => {
               alt="animated"
               className="w-full h-full object-cover"
             />
+            <p className="absolute bottom-0 left-0 m-2 text-white text-3xl font-extrabold drop-shadow-lg" style={{
+                textShadow: `
+                  2px 2px 6px rgba(0,0,0,0.8),
+                  0px 0px 12px #fff,
+                  0px 4px 16px rgba(0,0,0,0.8)
+                `
+              }}>
+              ตัวอย่างสินค้า
+            </p>
           </div>
             {/*  */}
          
