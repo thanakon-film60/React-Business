@@ -3,6 +3,8 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import NewsCarousel from "../../Carousel/NewsCarousel.jsx";
+import InvestorInfoGrid from "@/components/InvestorInfo/InvestorInfoGrid";
+
 const Digital = () => {
   return (
       <div className="container mx-auto lg:max-w-(--breakpoint-xl) md:max-w-(--breakpoint-md) bg-primary  bg-no-repeat bg-right-top pb-60 relative">
@@ -11,7 +13,7 @@ const Digital = () => {
              <NewsCarousel/>
             </div>
              <div className="bg-gray-100 flex flex-col items-center justify-center rounded-lg h-full">
-              We are a digital agency that builds amazing products.
+              <InvestorInfoGrid />
             </div>
             <div className="bg-gray-100 flex flex-col items-center justify-center rounded-lg h-full">
               GGGGG GG  G 
