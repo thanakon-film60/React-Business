@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-
+import NewsCarousel from "../../Carousel/NewsCarousel.jsx";
 const Digital = () => {
   return (
     <section className="relative bg-cover bg-center dark:bg-darkmode overflow-hidden">
@@ -11,18 +11,18 @@ const Digital = () => {
           {/* COLUMN-1 */}
           <div className="pt-24 lg:pl-24">
             <h3 className="text-18 font-normal text-white mb-5 tracking-widest text-center lg:text-start uppercase mt-5">
-              Who we are
+             <NewsCarousel/>
             </h3>
             <h4 className="text-65 sm:text-6xl font-bold text-white mb-8 leading-snug text-center lg:text-start">
               We are a digital agency that builds amazing products.
             </h4>
             <div className="text-center lg:text-start">
-              <Link
+              {/* <Link
                 href="#"
                 className="text-xl font-semibold text-white bg-blue hover:bg-primary py-4 px-12 rounded-full"
               >
                 Get started
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
