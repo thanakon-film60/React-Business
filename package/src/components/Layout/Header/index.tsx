@@ -5,7 +5,7 @@ import { headerData } from "../Header/Navigation/menuData";
 import Logo from "./Logo";
 import Image from "next/image";
 import HeaderLink from "../Header/Navigation/HeaderLink";
-import LanguageSwitcher from "@/components/Header/LanguageSwitcher";
+import { DropdownMenuItem } from "@/components/DropdownMenu"; 
 
 
 const Header: React.FC = () => {
@@ -29,26 +29,22 @@ const Header: React.FC = () => {
     };
   }, [navbarOpen]);
 
-  useEffect(() => {
-    // @ts-ignore
-    import("bootstrap/dist/js/bootstrap.bundle.min.js");
-  }, []);
-
+ 
   const menu1 = headerData.slice(0, 4);
   const menu2 = headerData.slice(4);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 w-full transition-all duration-300 border-b border-black/60 bg-white">
-      <div className="container" style={{ maxWidth:1520 }}>
-        <div className="d-flex align-items-center w-100 px-md-3 px-lg-4" style={{ height: 120 }}>
+      <div className="container " style={{ maxWidth:1520 }}>
+        <div className="d-flex align-items-center w-100 px-md-3 px-lg-4 " style={{ height: 120 }}>
           {/* --- เมนูซ้าย --- */}
-          <div className="d-flex menu-desktop flex-grow-1 align-items-center gap-1 gap-md-2  justify-content-end">
+          <div className="d-flex menu-desktop flex-grow-1 align-items-center gap-1 gap-md-2  justify-content-end ">
             {menu1.map((item, i) =>
               item.submenu ? (
-                <div className="menu-item-wrapper with-dropdown" key={i}>
+                <div className="menu-item-wrapper with-dropdown " key={i}>
                   <div className="dropdown w-100 h-100">
                     <button
-                      className="btn btn-link dropdown-toggle text-gray-979797 w-100 h-100 fw-bold"
+                      className="btn btn-link dropdown-toggle text-gray-979797 w-100 h-100 fw-bold no-decoration"
                       type="button"
                       id={`dropdownMenuButton-${i}`}
                       data-bs-toggle="dropdown"
@@ -107,7 +103,7 @@ const Header: React.FC = () => {
                 <div className="menu-item-wrapper with-dropdown" key={menu1.length + i}>
                   <div className="dropdown w-100 h-100">
                     <button
-                      className="btn btn-link dropdown-toggle text-gray-979797 w-100 h-100 fw-bold"
+                      className="btn btn-link dropdown-toggle text-gray-979797 w-100 h-100 fw-bold no-decoration"
                       type="button"
                       id={`dropdownMenuButton-${menu1.length + i}`}
                       data-bs-toggle="dropdown"
