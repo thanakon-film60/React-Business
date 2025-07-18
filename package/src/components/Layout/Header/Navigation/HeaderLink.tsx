@@ -25,7 +25,7 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
         <div className="menu-item-wrapper" style={{width: "auto", minWidth: 0, overflow: "hidden"}}>
           <Link
             href={item.href}
-            className={`fw-bold fs-8 text-black-50 d-flex align-items-center text-truncate text-gray-979797 ellipsis-text${
+            className={`fw-bold fs-8 text-black-50 d-flex align-items-center text-truncate text-gray-979797 ellipsis-text no-decoration ${
               path === item.href 
             }`}    
           style={{ fontSize: "18px", fontWeight: "bold" }}>

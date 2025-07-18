@@ -30,53 +30,40 @@ h2 { font-size: 14px; }
 
    /* ----------------------------------------------------------------- */
    
+/* ทำขีดเส้นใต้แบบ animate เฉพาะตอน hover */
 .menu-item-wrapper button,
 .menu-item-wrapper a {
   position: relative;
   overflow: hidden;
-  padding: 0.5rem 1.2rem;
-  border-radius: 0.75rem;
-  font-size: 1.07rem;
-  /* color: #166534; */
-  transition: background 0.18s, color 0.18s;
-  background: transparent;
-  z-index: 1;
-}
-
-.menu-item-wrapper:hover button,
-.menu-item-wrapper:hover a {
-  /* background: rgba(22, 101, 52, 0.09);
-  color: #22c55e; */
 }
 
 .menu-item-wrapper button::after,
 .menu-item-wrapper a::after {
-  content: "";
+  content: '';
   position: absolute;
-  left: 25%;
-  bottom: 0.2rem;
-  width: 50%;
-  height: 2.5px;
-  /* background: linear-gradient(90deg, #22c55e 0%, #15803d 100%); */
-  opacity: 0.7;
-  border-radius: 6px;
-  transition: width 0.35s cubic-bezier(.4,1.3,.4,1), left 0.35s, opacity 0.25s;
-  width: 0%;
+  left: 10%;
+  right: 10%;
+  bottom: -0.15em;
+  height: 6px;
+  background: #dc2626;        /* สีแดง tailwind: red-600 */
+  transform: scaleX(0);
+  transition: transform 0.2s cubic-bezier(.77,0,.18,1);
+  border-radius: 2px;
 }
 
 .menu-item-wrapper:hover button::after,
 .menu-item-wrapper:hover a::after {
-  left: 0;
-  width: 100%;
-  opacity: 1;
+  transform: scaleX(1);
 }
+
 /* ------------------------------------------------------------------------------------------------------------- */
 
 /* Dropdown improvements */
-.menu-item-wrapper.with-dropdown .dropdown-menu {
-  display: block; 
-  pointer-events: none;
+.menu-item-wrapper .dropdown-menu {
+  display: none;
   opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s;
   min-width: 180px;
   background: #fff;
   box-shadow: 0 8px 32px 0 rgba(21, 128, 61, 0.18);
@@ -88,69 +75,54 @@ h2 { font-size: 14px; }
   left: 0;
 }
 
-/* .menu-item-wrapper.with-dropdown:hover .dropdown-menu,
-.menu-item-wrapper.with-dropdown:focus-within .dropdown-menu {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
-} */
-
-.menu-item-wrapper .dropdown-menu a {
-  display: block;
-  padding: 0.5rem 1.1rem;
-  /* color: #166534; */
-  border-radius: 0.5rem;
-  font-size: 0.99rem;
-  transition: background 0.18s, color 0.15s;
-}
-
-.menu-item-wrapper .dropdown-menu a:hover,
-.menu-item-wrapper .dropdown-menu a:focus {
-  background: #e5f8ee00;
-  color: #d42c2c;
-}
-
-@media (prefers-color-scheme: dark) {
-  .menu-item-wrapper button,
-  .menu-item-wrapper a {
-    color: #bbf7d0;
-    background: transparent;
-  }
-  .menu-item-wrapper:hover button,
-  .menu-item-wrapper:hover a {
-    background: rgba(52, 211, 153, 0.10);
-    /* color: #4ade80; */
-  }
-
-
-  .menu-item-wrapper.with-dropdown .dropdown-menu {
-    background: #1a1a1a;
-    box-shadow: 0 8px 32px 0 rgba(52, 211, 153, 0.14);
-  }
-  .menu-item-wrapper .dropdown-menu a {
-    color: #bbf7d0;
-  }
-  .menu-item-wrapper .dropdown-menu a:hover,
-  .menu-item-wrapper .dropdown-menu a:focus {
-    background: #133829;
-    color: #4ade80;
-  }
-}
-/* --------------------------------------------------------------------------------------------- */
-/* เพิ่มใน global CSS หรือ component CSS */
+/* โผล่ตอน hover/focus */
 .menu-item-wrapper.with-dropdown:hover .dropdown-menu,
 .menu-item-wrapper.with-dropdown:focus-within .dropdown-menu {
   display: block !important;
   opacity: 1 !important;
   pointer-events: auto;
-}
-.menu-item-wrapper .dropdown-menu {
-  display: none;
-  opacity: 0;
-  transition: opacity 0.12s;
+  /* transform: translateY(0) scale(1); // ถ้ามี effect */
 }
 
-/* --------------------------------------------------------------------------------------------- */
+/* เส้นใต้สีแดง active */
+.menu-item-wrapper.active > button,
+.menu-item-wrapper.active > a {
+  position: relative;
+}
+.menu-item-wrapper.active > button::after,
+.menu-item-wrapper.active > a::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  margin: auto;
+  height: 6px;
+  width: 100%;
+  background: #d42c2c;
+  border-radius: 6px;
+  box-shadow: 0 3px 10px 0 rgba(0,0,0,0.07);
+}
+
+/* ซ่อนลูกศรของ bootstrap */
+.menu-item-wrapper .dropdown-toggle::after {
+  /* display: none !important;
+  content: none !important; */
+  border-top-color: #ffffff00 !important; 
+}
+
+
+/* 
+/* ------------------------------------------------------------------------ */
+.dropdown-item::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  height: 0 !important;
+}
+/* ------------------------------------------------------------------------ */
+
 
 .text-gray-979797 { color: #979797 !important; }
 .ellipsis-text { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
