@@ -10,11 +10,11 @@ const Footer = () => {
         <div className="flex flex-col items-start">
           <Image src="/images/logo/logo.png" alt="Micro Leasing Logo" width={120} height={120} />
           <div className="mt-3">
-            <h3 className="text-micro-yellow text-2xl font-bold mb-2">Call Center</h3>
+            <h3 className="text-micro-blue-200 text-2xl font-bold mb-2">Call Center</h3>
             <p className="text-white">02-105-5599<br/>Contact@microleasingplc.com</p>
           </div>
           <div className="mt-7">
-            <h4 className="text-micro-yellow text-xl font-bold mb-3">ติดตามเรา</h4>
+            <h4 className="text-micro-blue-200 text-xl font-bold mb-3">ติดตามเรา</h4>
             <div className="flex gap-5">
               <Link href="#"><Icon icon="ic:baseline-facebook" className="text-3xl text-white hover:text-yellow-400" /></Link>
               <Link href="#"><Icon icon="simple-icons:line" className="text-3xl text-white hover:text-yellow-400" /></Link>
@@ -25,7 +25,7 @@ const Footer = () => {
         </div>
         {/* Column 2: ที่อยู่ */}
         <div>
-          <h4 className="text-micro-yellow text-2xl font-bold mb-2">สำนักงานใหญ่ จ.สมุทรปราการ</h4>
+          <h4 className="text-micro-blue-200 text-2xl font-bold mb-2">สำนักงานใหญ่ จ.สมุทรปราการ</h4>
           <p className="text-white">
             9/9 หมู่ 6 ถนนกิ่งแก้ว<br />
             ตำบลราชาเทวะ<br />
@@ -33,7 +33,7 @@ const Footer = () => {
             จังหวัดสมุทรปราการ 10540<br />
             (ที่ตั้งบริษัทอยู่ติด ซอยกิ่งแก้ว 48)
           </p>
-          <h4 className="text-micro-yellow text-xl font-bold mt-7 mb-1">เวลาทำการ</h4>
+          <h4 className="text-micro-blue-200 text-xl font-bold mt-7 mb-1">เวลาทำการ</h4>
           <p className="text-white">
             จันทร์ - เสาร์ 8.00 - 17.00 น.<br/>
             วันหยุด วันอาทิตย์
@@ -41,23 +41,23 @@ const Footer = () => {
         </div>
         {/* Column 3: เกี่ยวกับเรา */}
         <div>
-          <h4 className="text-micro-yellow text-2xl font-bold mb-5">เกี่ยวกับเรา</h4>
+          <h4 className="text-micro-blue-200 text-2xl font-bold mb-5">เกี่ยวกับเรา</h4>
           <ul className="text-white space-y-3">
-            <li><Link href="#" className="hover:underline">เกี่ยวกับเรา</Link></li>
-            <li><Link href="#" className="hover:underline">ติดต่อเรา</Link></li>
-            <li><Link href="#" className="hover:underline">ร่วมงานกับเรา</Link></li>
-            <li><Link href="#" className="hover:underline">นักลงทุนสัมพันธ์</Link></li>
+            <li><Link href="#" className="hover:underline text-white">เกี่ยวกับเรา</Link></li>
+            <li><Link href="#" className="hover:underline text-white" >ติดต่อเรา</Link></li>
+            <li><Link href="#" className="hover:underline text-white">ร่วมงานกับเรา</Link></li>
+            <li><Link href="#" className="hover:underline text-white">นักลงทุนสัมพันธ์</Link></li>
           </ul>
         </div>
         {/* Column 4: สินค้าและบริการ */}
         <div>
-          <h4 className="text-micro-yellow text-2xl font-bold mb-5">สินค้าและบริการ</h4>
+          <h4 className="text-micro-blue-200 text-2xl font-bold mb-5">สินค้าและบริการ</h4>
           <ul className="text-white space-y-3">
-            <li><Link href="#" className="hover:underline">สินเชื่อซื้อขายรถยนต์ทุกประเภท</Link></li>
-            <li><Link href="#" className="hover:underline">สินเชื่อเพิ่มสภาพคล่อง</Link></li>
-            <li><Link href="#" className="hover:underline">รถพร้อมประมูล</Link></li>
-            <li><Link href="#" className="hover:underline">สินเชื่อรถมอเตอร์ไซค์</Link></li>
-            <li><Link href="#" className="hover:underline">บริการนายหน้าประกันภัย</Link></li>
+            <li><Link href="#" className="hover:underline text-white">สินเชื่อซื้อขายรถยนต์ทุกประเภท</Link></li>
+            <li><Link href="#" className="hover:underline text-white">สินเชื่อเพิ่มสภาพคล่อง</Link></li>
+            <li><Link href="#" className="hover:underline text-white">รถพร้อมประมูล</Link></li>
+            <li><Link href="#" className="hover:underline text-white">สินเชื่อรถมอเตอร์ไซค์</Link></li>
+            <li><Link href="#" className="hover:underline text-white">บริการนายหน้าประกันภัย</Link></li>
           </ul>
         </div>
       </div>
