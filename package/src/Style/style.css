@@ -295,7 +295,7 @@ h2 { font-size: 14px; }
   /* font-weight: bold; */
 }
 
-.text-micro-gray {
-  color: #979797;
-  /* font-weight: bold; */
+.text-micro-blue-200 {
+  color: #0d6efd;
+  font-weight: bold;
 }
