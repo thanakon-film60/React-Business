@@ -5,7 +5,7 @@ import { Icon } from "@iconify/react";
 const Footer = () => {
   return (
     <footer className="bg-[#D6001C] pt-14 pb-0 relative">
-      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
         {/* Column 1: Logo & Call Center */}
         <div className="flex flex-col items-start">
           <Image src="/images/logo/logo.png" alt="Micro Leasing Logo" width={120} height={120} />
@@ -25,12 +25,13 @@ const Footer = () => {
         </div>
         {/* Column 2: ที่อยู่ */}
         <div>
-          <h4 className="text-micro-yellow text-2xl font-bold mb-2">สำนักงานใหญ่ จ.นครปฐม</h4>
+          <h4 className="text-micro-yellow text-2xl font-bold mb-2">สำนักงานใหญ่ จ.สมุทรปราการ</h4>
           <p className="text-white">
-            863/3 ถนนเพชรเกษม<br />
-            ตำบลสนามจันทร์<br />
-            อำเภอเมืองนครปฐม<br />
-            จังหวัดนครปฐม 73000
+            9/9 หมู่ 6 ถนนกิ่งแก้ว<br />
+            ตำบลราชาเทวะ<br />
+            อำเภอเมืองสมุทรปราการ<br />
+            จังหวัดสมุทรปราการ 10540<br />
+            (ที่ตั้งบริษัทอยู่ติด ซอยกิ่งแก้ว 48)
           </p>
           <h4 className="text-micro-yellow text-xl font-bold mt-7 mb-1">เวลาทำการ</h4>
           <p className="text-white">
@@ -62,7 +63,7 @@ const Footer = () => {
       </div>
       {/* Bottom Bar */}
       <div className="bg-[#f6f6f7] py-4 mt-10">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between text-micro-blue text-center text-lg gap-3 ">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between text-micro-blue text-center text-sm sm:text-base md:text-lg gap-3">
           <div>
             © สงวนลิขสิทธิ์ พ.ศ. 2568 บริษัท ไมโครลิสซิ่ง จำกัด (มหาชน)
           </div>
