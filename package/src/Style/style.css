@@ -294,3 +294,8 @@ h2 { font-size: 14px; }
   color: #2a3eb1;
   /* font-weight: bold; */
 }
+
+.text-micro-gray {
+  color: #979797;
+  /* font-weight: bold; */
+}
