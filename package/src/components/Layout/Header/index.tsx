@@ -85,7 +85,7 @@ const Header: React.FC = () => {
                 </div>
               ) : (
                 <div className="menu-item-wrapper" key={i}>
-                  <HeaderLink item={item} />
+                  <HeaderLink key={item.label} item={item} isFirst={i === 0} />
                 </div>
               )
             )}

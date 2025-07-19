@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import "../../../../Style/style.css";
 
 
-const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
+const HeaderLink: React.FC<{ item: HeaderItem;  isFirst?: boolean }> = ({ item, isFirst }) => {
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const path = usePathname();
 
@@ -28,7 +28,7 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
             className={`fw-bold fs-8 text-black-50 d-flex align-items-center text-truncate text-gray-979797 ellipsis-text no-decoration ${
               path === item.href 
             }`}    
-          style={{ fontSize: "18px", fontWeight: "bold" }}>
+          style={{ fontSize: "18px", fontWeight: "bold", marginRight: isFirst ? 5 : undefined }}>
             {item.label}
             {item.submenu && (
               <svg
