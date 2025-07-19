@@ -107,12 +107,11 @@ h2 { font-size: 14px; }
 
 /* ซ่อนลูกศรของ bootstrap */
 .menu-item-wrapper .dropdown-toggle::after {
-  /* display: none !important;
-  content: none !important; */
+
   border-top-color: #ffffff00 !important; 
 }
-
-
+  /* display: none !important; รอใช้งาน
+  content: none !important; */
 /* 
 /* ------------------------------------------------------------------------ */
 .dropdown-item::after {
@@ -284,4 +283,14 @@ h2 { font-size: 14px; }
 .investor-btn:hover .label,
 .investor-btn:focus .label {
   color: #fff;
+}
+/* -------------------------------------------------------------------------------------------------------------- */
+.text-micro-yellow {
+  color: #FFD600;
+  font-weight: bold;
+}
+
+.text-micro-blue {
+  color: #2a3eb1;
+  /* font-weight: bold; */
 }
