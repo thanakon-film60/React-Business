@@ -23,7 +23,10 @@ import '../app/globals.css';
 
 
 export const metadata: Metadata = {
-  title: "Desgy Solutions",
+  title: "THAI PACKAGING & PRINTING PCL",
+  icons: {
+    icon: '/TPP.ico',
+  },
 };
 
 export default function Home() {
@@ -48,3 +51,4 @@ export default function Home() {
 }
 
 // *ALL
+// Desgy Solutions ไอค่อนหรือชื่อ
