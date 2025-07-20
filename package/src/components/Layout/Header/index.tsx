@@ -97,7 +97,7 @@ const Header: React.FC = () => {
           </div>
 
           {/* --- เมนูขวา + ภาษา --- */}
-          <div className="d-flex menu-desktop flex-grow-1 align-items-center gap-1 justify-content-start">
+          <div className="d-flex menu-desktop flex-grow-1 align-items-center gap-3 justify-content-start">
             {menu2.map((item, i) =>
               item.submenu ? (
                 <div className="menu-item-wrapper with-dropdown" key={menu1.length + i}>
@@ -144,7 +144,7 @@ const Header: React.FC = () => {
             )}
           </div>
            
-          <div className="d-flex align-items-center gap-1 gap-md-2 ms-auto header-lang">
+          <div className="d-none d-xxl-flex d-flex align-items-center gap-1 gap-md-2 ms-auto header-lang">
           <Link href="/en" className="d-flex align-items-center gap-1 gap-md-2 text-decoration-none lang-link language-switcher-btn">
             <Image src="/images/icons/us.svg" alt="US Flag" width={20} height={14} className="lang-flag" />
               <span className="lang-text">English</span>
@@ -173,7 +173,7 @@ const Header: React.FC = () => {
         {/* Mobile menu side panel */}
           <div
             ref={mobileMenuRef}
-            className={`d-xxl-none fixed top-0 end-0 h-100 w-100 bg-darkmode shadow-lg transition-transform duration-300 ${
+            className={`d-xxl-none fixed top-0 end-0 h-100 w-100 bg-darkmode shadow-lg transition-transform duration-300 bg-white ${
               navbarOpen ? "" : "d-none"
             }`}
             style={{ maxWidth: 360, zIndex: 9999 }}
@@ -190,11 +190,63 @@ const Header: React.FC = () => {
               <i className="bi bi-x-lg" style={{ fontSize: 28 }}></i>
             </button>
           </div>
-          {/* ...mobile menu content... */}
+          <div className="p-4 overflow-y-auto">
+            <nav className="flex flex-col gap-2">
+          {headerData.map((item, i) => (
+            <div key={i} className="border-b border-gray-200 py-2">
+              {item.submenu ? (
+                <details className="group">
+                  <summary className="flex justify-between items-center font-bold text-gray-800 cursor-pointer">
+                    {item.label}
+                    {/* <span className="group-open:rotate-180 transition-transform duration-200">
+                      ▼
+                    </span> */}
+                  </summary>
+                  <div className="flex flex-col pl-4 mt-2 gap-1">
+                    {item.submenu.map((sub, j) => (
+                      <Link
+                        key={j}
+                        href={sub.href}
+                        className="text-gray-700 hover:text-blue-600 transition-colors"
+                        onClick={() => setNavbarOpen(false)}
+                      >
+                        {sub.label}
+                      </Link>
+                    ))}
+                  </div>
+                </details>
+              ) : (
+                <Link
+                  href={item.href}
+                  className="font-bold text-gray-800 hover:text-blue-600 transition-colors"
+                  onClick={() => setNavbarOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              )}
+            </div>
+          ))}
+            </nav>
+          {/* Language Switcher */}
+          <div className="mt-6 border-t border-gray-200 pt-4">
+            <div className="flex items-center justify-center gap-4">
+              <Link href="/en" className="flex items-center gap-2" onClick={() => setNavbarOpen(false)}>
+                <Image src="/images/icons/us.svg" alt="English" width={20} height={14} />
+                <span>English</span>
+              </Link>
+              <Link href="/th" className="flex items-center gap-2" onClick={() => setNavbarOpen(false)}>
+                <Image src="/images/icons/th.svg" alt="Thai" width={20} height={14} />
+                <span>Thai</span>
+              </Link>
+            </div>
+          </div>
+
+          </div>
         </div>
 
         </div>
         {/* --- Mobile Menu --- */}
+
 
       </div>
     </header>
