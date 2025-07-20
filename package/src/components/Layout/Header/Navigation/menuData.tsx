@@ -31,14 +31,8 @@ export const headerData: HeaderItem[] = [
       { label: "รางวัลและความภาคภูมิใจ", href: "/awards-achievements" },
     ],
   },
-  {
-    label: "ข่าวสารและกิจกรรม-บทความ",
-    href: "#",
-    submenu: [
-      { label: "ข่าวสารและกิจกรรม", href: "/news-events" },
-      { label: "บทความ", href: "/articles" },
-    ],
-  },
+{ label: "ข่าวสารและกิจกรรม", href: "/news-events" },
+{ label: "บทความ", href: "/news-events" },
   {
   label: "นักลงทุนสัมพันธ์",
   href: "#",
@@ -61,3 +55,13 @@ export const headerData: HeaderItem[] = [
 },
 
 ];
+
+
+  // {
+  //   label: "ข่าวสารและกิจกรรม-บทความ",
+  //   href: "#",
+  //   submenu: [
+  //     { label: "ข่าวสารและกิจกรรม", href: "/news-events" },
+  //     { label: "บทความ", href: "/articles" },
+  //   ],
+  // },
