@@ -1,4 +1,3 @@
-
 import './globals.css'
 import localFont from 'next/font/local'
 import Header from '@/components/Layout/Header'
@@ -6,6 +5,14 @@ import Footer from '@/components/Layout/Footer'
 // import { ThemeProvider } from 'next-themes'
 import ScrollToTop from '@/components/ScrollToTop'
 import Aoscompo from '@/utils/aos'
+import { Metadata } from 'next'    
+
+export const metadata: Metadata = {
+  title: "THAI PACKAGING & PRINTING PCL",
+  icons: {
+    icon: '/TPP.ico',
+  },
+}
 
 const font = localFont({
   src: [
@@ -22,7 +29,6 @@ const font = localFont({
   ],
   display: 'swap',
 })
-
 
 export default function RootLayout({
   children,
