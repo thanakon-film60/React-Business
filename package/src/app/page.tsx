@@ -34,7 +34,7 @@ export default function Home() {
       <Dedicated />
       <Digital />
       {/* <Beliefs /> */}
-      <Work />
+      {/* <Work /> */}
       {/* <Team /> */}
       {/* <Featured /> */}
       {/* <Manage /> */}
@@ -46,3 +46,5 @@ export default function Home() {
     </main>
   );
 }
+
+// *ALL

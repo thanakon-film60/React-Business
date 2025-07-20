@@ -1,63 +1,94 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { ProductType } from "@/app/api/data";
 
-const footer = () => {
+const Footer = () => {
   return (
-    <div className="bg-black" id="first-section">
-      <div className="mx-auto max-w-2xl pt-48 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div className="grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 lg:grid-cols-12 xl:gap-x-8">
-          {/* COLUMN-1 */}
-          <div className='col-span-4'>
-            <h3 className='text-white text-4xl font-semibold leading-9 mb-4 lg:mb-20'>Desgy Solutions</h3>
-            <div className='flex gap-4'>
-              <div className='footer-icons'>
-                <Link href="https://facebook.com"><Image src={'/images/footer/vec.svg'} alt="facebook" width={15} height={20} /></Link>
-              </div>
-              <div className='footer-icons'>
-                <Link href="https://twitter.com"><Image src={'/images/footer/twitter.svg'} alt="twitter" width={20} height={20} /></Link>
-              </div>
-              <div className='footer-icons'>
-                <Link href="https://instagram.com"><Image src={'/images/footer/instagram.svg'} alt="instagram" width={20} height={20} /></Link>
-              </div>
-            </div>
+    <footer className="bg-[#D6001C] py-10 relative">
+      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Column 1: Logo & Call Center */}
+        <div className="flex flex-col items-start">
+          <Image src="/images/logo/logo.png" alt="Micro Leasing Logo" width={120} height={120} />
+          <div className="mt-4">
+            <h3 className="text-micro-blue-200 text-xl md:text-2xl font-bold mb-2">ติดต่อสอบถาม</h3>
+            <p className="text-white">02-175-2201-8<br />Contact@microleasingplc.com</p>
           </div>
-          {/* CLOUMN-2/3 */}
-          {ProductType.map((product) => (
-            <div key={product.id} className="group relative col-span-2">
-              <p className="text-white text-xl font-extrabold mb-9">{product.section}</p>
-              <ul>
-                {product.link.map((link: string, index: number) => (
-                  <li key={index} className='mb-5'>
-                    <Link href="/" className="text-white text-lg font-normal mb-6 space-links">{link}</Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-      {/* All Rights Reserved */}
-      <div className="mx-auto max-w-2xl lg:max-w-7xl">
-        <div className="pt-5 pb-5 px-4 sm:px-6 lg:px-4 border-solid border-t border-footer">
-          <div className="mt-4 grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 xl:gap-x-8">
-            <div>
-              <h3 className='text-center md:text-start text-white text-lg'>@2023 - All Rights Reserved by <Link href="https://getnextjstemplates.com/" target="_blank"> GetNextJsTemplates.com</Link></h3>
-            </div>
-            <div className="flex justify-center md:justify-end">
-              <Link href="/">
-                <h3 className="text-white pr-6">Privacy policy</h3>
-              </Link>
-              <Link href="/">
-                <h3 className="text-white pl-6 border-solid border-l border-footer">Terms & conditions</h3>
-              </Link>
+          <div className="mt-6">
+            <h4 className="text-micro-blue-200 text-lg md:text-xl font-bold mb-3">ติดตามเรา</h4>
+            <div className="flex gap-4">
+              <Link href="#"><Icon icon="ic:baseline-facebook" className="text-3xl text-white hover:text-yellow-400" /></Link>
+              <Link href="#"><Icon icon="simple-icons:line" className="text-3xl text-white hover:text-yellow-400" /></Link>
+              <Link href="#"><Icon icon="ri:tiktok-fill" className="text-3xl text-white hover:text-yellow-400" /></Link>
+              <Link href="#"><Icon icon="mdi:youtube" className="text-3xl text-white hover:text-yellow-400" /></Link>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  )
-}
 
-export default footer;
+        {/* Column 2: ที่อยู่ */}
+        <div>
+          <h4 className="text-micro-blue-200 text-xl md:text-2xl font-bold mb-2">บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)</h4>
+          <p className="text-white">
+            9/9 หมู่ 6 ถนนกิ่งแก้ว<br />
+            ตำบลราชาเทวะ<br />
+            อำเภอบางพลี<br />
+            จังหวัดสมุทรปราการ 10540.<br />
+          </p>
+          <h4 className="text-micro-blue-200 text-lg md:text-xl font-bold mt-6 mb-1">เวลาทำการ</h4>
+          <p className="text-white">
+            จันทร์ - เสาร์ 8.30 - 17.30 น.<br />
+            วันหยุด วันอาทิตย์
+          </p>
+        </div>
+
+        {/* Column 3: เกี่ยวกับเรา */}
+        <div>
+          <h4 className="text-micro-blue-200 text-xl md:text-2xl font-bold mb-4">เกี่ยวกับเรา</h4>
+          <ul className="text-white space-y-3">
+            {['เกี่ยวกับเรา', 'ติดต่อเรา', 'ร่วมงานกับเรา', 'นักลงทุนสัมพันธ์'].map((text, idx) => (
+              <li key={idx}><Link href="#" className="hover:underline text-micro-white">{text}</Link></li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Column 4: สินค้าและบริการ */}
+        <div>
+          <h4 className="text-micro-blue-200 text-xl md:text-2xl font-bold mb-4">สินค้าและบริการ</h4>
+          <ul className="space-y-3">
+            {["Pakku Packaging - Food Packaging","บริการของเรา"].map((text, idx) => (
+              <li key={idx}><Link href="#" className="hover:underline text-micro-white">{text}</Link></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="bg-[#f6f6f7] py-4 mt-10">
+        <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-center text-micro-blue text-center text-sm gap-x-2 gap-y-2">
+          <p className="whitespace-nowrap mb-0">
+            © สงวนลิขสิทธิ์ พ.ศ. 2568 บริษัท ไมโครลิสซิ่ง จำกัด (มหาชน)
+          </p>
+          <ul className="flex flex-wrap items-center justify-center pl-0 mb-0 list-none">
+            {[
+              'ข้อกำหนดและเงื่อนไข',
+              'การคุ้มครองข้อมูลส่วนบุคคล',
+              'นโยบายการใช้คุกกี้',
+              'แผนผังเว็บไซต์',
+            ].map((text, idx, arr) => (
+              <li key={idx} className="flex items-center">
+                <Link href="#" className="text-blue-600 hover:underline whitespace-nowrap">
+                  {text}
+                </Link>
+                {idx < arr.length - 1 && (
+                  <span className="mx-2 text-blue-600">|</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+    </footer>
+  );
+};
+
+export default Footer;

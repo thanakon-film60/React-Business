@@ -35,7 +35,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 w-full transition-all duration-300 border-b border-black/60 bg-white">
-      <div className="container " style={{ maxWidth:1520 }}>
+      <div className="container-fluid " >
         <div className="d-flex align-items-center w-100 px-md-3 px-lg-4 " style={{ height: 120 }}>
           {/* --- เมนูซ้าย --- */}
           <div className="d-flex menu-desktop flex-grow-1 align-items-center gap-1 gap-md-2  justify-content-end ">
@@ -85,7 +85,7 @@ const Header: React.FC = () => {
                 </div>
               ) : (
                 <div className="menu-item-wrapper" key={i}>
-                  <HeaderLink item={item} />
+                  <HeaderLink key={item.label} item={item} isFirst={i === 0} />
                 </div>
               )
             )}
@@ -143,16 +143,18 @@ const Header: React.FC = () => {
               )
             )}
           </div>
-            <div className="d-flex align-items-center gap-1 gap-md-2 ms-auto header-lang">
-              <Link href="/en" className="d-flex align-items-center gap-1 gap-md-2 text-decoration-none lang-link language-switcher-btn">
-                <Image src="/images/icons/us.svg" alt="US Flag" width={20} height={14} className="lang-flag" />
-                <span className="lang-text">English</span>
-              </Link>
-              <Link href="/th" className="d-flex align-items-center gap-1 gap-md-2 text-decoration-none lang-link language-switcher-btn">
-                <Image src="/images/icons/th.svg" alt="TH Flag" width={20} height={14} className="lang-flag" />
-                <span className="lang-text">Thai</span>
-              </Link>
+           
+          <div className="d-flex align-items-center gap-1 gap-md-2 ms-auto header-lang">
+          <Link href="/en" className="d-flex align-items-center gap-1 gap-md-2 text-decoration-none lang-link language-switcher-btn">
+            <Image src="/images/icons/us.svg" alt="US Flag" width={20} height={14} className="lang-flag" />
+              <span className="lang-text">English</span>
+            </Link>
+            <Link href="/th" className="d-flex align-items-center gap-1 gap-md-2 text-decoration-none lang-link language-switcher-btn">
+            <Image src="/images/icons/th.svg" alt="TH Flag" width={20} height={14} className="lang-flag" />
+              <span className="lang-text">Thai</span>
+            </Link>
             </div>
+      
  
             {/* Hamburger ปุ่ม burger */}
           <div className="burger-mobile align-items-center ms-auto" style={{ minHeight: 48 }}>
