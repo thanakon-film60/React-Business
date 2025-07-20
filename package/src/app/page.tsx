@@ -33,15 +33,15 @@ export default function Home() {
       <Aboutus />
       <Dedicated />
       <Digital />
-      <Beliefs />
+      {/* <Beliefs /> */}
       <Work />
-      <Team />
-      <Featured />
-      <Manage />
-      <FAQ />
-      <Testimonial />
-      <Articles />
-      <Join />
+      {/* <Team /> */}
+      {/* <Featured /> */}
+      {/* <Manage /> */}
+      {/* <FAQ /> */}
+      {/* <Testimonial /> */}
+      {/* <Articles /> */}
+      {/* <Join /> */}
       <Insta />
     </main>
   );
