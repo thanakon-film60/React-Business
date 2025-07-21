@@ -4,8 +4,8 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <section className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-950 px-4 py-12">
-      <div className="flex flex-col md:flex-row items-center gap-10 w-full max-w-4xl">
+    <section className="flex flex-col items-center justify-center px-4 py-16 w-full max-w-3xl mx-auto">
+      <div className="flex flex-col md:flex-row items-center gap-10 w-full">
         <div className="w-full md:w-1/2 flex justify-center">
           <Image
             src="/images/404.svg"
@@ -35,3 +35,4 @@ export default function NotFound() {
     </section>
   );
 }
+
