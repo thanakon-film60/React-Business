@@ -1,6 +1,8 @@
-import { HeaderItem } from "@/types/menu";
+import HeaderMenu, { MenuItem } from "./HeaderMenu";
+import Logo from "../Layout/Header/Logo/index"; // เปลี่ยน path ตามจริง
 
-export const headerData: HeaderItem[] = [
+// ตัวอย่างเมนู
+const menu1: MenuItem[] = [
     { label: "หน้าหลัก", href: "/#" },
   {
     label: "เกี่ยวกับเรา",
@@ -31,6 +33,9 @@ export const headerData: HeaderItem[] = [
       { label: "รางวัลและความภาคภูมิใจ", href: "/awards-achievements" },
     ],
   },
+];
+
+const menu2: MenuItem[] = [
 { label: "ข่าวสารและกิจกรรม", href: "/news-events" },
 { label: "บทความ", href: "/news-events" },
   {
@@ -52,15 +57,23 @@ export const headerData: HeaderItem[] = [
     { label: "ติดต่อสอบถาม", href: "/contact-inquiry" },
   ],
 },
-
 ];
 
+const HeaderList: React.FC = () => (
+  <header className="fixed top-0 left-0 right-0 z-40 w-full transition-all duration-300 border-b border-black/60 bg-white">
+    <div className="container-fluid">
+      <div className="d-flex align-items-center w-100 px-md-3 px-lg-4" style={{ height: 120}}>
+        {/* เมนูซ้าย */}
+        <HeaderMenu menu={menu1} justify="end" />
+        {/* LOGO */}
+        <div className="d-flex align-items-center justify-content-center flex-shrink-0">
+          <Logo />
+        </div>
+        {/* เมนูขวา */}
+        <HeaderMenu menu={menu2} justify="start" />
+      </div>
+    </div>
+  </header>
+);
 
-  // {
-  //   label: "ข่าวสารและกิจกรรม-บทความ",
-  //   href: "#",
-  //   submenu: [
-  //     { label: "ข่าวสารและกิจกรรม", href: "/news-events" },
-  //     { label: "บทความ", href: "/articles" },
-  //   ],
-  // },
+export default HeaderList;

@@ -3,15 +3,15 @@ import NotFound from "@/components/NotFound";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "404 Page | Venus ",
+  title: "404 Page",
 };
 
 const ErrorPage = () => {
   return (
     <>
-      <HeroSub
+      {/* <HeroSub
         title="404"
-      />
+      /> */}
       <NotFound />
     </>
   );
