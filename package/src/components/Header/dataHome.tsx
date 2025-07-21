@@ -62,7 +62,7 @@ const menu2: MenuItem[] = [
 const HeaderList: React.FC = () => (
   <header className="fixed top-0 left-0 right-0 z-40 w-full transition-all duration-300 border-b border-black/60 bg-white">
     <div className="container-fluid">
-      <div className="d-flex align-items-center w-100 px-md-3 px-lg-4" style={{ height: 120 }}>
+      <div className="d-flex align-items-center w-100 px-md-3 px-lg-4" style={{ height: 120}}>
         {/* เมนูซ้าย */}
         <HeaderMenu menu={menu1} justify="end" />
         {/* LOGO */}
