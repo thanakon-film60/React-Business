@@ -1,7 +1,7 @@
 import React from "react";
-import Hero from "@/components/Home/Hero";
+import Hero from "@/components/Home/Video";
 import Aboutus from "@/components/Home/AboutUs";
-import Dedicated from "@/components/Home/Dedicated";
+import Dedicated from "@/components/Home/Detail";
 import Insta from "@/components/Home/Insta";
 import { Metadata } from "next";
 
