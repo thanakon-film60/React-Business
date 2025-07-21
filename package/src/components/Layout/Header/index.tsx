@@ -6,7 +6,7 @@ import Logo from "./Logo";
 import Image from "next/image";
 import HeaderLink from "../Header/Navigation/HeaderLink";
 import { DropdownMenuItem } from "@/components/DropdownMenu"; 
-import HeaderMenu from "@/components/Header/HeaderMenu";
+import HeaderMenu from "@/components/dataHome/HeaderMenu";
 
 
 const Header: React.FC = () => {
