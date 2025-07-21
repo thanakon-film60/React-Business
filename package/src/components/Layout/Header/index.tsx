@@ -6,6 +6,7 @@ import Logo from "./Logo";
 import Image from "next/image";
 import HeaderLink from "../Header/Navigation/HeaderLink";
 import { DropdownMenuItem } from "@/components/DropdownMenu"; 
+import HeaderMenu from "@/components/Header/HeaderMenu";
 
 
 const Header: React.FC = () => {
@@ -37,112 +38,11 @@ const Header: React.FC = () => {
     <header className="fixed top-0 left-0 right-0 z-40 w-full transition-all duration-300 border-b border-black/60 bg-white">
       <div className="container-fluid " >
         <div className="d-flex align-items-center w-100 px-md-3 px-lg-4 " style={{ height: 120 }}>
-          {/* --- เมนูซ้าย --- */}
-          <div className="d-flex menu-desktop flex-grow-1 align-items-center gap-1 gap-md-2  justify-content-end ">
-            {menu1.map((item, i) =>
-              item.submenu ? (
-                <div className="menu-item-wrapper with-dropdown " key={i}>
-                  <div className="dropdown w-100 h-100">
-                    <button
-                      className="btn btn-link dropdown-toggle text-gray-979797 w-100 h-100 fw-bold no-decoration"
-                      type="button"
-                      id={`dropdownMenuButton-${i}`}
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                      style={{
-                        borderRadius: "0.75rem",
-                        fontWeight: "bold",
-                        fontSize: "18px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        textAlign: "center",
-                        width: "100%",
-                        height: "100%",
-                      }}
-                    >
-                      {item.label}
-                    </button>
-                    <ul
-                      className="dropdown-menu rounded-2xl border-0 py-2"
-                      style={{
-                        background: "rgba(253, 251, 251, 1)",
-                        boxShadow: "rgba(0, 0, 0, 0.28) 0px 4px 24px 0px",
-                        border: "none",
-                        padding: "0.5rem 0",
-                      }}
-                      aria-labelledby={`dropdownMenuButton-${i}`}
-                    >
-                      {item.submenu.map((sub, j) => (
-                        <li key={j}>
-                          <Link className="dropdown-item" href={sub.href}>
-                            {sub.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ) : (
-                <div className="menu-item-wrapper" key={i}>
-                  <HeaderLink key={item.label} item={item} isFirst={i === 0} />
-                </div>
-              )
-            )}
-          </div>
-
-          {/* --- LOGO --- */}
-          <div className="d-flex align-items-center justify-content-center flex-shrink-0">
-            <Logo />
-          </div>
-
-          {/* --- เมนูขวา + ภาษา --- */}
-          <div className="d-flex menu-desktop flex-grow-1 align-items-center gap-3 justify-content-start">
-            {menu2.map((item, i) =>
-              item.submenu ? (
-                <div className="menu-item-wrapper with-dropdown" key={menu1.length + i}>
-                  <div className="dropdown w-100 h-100">
-                    <button
-                      className="btn btn-link dropdown-toggle text-gray-979797 w-100 h-100 fw-bold no-decoration"
-                      type="button"
-                      id={`dropdownMenuButton-${menu1.length + i}`}
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                      style={{
-                        borderRadius: "0.75rem",
-                        fontWeight: "bold",
-                        fontSize: "18px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        textAlign: "center",
-                        width: "100%",
-                        height: "100%",
-                      }}
-                    >
-                      {item.label}
-                    </button>
-                    <ul
-                      className="dropdown-menu"
-                      aria-labelledby={`dropdownMenuButton-${menu1.length + i}`}
-                    >
-                      {item.submenu.map((sub, j) => (
-                        <li key={j}>
-                          <Link className="dropdown-item" href={sub.href}>
-                            {sub.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ) : (
-                <div className="menu-item-wrapper" key={menu1.length + i}>
-                  <HeaderLink item={item} />
-                </div>
-              )
-            )}
-          </div>
+          <HeaderMenu menu={menu1}  justify="end"/>
+            <div className="d-flex align-items-center justify-content-center flex-shrink-0">
+              <Logo />
+            </div>
+          <HeaderMenu menu={menu2} justify="start" />
            
           <div className="d-none d-xxl-flex d-flex align-items-center gap-1 gap-md-2 ms-auto header-lang">
           <Link href="/en" className="d-flex align-items-center gap-1 gap-md-2 text-decoration-none lang-link language-switcher-btn">
