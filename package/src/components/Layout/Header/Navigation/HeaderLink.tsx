@@ -5,8 +5,7 @@ import { HeaderItem } from "../../../../types/menu";
 import { usePathname } from "next/navigation";
 import "../../../../Style/style.css";
 
-
-const HeaderLink: React.FC<{ item: HeaderItem;  isFirst?: boolean }> = ({ item, isFirst }) => {
+const HeaderLink: React.FC<{ item: HeaderItem; isFirst?: boolean }> = ({ item, isFirst }) => {
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const path = usePathname();
 
@@ -15,48 +14,79 @@ const HeaderLink: React.FC<{ item: HeaderItem;  isFirst?: boolean }> = ({ item, 
   };
   const handleMouseLeave = () => setSubmenuOpen(false);
 
-  return (
-    <div
-      className="relative"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+  // เมนูหลักที่มี href
+  const renderMenuLink = () => (
+    <Link
+      href={item.href!}
+      className={`fw-bold fs-8 text-black-50 d-flex align-items-center text-truncate text-gray-979797 ellipsis-text no-decoration ${
+        path === item.href ? "active" : ""
+      }`}
+      style={{ fontSize: "18px", fontWeight: "bold", marginRight: isFirst ? 5 : undefined }}
     >
+      {item.label}
+      {item.submenu && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="1.5em"
+          height="1.5em"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1.5"
+            d="m7 10l5 5l5-5"
+          />
+        </svg>
+      )}
+    </Link>
+  );
+
+  // เมนูหลักที่ไม่มี href (เช่น dropdown-only)
+  const renderMenuSpan = () => (
+    <span
+      className="fw-bold fs-8 text-black-50 d-flex align-items-center text-truncate text-gray-979797 ellipsis-text no-decoration"
+      style={{ fontSize: "18px", fontWeight: "bold", marginRight: isFirst ? 5 : undefined, cursor: "pointer" }}
+    >
+      {item.label}
+      {item.submenu && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="1.5em"
+          height="1.5em"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1.5"
+            d="m7 10l5 5l5-5"
+          />
+        </svg>
+      )}
+    </span>
+  );
+
+  return (
+    <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="menu-list">
-        <div className="menu-item-wrapper" style={{width: "auto", minWidth: 0, overflow: "hidden"}}>
-          <Link
-            href={item.href}
-            className={`fw-bold fs-8 text-black-50 d-flex align-items-center text-truncate text-gray-979797 ellipsis-text no-decoration ${
-              path === item.href 
-            }`}    
-          style={{ fontSize: "18px", fontWeight: "bold", marginRight: isFirst ? 5 : undefined }}>
-            {item.label}
-            {item.submenu && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1.5em"
-                height="1.5em"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                  d="m7 10l5 5l5-5"
-                />
-              </svg>
-            )}
-          </Link>
+        <div className="menu-item-wrapper" style={{ width: "auto", minWidth: 0, overflow: "hidden" }}>
+          {/* ถ้ามี href จริงให้ใช้ Link ถ้าไม่มีใช้ span */}
+          {item.href ? renderMenuLink() : renderMenuSpan()}
         </div>
       </div>
-      {submenuOpen && (
+      {/* dropdown menu */}
+      {submenuOpen && item.submenu && (
         <div
           className="absolute py-2 left-0 mt-0.5 w-60 bg-white dark:bg-darklight dark:text-white shadow-lg rounded-lg"
           data-aos="fade-up"
           data-aos-duration="500"
         >
-          {item.submenu?.map((subItem, index) => (
+          {item.submenu.map((subItem, index) => (
             <Link
               key={index}
               href={subItem.href}

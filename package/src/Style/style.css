@@ -17,8 +17,8 @@ body {
   font-family: 'Kanit', Tahoma, Arial, sans-serif;
 }
 
-
-h1 { font-size: 15px; }
+ฆฆฆ
+h1 { font-size: 16px; }
 h2 { font-size: 14px; }
 .fs-14 { font-size: 14px !important; }
 
@@ -70,9 +70,13 @@ h2 { font-size: 14px; }
   border-radius: 1rem;
   padding: 0.7rem 0.5rem;
   margin-top: 0.35rem;
-  z-index: 100;
+  z-index: -9999;
   position: absolute;
   left: 0;
+  padding-top: 90px !important;
+  top: -10px;
+    /* clip-path แบบ custom */
+
 }
 
 /* โผล่ตอน hover/focus */
@@ -127,6 +131,11 @@ h2 { font-size: 14px; }
 .ellipsis-text { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 
 /* Responsive language menu */
+@media (max-width: 520px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+}
 @media (max-width: 1200px) {
   .header-lang .lang-link span { font-size: 12px; }
   .header-lang .lang-flag { width: 13px !important; height: 9px !important; }
