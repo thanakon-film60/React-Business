@@ -14,7 +14,7 @@ interface HeaderMenuProps {
 
 const HeaderMenu: React.FC<HeaderMenuProps> = ({ menu, justify = "start" }) => {
   return (
-    <div className={`d-flex menu-desktop flex-grow-1 align-items-center gap-2 justify-content-${justify}`}>
+    <div className={`d-flex menu-desktop flex-grow-1 align-items-center gap-2 justify-content-${justify}`}style={{ fontSize: "18px" }}>
       {menu.map((item, i) =>
         item.submenu ? (
           <div className="menu-item-wrapper with-dropdown" key={i}>

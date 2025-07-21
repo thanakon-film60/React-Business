@@ -9,7 +9,7 @@ type LogoProps = {
 
 const Logo: React.FC<LogoProps> = ({ className = "", style }) => {
   return (
-    <div className={`flex items-center gap-3 ${className}`} style={style}>
+    <div className={`flex items-center ${className}`} style={style}>
       <Link href="/" className="inline-block flex-shrink-0 ">
         <Image
           src="/images/logo/logo.png"
