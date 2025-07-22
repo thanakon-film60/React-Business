@@ -17,66 +17,6 @@ body {
 h1 { font-size: 16px; }
 h2 { font-size: 14px; }
 
-.menu-item-wrapper button,
-.menu-item-wrapper a {
-  position: relative;
-}
-
-.menu-item-wrapper button::after,
-.menu-item-wrapper a::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 10%;
-  right: 10%;
-  height: 6px;
-  background: #dc2626;
-  transform: scaleX(0);
-  transition: transform 0.2s ease;
-  border-radius: 2px;
-}
-
-.menu-item-wrapper:hover button::after,
-.menu-item-wrapper:hover a::after,
-.menu-item-wrapper.active > button::after,
-.menu-item-wrapper.active > a::after {
-  transform: scaleX(1);
-}
-
-.menu-item-wrapper .dropdown-menu {
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  visibility: hidden;
-}
-
-.menu-item-wrapper:hover .dropdown-menu,
-.menu-item-wrapper:focus-within .dropdown-menu {
-  opacity: 1;
-  visibility: visible;
-}
-
-.menu-item-wrapper .dropdown-toggle::after,
-.dropdown-item::after {
-  display: none;
-}
-
-@media (max-width: 520px) {
-  .hide-on-mobile { display: none; }
-}
-
-@media (max-width: 1450px) {
-  .menu-desktop { display: none !important; }
-  .burger-mobile { display: flex !important; }
-}
-
-.header-lang .lang-text { font-size: 14px; }
-@media (max-width: 1400px) {
-  .header-lang .lang-text { font-size: 12px; }
-}
-@media (max-width: 1200px) {
-  .header-lang .lang-text { display: none; }
-}
-
 .no-decoration { text-decoration: none !important; }
 
 @media (min-width: 1250px) {
@@ -87,10 +27,6 @@ h2 { font-size: 14px; }
 }
 
 
-.language-switcher-btn {
-    margin-bottom: 0px;
-    margin-top: -75px;
-}
 /* -------------------------------------------------- */
 .about-bg-image {
   background-image: url('/images/team/TPP_HOME.png');
@@ -100,38 +36,6 @@ h2 { font-size: 14px; }
   /* เพิ่มเติมเช่นขอบมนหรือเงา */
   border-radius: 1.5rem; /* ถ้าต้องการโค้งเหมือนของเดิม */
   min-height: 400px;      /* กำหนดความสูงขั้นต่ำ */
-}
-
-.transparent-bg {
-  background-color: #ffffffad !important;
-}
-
-.no-decoration {
-  text-decoration: none !important;
-}
-
-
-.img-container {
-  position: relative;
-  width: 800px;
-  height: 534px;
-}
-.img-static {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 0.3s;
-  z-index: 2;
-}
-.img-container:hover .img-static {
-  opacity: 0;
-}
-.img-gif {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
 }
 
 /* ------------------------------------------------------------------ */
