@@ -21,7 +21,6 @@ const HeaderLink: React.FC<{ item: HeaderItem; isFirst?: boolean }> = ({ item, i
       className={`fw-bold fs-8 text-black-50 d-flex align-items-center text-truncate text-gray-979797 ellipsis-text no-decoration ${
         path === item.href ? "active" : ""
       }`}
-      style={{ fontSize: "18px", fontWeight: "bold", marginRight: isFirst ? 5 : undefined }}
     >
       {item.label}
       {item.submenu && (
@@ -48,7 +47,6 @@ const HeaderLink: React.FC<{ item: HeaderItem; isFirst?: boolean }> = ({ item, i
   const renderMenuSpan = () => (
     <span
       className="fw-bold fs-8 text-black-50 d-flex align-items-center text-truncate text-gray-979797 ellipsis-text no-decoration"
-      style={{ fontSize: "18px", fontWeight: "bold", marginRight: isFirst ? 5 : undefined, cursor: "pointer" }}
     >
       {item.label}
       {item.submenu && (
@@ -74,7 +72,7 @@ const HeaderLink: React.FC<{ item: HeaderItem; isFirst?: boolean }> = ({ item, i
   return (
     <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="menu-list">
-        <div className="menu-item-wrapper" style={{ width: "auto", minWidth: 0, overflow: "hidden" }}>
+        <div className="menu-item-wrapper">
           {/* ถ้ามี href จริงให้ใช้ Link ถ้าไม่มีใช้ span */}
           {item.href ? renderMenuLink() : renderMenuSpan()}
         </div>
