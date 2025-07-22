@@ -7,7 +7,7 @@ type LogoProps = {
   // ไม่ต้องมี showTitleOnMobile แล้ว
 };
 
-const Logo: React.FC<LogoProps> = ({ className = "", style }) => {
+const Logo: React.FC<LogoProps> = ({ className = "", style, }) => {
   return (
     <div className={`flex items-center ${className}`} style={style}>
       <Link href="/" className="inline-block flex-shrink-0 ">
@@ -21,7 +21,7 @@ const Logo: React.FC<LogoProps> = ({ className = "", style }) => {
         />
       </Link>
       {/* แสดง h1 h2 เฉพาะ mobile */}
-      <div className="d-xxl-none hide-on-mobile">
+      <div className="d-xxl-none ">
         <h1 className="logo-title text-lg font-bold text-black" style={{fontSize: 16}}>
           THAI PACKAGING & PRINTING PCL
         </h1>

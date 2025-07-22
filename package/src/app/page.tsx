@@ -25,20 +25,9 @@ export default function Home() {
       <Hero />
       <Aboutus />
       <Dedicated />
-      {/* <Digital /> */}
-      {/* <Beliefs /> */}
-      {/* <Work /> */}
-      {/* <Team /> */}
-      {/* <Featured /> */}
-      {/* <Manage /> */}
-      {/* <FAQ /> */}
-      {/* <Testimonial /> */}
-      {/* <Articles /> */}
-      {/* <Join /> */}
       <Insta />
     </main>
   );
 }
 
 // *ALL
-// Desgy Solutions ไอค่อนหรือชื่อ

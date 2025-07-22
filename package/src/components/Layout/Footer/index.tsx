@@ -65,7 +65,7 @@ const Footer = () => {
       <div className="bg-[#f6f6f7] py-4 mt-10">
         <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-center text-micro-blue text-center text-sm gap-x-2 gap-y-2">
           <p className="whitespace-nowrap mb-0">
-            © สงวนลิขสิทธิ์ พ.ศ. 2568 บริษัท ไมโครลิสซิ่ง จำกัด (มหาชน)
+            © สงวนลิขสิทธิ์ พ.ศ. 2568 บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)
           </p>
           <ul className="flex flex-wrap items-center justify-center pl-0 mb-0 list-none">
             {[
