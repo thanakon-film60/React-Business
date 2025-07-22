@@ -3,162 +3,89 @@
   font-family: 'Kanit';
   src: url('/fonts/Kanit-Regular.ttf') format('truetype');
   font-weight: 400;
-  font-style: normal;
 }
 @font-face {
   font-family: 'Kanit';
   src: url('/fonts/Kanit-Bold.ttf') format('truetype');
   font-weight: 700;
-  font-style: normal;
 }
 
-/* ตั้งให้ body ใช้ Kanit ทั้งโปรเจ็ค */
 body {
   font-family: 'Kanit', Tahoma, Arial, sans-serif;
 }
 
-ฆฆฆ
 h1 { font-size: 16px; }
 h2 { font-size: 14px; }
-.fs-14 { font-size: 14px !important; }
 
-
-/* .menu-item-wrapper.with-dropdown:hover{
-  background: #ddd8d94d;
-  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.28);
-} */
-
-   /* ----------------------------------------------------------------- */
-   
-/* ทำขีดเส้นใต้แบบ animate เฉพาะตอน hover */
 .menu-item-wrapper button,
 .menu-item-wrapper a {
   position: relative;
-  overflow: hidden;
 }
 
 .menu-item-wrapper button::after,
 .menu-item-wrapper a::after {
   content: '';
   position: absolute;
+  bottom: -8px;
   left: 10%;
   right: 10%;
-  bottom: -0.15em;
   height: 6px;
-  background: #dc2626;        /* สีแดง tailwind: red-600 */
+  background: #dc2626;
   transform: scaleX(0);
-  transition: transform 0.2s cubic-bezier(.77,0,.18,1);
+  transition: transform 0.2s ease;
   border-radius: 2px;
 }
 
 .menu-item-wrapper:hover button::after,
-.menu-item-wrapper:hover a::after {
+.menu-item-wrapper:hover a::after,
+.menu-item-wrapper.active > button::after,
+.menu-item-wrapper.active > a::after {
   transform: scaleX(1);
 }
 
-/* ------------------------------------------------------------------------------------------------------------- */
-
-/* Dropdown improvements */
 .menu-item-wrapper .dropdown-menu {
-  display: none;
   opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.12s;
-  min-width: 180px;
-  background: #fff;
-  box-shadow: 0 8px 32px 0 rgba(21, 128, 61, 0.18);
-  border-radius: 1rem;
-  padding: 0.7rem 0.5rem;
-  margin-top: 0.35rem;
-  z-index: -9999;
-  position: absolute;
-  left: 0;
-  /* padding-top: 90px !important; */
-  /* top: -10px; */
-    /* clip-path แบบ custom */
-
+  transition: opacity 0.2s ease;
+  visibility: hidden;
 }
 
-/* โผล่ตอน hover/focus */
-.menu-item-wrapper.with-dropdown:hover .dropdown-menu,
-.menu-item-wrapper.with-dropdown:focus-within .dropdown-menu {
-  display: block !important;
-  opacity: 1 !important;
-  pointer-events: auto;
-  /* transform: translateY(0) scale(1); // ถ้ามี effect */
+.menu-item-wrapper:hover .dropdown-menu,
+.menu-item-wrapper:focus-within .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
 }
 
-/* เส้นใต้สีแดง active */
-.menu-item-wrapper.active > button,
-.menu-item-wrapper.active > a {
-  position: relative;
-}
-.menu-item-wrapper.active > button::after,
-.menu-item-wrapper.active > a::after {
-  content: "";
-  display: block;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -8px;
-  margin: auto;
-  height: 6px;
-  width: 100%;
-  background: #d42c2c;
-  border-radius: 6px;
-  box-shadow: 0 3px 10px 0 rgba(0,0,0,0.07);
-}
-
-/* ซ่อนลูกศรของ bootstrap */
-.menu-item-wrapper .dropdown-toggle::after {
-
-  border-top-color: #ffffff00 !important; 
-}
-  /* display: none !important; รอใช้งาน
-  content: none !important; */
-/* 
-/* ------------------------------------------------------------------------ */
+.menu-item-wrapper .dropdown-toggle::after,
 .dropdown-item::after {
-  display: none !important;
-  content: none !important;
-  background: none !important;
-  height: 0 !important;
+  display: none;
 }
-/* ------------------------------------------------------------------------ */
 
-
-.text-gray-979797 { color: #979797 !important; }
-.ellipsis-text { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-
-/* Responsive language menu */
 @media (max-width: 520px) {
-  .hide-on-mobile {
-    display: none !important;
-  }
-}
-@media (max-width: 1200px) {
-  .header-lang .lang-link span { font-size: 12px; }
-  .header-lang .lang-flag { width: 13px !important; height: 9px !important; }
-}
-@media (max-width: 1400px) {
-  .header-lang .lang-link span { font-size: 14px; }
-  .header-lang .lang-flag { width: 16px !important; height: 11px !important; }
-}
-@media (max-width: 1200px) {
-  .header-lang .lang-link span { font-size: 12px; }
-  .header-lang .lang-flag { width: 13px !important; height: 9px !important; }
-}
-@media (max-width: 1700px) {
-  .header-lang .lang-text { display: none !important; }
+  .hide-on-mobile { display: none; }
 }
 
-/* Hamburger & desktop menu */
-.menu-desktop { display: flex !important; }
-.burger-mobile { display: none !important; }
 @media (max-width: 1450px) {
   .menu-desktop { display: none !important; }
   .burger-mobile { display: flex !important; }
 }
+
+.header-lang .lang-text { font-size: 14px; }
+@media (max-width: 1400px) {
+  .header-lang .lang-text { font-size: 12px; }
+}
+@media (max-width: 1200px) {
+  .header-lang .lang-text { display: none; }
+}
+
+.no-decoration { text-decoration: none !important; }
+
+@media (min-width: 1250px) {
+  .logo-title,
+  .logo-subtitle {
+    display: none !important;
+  }
+}
+
 
 .language-switcher-btn {
     margin-bottom: 0px;
