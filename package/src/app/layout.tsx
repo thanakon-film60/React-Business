@@ -6,7 +6,11 @@ import Footer from '@/components/Layout/Footer'
 import ScrollToTop from '@/components/ScrollToTop'
 import Aoscompo from '@/utils/aos'
 import { Metadata } from 'next'    
-// import '../Style/style.css';
+import '../Style/style.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import '../app/globals.css';
+
 export const metadata: Metadata = {
   title: "THAI PACKAGING & PRINTING PCL",
   icons: {

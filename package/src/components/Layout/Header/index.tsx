@@ -53,7 +53,7 @@ useEffect(() => {
             <HeaderLink key={i + menu1.length} item={item} />
           ))}
           {/* Language Switcher */}
-          <div className="flex gap-2 items-center ml-4">
+          <div className="flex gap-4 items-center ml-4">
             <Link href="/en" className="flex items-center gap-1 lang-link">
               <Image src="/images/icons/us.svg" width={20} height={14} alt="English" />
               <span className="hidden 2xl:inline lang-text text-xs">English</span>
