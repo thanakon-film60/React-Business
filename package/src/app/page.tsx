@@ -4,6 +4,7 @@ import Aboutus from "@/components/Home/AboutUs";
 import Dedicated from "@/components/Home/Detail";
 import Insta from "@/components/Home/Insta";
 import { Metadata } from "next";
+import ProductsServices from "@/components/ProductsServices";
 
 // สำหรับ CSS
 import '../Style/style.css';
@@ -24,6 +25,7 @@ export default function Home() {
     <main>
       <Hero />
       <Aboutus />
+      <ProductsServices/>
       <Dedicated />
       <Insta />
     </main>
