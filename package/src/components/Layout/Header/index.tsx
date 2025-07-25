@@ -28,31 +28,31 @@ useEffect(() => {
     document.removeEventListener("mousedown", handleClickOutside);
   };
 }, [navbarOpen]);
-  // แบ่งเมนูซ้าย/ขวา ตามต้องการ
-  const menu1 = headerData.slice(0, 4); // ตัวอย่าง: ซ้าย
-  const menu2 = headerData.slice(4);    // ตัวอย่าง: ขวา
+ 
+  const menu1 = headerData.slice(0, 4); 
+  const menu2 = headerData.slice(4);   
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 bg-white shadow-sm border-b border-black/60">
       <div className="w-full max-w-screen-2xl mx-auto flex items-center h-[100px] px-2 md:px-4 flex-nowrap">
-        {/* ----- เมนูซ้าย ----- */}
+        
         <nav className="hidden xl:flex flex-1 justify-end gap-2 min-w-0 whitespace-nowrap">
           {menu1.map((item, i) => (
             <HeaderLink key={i} item={item} />
           ))}
         </nav>
 
-        {/* ----- โลโก้ตรงกลาง ----- */}
+       
         <div className="flex-shrink-0 flex justify-center px-4">
           <Logo />
         </div>
 
-        {/* ----- เมนูขวา + ภาษา ----- */}
+        
         <nav className="hidden xl:flex flex-1 justify-start gap-3 min-w-0 items-center whitespace-nowrap">
           {menu2.map((item, i) => (
             <HeaderLink key={i + menu1.length} item={item} />
           ))}
-          {/* Language Switcher */}
+        
           <div className="flex gap-4 items-center ml-4">
             <Link href="/en" className="flex items-center gap-1 lang-link">
               <Image src="/images/icons/us.svg" width={20} height={14} alt="English" />
@@ -65,7 +65,7 @@ useEffect(() => {
           </div>
         </nav>
 
-        {/* ----- ปุ่ม Burger เฉพาะ Mobile ----- */}
+    
         <button
           className="xl:hidden flex ms-auto p-2"
           onClick={() => setNavbarOpen((prev) => !prev)}
@@ -75,7 +75,7 @@ useEffect(() => {
         </button>
       </div>
 
-      {/* ----------- Mobile Menu Side Panel ----------- */}
+      
       <div
         ref={mobileMenuRef}
         className={`
@@ -120,7 +120,7 @@ useEffect(() => {
               )}
             </div>
           ))}
-          {/* Language Switcher */}
+          
           <div className="mt-4 border-t pt-4 flex gap-4">
             <Link
               href="/en"

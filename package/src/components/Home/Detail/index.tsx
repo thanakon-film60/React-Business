@@ -6,6 +6,7 @@ const Dedicated = () => {
   return (
     <section className="relative bg-cover bg-center dark:bg-darkmode overflow-hidden">
       <div className="container mx-auto lg:max-w-(--breakpoint-xl) md:max-w-(--breakpoint-md)">
+              <h2 className="text-center text-2xl font-bold mb-8 underline decoration-red-500 decoration-8">บริการของเรา</h2><br/>
         <div className="col-span-6 lg:col-span-3 flex justify-center gap-4">
 
           
