@@ -149,3 +149,15 @@ h2 { font-size: 14px; }
   z-index: -12;
 }
 /* ------------------------------------------------------------------ */
+.btn-secondary {
+  background-color: transparent;
+  border: none; /* ไม่มีกรอบ */
+  color: #6c757d;
+}
+
+.btn-secondary:hover, 
+.btn-secondary:focus {
+  background-color: transparent; /* hover แล้วไม่มีพื้นหลัง */
+  border: none;
+  color: #6c757d;
+}
