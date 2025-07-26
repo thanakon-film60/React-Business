@@ -3,157 +3,109 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { HeaderItem } from "../../../../types/menu";
 import { usePathname } from "next/navigation";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "../../../../Style/style.css";
 
-const HeaderLink: React.FC<{ item: HeaderItem; isFirst?: boolean }> = ({ item, isFirst }) => {
+const HeaderLink: React.FC<{ item: HeaderItem; isFirst?: boolean }> = ({ item }) => {
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const path = usePathname();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  
   useEffect(() => {
     setSubmenuOpen(false);
   }, [path]);
 
-  // ปิด dropdown เมื่อคลิกข้างนอก (desktop/mobile)
   useEffect(() => {
-    if (!submenuOpen) return;
     function handleClickOutside(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setSubmenuOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [submenuOpen]);
 
-  // Accessibility: ปิดเมื่อกด Escape
-  useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") setSubmenuOpen(false);
     }
+
+    document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
+  // เปิด dropdown เมื่อเมาส์ hover
   const handleMouseEnter = () => {
     if (item.submenu) setSubmenuOpen(true);
   };
-  const handleMouseLeave = () => setSubmenuOpen(false);
 
-  // onClick เฉพาะเมนูที่มี submenu (mobile/keyboard/desktop)
-  const handleMenuClick = (e: React.MouseEvent) => {
-    if (item.submenu) {
-      e.preventDefault(); // ป้องกันเปลี่ยนเส้นทาง (ถ้าไม่ต้องการ)
-      setSubmenuOpen((open) => !open);
-    }
+  const handleMouseLeave = () => {
+    if (item.submenu) setSubmenuOpen(false);
   };
 
-  // เมนูหลักที่มี href
-  const renderMenuLink = () => (
-    <Link
-      href={item.href!}
-      className={`fw-bold fs-8 text-black-50 d-flex align-items-center text-truncate text-gray-979797 ellipsis-text no-decoration ${
-        path === item.href ? "active" : ""
-      }`}
-      onClick={item.submenu ? handleMenuClick : undefined}
-      aria-haspopup={!!item.submenu}
-      aria-expanded={submenuOpen}
-      tabIndex={0}
-    >
-      {item.label}
-      {item.submenu && (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1.5em"
-          height="1.5em"
-          viewBox="0 0 24 24"
-          className="dropdown-arrow"
-        >
-          <path
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.5"
-            d="m7 10l5 5l5-5"
-          />
-        </svg>
-      )}
-    </Link>
-  );
-
-  // เมนูหลักที่ไม่มี href (เช่น dropdown-only)
-  const renderMenuSpan = () => (
-    <span
-      className="fw-bold fs-8 text-black-50 d-flex align-items-center text-truncate text-gray-979797 ellipsis-text no-decoration"
-      onClick={item.submenu ? handleMenuClick : undefined}
-      aria-haspopup={!!item.submenu}
-      aria-expanded={submenuOpen}
-      tabIndex={0}
-      role={item.submenu ? "button" : undefined}
-    >
-      {item.label}
-      {item.submenu && (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1.5em"
-          height="1.5em"
-          viewBox="0 0 24 24"
-          className="dropdown-arrow"
-        >
-          <path
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.5"
-            d="m7 10l5 5l5-5"
-          />
-        </svg>
-      )}
-    </span>
-  );
+  // เปิด-ปิด dropdown เมื่อกดปุ่ม (toggle)
+  const toggleDropdown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (item.submenu) setSubmenuOpen((open) => !open);
+  };
 
   return (
-    <>
-    <div></div>
     <div
-      className="relative"
+      className={item.submenu ? "dropdown" : ""}
+      ref={dropdownRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      ref={dropdownRef}
     >
-      {/* dropdown menu */}
-      {submenuOpen && item.submenu && (
-        <div
-          className="absolute py-2 left-0 mt-0.5 w-60 bg-white dark:bg-darklight dark:text-white shadow-lg rounded-lg "
-          data-aos="fade-up"
-          data-aos-duration="500"
+      {item.href ? (
+        item.submenu ? (
+          <Link
+            href={item.href}
+            className={`btn btn-secondary dropdown-toggle ${path === item.href ? "active" : ""}`}
+            role="button"
+            aria-expanded={submenuOpen}
+            onClick={toggleDropdown}
+          >
+            {item.label}
+          </Link>
+        ) : (
+          <Link
+            href={item.href}
+            className={`btn btn-secondary ${path === item.href ? "active" : ""}`}
+          >
+            {item.label}
+          </Link>
+        )
+      ) : item.submenu ? (
+        <span
+          className="btn btn-secondary dropdown-toggle"
+          role="button"
+          aria-expanded={submenuOpen}
+          onClick={toggleDropdown}
         >
-          {item.submenu.map((subItem, index) => (
+          {item.label}
+        </span>
+      ) : (
+        <span className="btn btn-secondary">
+          {item.label}
+        </span>
+      )}
+
+      <ul className={`dropdown-menu${submenuOpen && item.submenu ? " show" : ""}`}>
+        {item.submenu?.map((subItem, idx) => (
+          <li key={idx}>
             <Link
-              key={index}
               href={subItem.href}
-              className="block px-4 py-2 text-black dark:text-white hover:bg-primary"
-              tabIndex={0}
+              className="dropdown-item"
               onClick={() => setSubmenuOpen(false)}
             >
               {subItem.label}
             </Link>
-          ))}
-        </div>
-      )}
-      <div className="relative z-10">
-        <div>
-          {/* ถ้ามี href จริงให้ใช้ Link ถ้าไม่มีใช้ span */}
-          {item.href ? renderMenuLink() : renderMenuSpan()}
-        </div>
-      </div>
+          </li>
+        ))}
+      </ul>
     </div>
-     </>
   );
- 
 };
 
 export default HeaderLink;
