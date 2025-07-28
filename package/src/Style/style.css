@@ -161,3 +161,58 @@ h2 { font-size: 14px; }
   border: none;
   color: #6c757d;
 }
+/* ------------------------------------------------------------------ */
+
+/* ทดสอบ */
+nav > .dropdown {
+  position: relative;
+}
+
+nav > .dropdown .dropdown-menu {
+  position: absolute;
+  top: 100%; 
+  left: 0;
+  background-color: #b50000; /* สีแดงตามภาพตัวอย่าง */
+  color: #fff;
+  min-width: 220px;
+  padding: 0;
+  border-radius: 0;
+  z-index: 9999;
+  display: none; /* เริ่มต้นซ่อนไว้ก่อน */
+  margin-top: 0;
+  box-shadow: none;
+}
+
+nav > .dropdown:hover .dropdown-menu,
+nav > .dropdown:focus-within .dropdown-menu {
+  display: block; /* เมื่อ hover หรือโฟกัสถึงจะโชว์ */
+}
+
+nav > .dropdown .dropdown-menu .dropdown-item {
+  color: white;
+  padding: 8px 15px;
+}
+
+nav > .dropdown .dropdown-menu .dropdown-item:hover {
+  background-color: #9c0000; /* hover สีเข้มขึ้นเล็กน้อย */
+}
+
+/* ปรับแต่งลิงค์บนแถบหลักให้ชัดขึ้น */
+nav > .dropdown > a.btn,
+nav > .dropdown > span.btn {
+  background-color: transparent !important;
+  color: #000000 !important;
+  padding: 38px 15px;
+  border-radius: 0;
+}
+
+nav > .dropdown > a.btn:hover,
+nav > .dropdown > span.btn:hover,
+nav > .dropdown > a.btn.active,
+nav > .dropdown > span.btn.active {
+  background-color: #b50000 !important;
+  color: white !important;
+}
+
+/* -------------------------------------------------------------------------------------- */
+

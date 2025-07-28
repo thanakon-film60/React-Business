@@ -38,7 +38,7 @@ const items = [
 export default function ProductsServices() {
   return (
     <section>
-      <h2 className="text-center text-2xl font-bold mb-8 underline decoration-red-500 decoration-8">ผลิตภัณฑ์และบริการ</h2>
+      <h2 className="text-center text-2xl font-bold mb-8 underline decoration-red-500 decoration-8" style={{fontSize:"34px"}}>ผลิตภัณฑ์และบริการ</h2>
       <br/>
       <div className="container">
         <div className="row g-4 justify-content-center">
