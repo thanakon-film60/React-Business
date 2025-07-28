@@ -36,7 +36,7 @@ const HeaderLink: React.FC<{
 
 return (
     <div
-      className={item.submenu ? "dropdown" : ""}
+      className={item.submenu ? "dropdown" : "dropdown"}
       ref={dropdownRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

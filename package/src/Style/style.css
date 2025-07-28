@@ -201,7 +201,7 @@ nav > .dropdown .dropdown-menu .dropdown-item:hover {
 nav > .dropdown > a.btn,
 nav > .dropdown > span.btn {
   background-color: transparent !important;
-  color: #000 !important;
+  color: #000000 !important;
   padding: 38px 15px;
   border-radius: 0;
 }
@@ -213,3 +213,6 @@ nav > .dropdown > span.btn.active {
   background-color: #b50000 !important;
   color: white !important;
 }
+
+/* -------------------------------------------------------------------------------------- */
+
