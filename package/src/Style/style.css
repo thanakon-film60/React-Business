@@ -208,7 +208,6 @@ nav > .dropdown > span.btn {
 
 nav > .dropdown > a.btn:hover,
 nav > .dropdown > span.btn:hover,
-nav > .dropdown > a.btn.active,
 nav > .dropdown > span.btn.active {
   background-color: #b50000 !important;
   color: white !important;
