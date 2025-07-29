@@ -80,6 +80,9 @@ const TabPage = () => {
 
   return (
     <div className="w-full px-4 relative">
+      <h4 className="text-center font-bold pb-4 underline decoration-red-500 decoration-8 " style={{ fontSize: "34px"}}>
+          ข่าวสารและบทความ
+      </h4>
       {/* Tabs */}
       <div className="flex justify-center gap-4 mb-6">
         <button

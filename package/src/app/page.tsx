@@ -5,6 +5,7 @@ import Dedicated from "@/components/Home/Detail";
 import Insta from "@/components/Home/Insta";
 import { Metadata } from "next";
 import ProductsServices from "@/components/ProductsServices";
+import InvestorRelations from "@/components/InvestorRelations";
 
 // สำหรับ CSS
 import '../Style/style.css';
@@ -27,6 +28,7 @@ export default function Home() {
       <Aboutus />
       {/* <ProductsServices/> */}
       <Dedicated />
+      <InvestorRelations/>
       <Insta />
     </main>
   );
