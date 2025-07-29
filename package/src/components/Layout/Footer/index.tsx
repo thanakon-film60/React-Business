@@ -54,7 +54,7 @@ const Footer = () => {
         <div>
           <h4 className="text-micro-blue-200 text-xl md:text-2xl font-bold mb-4">สินค้าและบริการ</h4>
           <ul className="space-y-3">
-            {["Pakku Packaging - Food Packaging","บริการของเรา"].map((text, idx) => (
+            {["บริการของเรา","Pakku Packaging - Food Packaging"].map((text, idx) => (
               <li key={idx}><Link href="#" className="hover:underline text-micro-white">{text}</Link></li>
             ))}
           </ul>

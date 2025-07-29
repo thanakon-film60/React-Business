@@ -25,7 +25,7 @@ export default function Home() {
     <main>
       <Hero />
       <Aboutus />
-      <ProductsServices/>
+      {/* <ProductsServices/> */}
       <Dedicated />
       <Insta />
     </main>

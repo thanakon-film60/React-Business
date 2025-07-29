@@ -16,6 +16,9 @@ const HeaderLink: React.FC<{
 
   const path = usePathname();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  //------------------------------------------------
+   
+  
 
   const submenuOpen = submenuOpenId === index; //เช็คจาก index
 
@@ -36,7 +39,7 @@ const HeaderLink: React.FC<{
 
 return (
     <div
-      className={item.submenu ? "dropdown" : "dropdown"}
+      className={"dropdown"}
       ref={dropdownRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

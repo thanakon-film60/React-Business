@@ -29,7 +29,7 @@ h2 { font-size: 14px; }
 
 /* -------------------------------------------------- */
 .about-bg-image {
-  background-image: url('/images/team/TPP_HOME.png');
+  background-image: url('/images/team/test-about.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -208,7 +208,6 @@ nav > .dropdown > span.btn {
 
 nav > .dropdown > a.btn:hover,
 nav > .dropdown > span.btn:hover,
-nav > .dropdown > a.btn.active,
 nav > .dropdown > span.btn.active {
   background-color: #b50000 !important;
   color: white !important;
