@@ -22,7 +22,7 @@ const Aboutus = () => {
           <div
             className="md:w-1/2 w-full h-[280px] md:h-auto bg-center bg-cover"
             style={{
-              backgroundImage: "url('/soybean.jpg')", // เปลี่ยน path เป็นรูปของคุณ
+              // backgroundImage: "url('/soybean.jpg')", // เปลี่ยน path เป็นรูปของคุณ
               minHeight: "320px",
             }}
           ></div>

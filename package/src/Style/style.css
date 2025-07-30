@@ -246,7 +246,10 @@ nav > .dropdown > span.btn.active {
   gap: 30px;
   margin-top: 30px;
   justify-items: center;
-  margin-left: -150px;
+  /* margin-left: -150px; */     
+  justify-content: center;    
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .ir-card {
