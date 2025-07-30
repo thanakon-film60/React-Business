@@ -29,7 +29,7 @@ h2 { font-size: 14px; }
 
 /* -------------------------------------------------- */
 .about-bg-image {
-  background-image: url('/images/team/TPP_HOME.png');
+  background-image: url('/images/team/test-about.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -208,11 +208,116 @@ nav > .dropdown > span.btn {
 
 nav > .dropdown > a.btn:hover,
 nav > .dropdown > span.btn:hover,
-nav > .dropdown > a.btn.active,
 nav > .dropdown > span.btn.active {
   background-color: #b50000 !important;
   color: white !important;
 }
+/* InvestorRelations */
+/* -------------------------------------------------------------------------------------- */
+.ir-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 40px auto;
+  text-align: center;
+}
+
+.ir-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #444;
+  margin-bottom: 10px;
+  display: inline-block;
+  position: relative;
+}
+
+.ir-title-underline {
+  height: 5px;
+  width: 90%;
+  background: #2b7a3d;
+  border-radius: 3px;
+  margin: 0 auto;
+  margin-top: 6px;
+}
+
+.ir-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 220px);
+  gap: 30px;
+  margin-top: 30px;
+  justify-items: center;
+  /* margin-left: -150px; */     
+  justify-content: center;    
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ir-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  background: #fff;
+  transition: box-shadow 0.2s;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-end;
+  /* min-height: 200px; */
+  width: 450px;
+  height: 325px;
+  /* min-height: unset; */
+}
+
+.ir-card-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  filter: brightness(0.9);
+}
+
+.ir-card-title {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-align: left;
+  padding: 0 0 20px 20px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.27);
+}
+
+/* ให้ช่องสุดท้ายสองช่องอยู่ตรงกลาง */
+.ir-card:nth-child(4) {
+  grid-column: 1 / span 2;
+}
+.ir-card:nth-child(5) {
+  grid-column: 3 / span 1;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .ir-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(3, 180px);
+  }
+  .ir-card { min-height: 160px; }
+  .ir-card:nth-child(4),
+  .ir-card:nth-child(5) {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .ir-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 140px);
+    gap: 16px;
+  }
+  .ir-card { min-height: 120px; }
+  .ir-card-title { font-size: 1rem; padding: 0 0 10px 10px; }
+}
 
 /* -------------------------------------------------------------------------------------- */
-

@@ -6,11 +6,11 @@ const Dedicated = () => {
   return (
     <section className="relative bg-cover bg-center dark:bg-darkmode overflow-hidden">
       <div className="container mx-auto lg:max-w-(--breakpoint-xl) md:max-w-(--breakpoint-md)">
-              <h2 className="text-center text-2xl font-bold mb-8 underline decoration-red-500 decoration-8" style={{fontSize:"34px"}}>บริการของเรา</h2><br/>
+              <h2 className="text-center text-2xl font-bold mb-8 underline decoration-red-500 decoration-8" style={{fontSize:"34px"}}>สินค้าและบริการของเรา</h2><br/>
         <div className="col-span-6 lg:col-span-3 flex justify-center gap-4">
 
           
-          <div className="group relative w-[450px] h-[325px] mx-auto">
+          <div className="group relative w-[450px] h-[325px] mx-auto shadow-lg rounded-3">
             <img
               src="/images/hero/Silk-screen-3.jpg"
               alt="static"
@@ -34,7 +34,7 @@ const Dedicated = () => {
           </div>
             {/*  */}
 
-           <div className="group relative w-[450px] h-[325px] mx-auto">
+           <div className="group relative w-[450px] h-[325px] mx-auto shadow-lg rounded-3">
             <img
               src="/images/hero/Silk-screen-2.jpg"
               alt="static"
@@ -56,7 +56,7 @@ const Dedicated = () => {
             </p>
           </div>
             {/*  */}
-           <div className="group relative w-[450px] h-[325px] mx-auto">
+           <div className="group relative w-[450px] h-[325px] mx-auto shadow-lg rounded-3">
             <img
               src="/images/hero/Silk-screen-1.jpg"
               alt="static"
@@ -79,6 +79,7 @@ const Dedicated = () => {
           </div>
             {/*  */}
          
+              
           <div>
   
           </div>
