@@ -10,7 +10,7 @@ const Dedicated = () => {
         <div className="col-span-6 lg:col-span-3 flex justify-center gap-4">
 
           
-          <div className="group relative w-[450px] h-[325px] mx-auto">
+          <div className="group relative w-[450px] h-[325px] mx-auto shadow-lg rounded-3">
             <img
               src="/images/hero/Silk-screen-3.jpg"
               alt="static"
@@ -34,7 +34,7 @@ const Dedicated = () => {
           </div>
             {/*  */}
 
-           <div className="group relative w-[450px] h-[325px] mx-auto">
+           <div className="group relative w-[450px] h-[325px] mx-auto shadow-lg rounded-3">
             <img
               src="/images/hero/Silk-screen-2.jpg"
               alt="static"
@@ -56,7 +56,7 @@ const Dedicated = () => {
             </p>
           </div>
             {/*  */}
-           <div className="group relative w-[450px] h-[325px] mx-auto">
+           <div className="group relative w-[450px] h-[325px] mx-auto shadow-lg rounded-3">
             <img
               src="/images/hero/Silk-screen-1.jpg"
               alt="static"

@@ -27,10 +27,6 @@ const data = [
 export default function InvestorRelations() {
   return (
     <div className="ir-container">
-      {/* <h1 className="ir-title">
-        นักลงทุนสัมพันธ์
-        <div className="ir-title-underline" />
-      </h1> */}
       <h4 className="text-center font-bold pb-4 underline decoration-red-500 decoration-8 " style={{ fontSize: "34px"}}>
          นักลงทุนสัมพันธ์
       </h4>

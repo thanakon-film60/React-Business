@@ -245,6 +245,8 @@ nav > .dropdown > span.btn.active {
   grid-template-rows: repeat(2, 220px);
   gap: 30px;
   margin-top: 30px;
+  justify-items: center;
+  margin-left: -150px;
 }
 
 .ir-card {
@@ -257,7 +259,10 @@ nav > .dropdown > span.btn.active {
   cursor: pointer;
   display: flex;
   align-items: flex-end;
-  min-height: 200px;
+  /* min-height: 200px; */
+  width: 450px;
+  height: 325px;
+  /* min-height: unset; */
 }
 
 .ir-card-img {
