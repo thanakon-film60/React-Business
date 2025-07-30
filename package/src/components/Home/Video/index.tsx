@@ -1,28 +1,31 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const Hero = () => {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+interface HeroProps {
+  setIsLoading: (val: boolean) => void;
+}
 
-  useEffect(() => {
-  if (videoRef.current) {
-    videoRef.current.load(); 
-  }
-}, []);
-  return (
+const Hero = ({ setIsLoading }: HeroProps) => {
+  const [hasLoaded, setHasLoaded] = useState(false);
+
+useEffect(() => {
+  if (hasLoaded) setIsLoading(false);
+}, [hasLoaded]);
+  
+return (
     <section
       className="relative w-full min-h-screen flex items-center justify-center overflow-hidden z-1 mt-[20px]"
       id="main-banner"
     >
       <video
-        ref={videoRef}
-        src="/images/video/banner-video.mp4"
+        
+        src="/images/video/fixed-banner-video.mp4"
         className="w-full h-full object-cover absolute top-0 left-0"
         autoPlay
         loop
         muted
         playsInline
-        preload="auto"
+        onLoadedData={() => setHasLoaded(true)}
       />
       <div className="relative z-10 w-full flex justify-center items-center">
       </div>
