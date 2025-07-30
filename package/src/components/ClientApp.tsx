@@ -16,6 +16,7 @@ import Loading from "@/app/loading";
 
 export default function ClientApp() {
   const [isLoading, setIsLoading] = useState(true);
+  
 
   return (
     // <main>
@@ -34,7 +35,7 @@ export default function ClientApp() {
     
       <main>
         <>
-          <Hero />
+          <Hero setIsLoading={setIsLoading} />
           <Aboutus />
           <Dedicated />
           <InvestorRelations />
