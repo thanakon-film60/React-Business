@@ -26,6 +26,14 @@ h2 { font-size: 14px; }
   }
 }
 
+a {
+  text-decoration: none !important;
+}
+
+.footer-custom a {
+  text-decoration: none !important;
+}
+
 
 /* -------------------------------------------------- */
 .about-bg-image {
@@ -321,3 +329,15 @@ nav > .dropdown > span.btn.active {
 }
 
 /* -------------------------------------------------------------------------------------- */
+/* Bootstrap */
+
+.footer-custom {
+  font-size: 15px !important;
+}
+.footer-custom * {
+  font-size: 15px !important;
+}
+
+.pl-0{
+  padding-left: 0px;
+}
