@@ -31,7 +31,7 @@ const Aboutus = () => {
             <div className="max-w-xl">
               <strong className="text-3xl font-bold mb-4 text-red-700">
                 <span className="text-micro-blue-200">เกี่ยวกับ</span>&nbsp;
-                ไทยบรรจุภัณฑ์และการพิมพ์
+                TPP
               </strong>
               <p className="mb-4 text-lg text-gray-800 dark:text-white">
                 <b>บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)</b>&nbsp;

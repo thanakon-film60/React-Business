@@ -26,6 +26,15 @@ h2 { font-size: 14px; }
   }
 }
 
+a {
+  text-decoration: none !important;
+}
+
+.footer-custom a {
+  text-decoration: none !important;
+}
+
+/* Responsive */
 
 /* -------------------------------------------------- */
 .about-bg-image {
@@ -221,35 +230,12 @@ nav > .dropdown > span.btn.active {
   text-align: center;
 }
 
-.ir-title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #444;
-  margin-bottom: 10px;
-  display: inline-block;
-  position: relative;
-}
-
-.ir-title-underline {
-  height: 5px;
-  width: 90%;
-  background: #2b7a3d;
-  border-radius: 3px;
-  margin: 0 auto;
-  margin-top: 6px;
-}
-
 .ir-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 220px);
+  grid-template-columns: repeat(4, 1fr);
   gap: 30px;
   margin-top: 30px;
   justify-items: center;
-  /* margin-left: -150px; */     
-  justify-content: center;    
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .ir-card {
@@ -262,10 +248,9 @@ nav > .dropdown > span.btn.active {
   cursor: pointer;
   display: flex;
   align-items: flex-end;
-  /* min-height: 200px; */
-  width: 450px;
-  height: 325px;
-  /* min-height: unset; */
+  width: 100%;
+  height: 250px;
+  min-width: 0;
 }
 
 .ir-card-img {
@@ -282,42 +267,52 @@ nav > .dropdown > span.btn.active {
   z-index: 1;
   width: 100%;
   color: #fff;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: bold;
   text-align: left;
   padding: 0 0 20px 20px;
   text-shadow: 0 2px 6px rgba(0,0,0,0.27);
 }
 
-/* ให้ช่องสุดท้ายสองช่องอยู่ตรงกลาง */
-.ir-card:nth-child(4) {
-  grid-column: 1 / span 2;
-}
-.ir-card:nth-child(5) {
-  grid-column: 3 / span 1;
-}
-
-/* Responsive */
+/* Responsive for tablet */
 @media (max-width: 900px) {
   .ir-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(3, 180px);
-  }
-  .ir-card { min-height: 160px; }
-  .ir-card:nth-child(4),
-  .ir-card:nth-child(5) {
-    grid-column: auto;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
+/* Responsive for mobile */
 @media (max-width: 600px) {
   .ir-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(5, 140px);
     gap: 16px;
   }
-  .ir-card { min-height: 120px; }
-  .ir-card-title { font-size: 1rem; padding: 0 0 10px 10px; }
+  .ir-card {
+    height: 160px;
+  }
+  .ir-card-title {
+    font-size: 1rem;
+    padding: 0 0 10px 10px;
+  }
 }
 
 /* -------------------------------------------------------------------------------------- */
+/* Bootstrap */
+
+.footer-custom {
+  font-size: 15px !important;
+}
+.footer-custom * {
+  font-size: 15px !important;
+}
+
+.pl-0{
+  padding-left: 0px;
+}
+
+.footer-img1{
+    background-image: url('/images/footer/Footer 1.png');
+}
+.footer-img2{
+    background-image: url('/images/footer/Footer 2.png');
+}
