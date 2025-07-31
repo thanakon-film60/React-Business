@@ -1,5 +1,4 @@
 import React from "react";
-// import "./InvestorRelations.css";
 
 const data = [
   {
@@ -14,21 +13,20 @@ const data = [
     title: "ข้อมูลผู้ถือหุ้น",
     img: "/images/Header/shareholder-info.jpg",
   },
-//   {
-//     title: "รายงานประจำปี",
-//     img: "/images/annual-report.jpg",
-//   },
-//   {
-//     title: "สอบถามข้อมูล",
-//     img: "/images/contact-info.jpg",
-//   },
+  {
+    title: "รายงานประจำปี",
+    img: "/images/annual-report.jpg",
+  },
 ];
 
 export default function InvestorRelations() {
   return (
     <div className="ir-container">
-      <h4 className="text-center font-bold pb-4 underline decoration-red-500 decoration-8 " style={{ fontSize: "34px"}}>
-         นักลงทุนสัมพันธ์
+      <h4
+        className="text-center font-bold pb-4 underline decoration-red-500 decoration-8 "
+        style={{ fontSize: "34px" }}
+      >
+        นักลงทุนสัมพันธ์
       </h4>
       <div className="ir-grid">
         {data.map((item, i) => (
