@@ -309,3 +309,10 @@ nav > .dropdown > span.btn.active {
 .pl-0{
   padding-left: 0px;
 }
+
+.footer-img1{
+    background-image: url('/images/footer/Footer 1.png');
+}
+.footer-img2{
+    background-image: url('/images/footer/Footer 2.png');
+}

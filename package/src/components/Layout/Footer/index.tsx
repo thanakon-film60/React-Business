@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react";
 
 const Footer = () => {
   return (
-    <footer className="relative py-4 footer-custom bg-[#D6001C]">
+    <footer className="relative py-4 footer-custom bg-[#D6001C] footer-img1">
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-8">
         {/* Column 1: Logo & Call Center */}
         <div className="col">
