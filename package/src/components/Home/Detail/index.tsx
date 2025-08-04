@@ -3,23 +3,23 @@ import React from "react";
 
 const cards = [
   {
-    staticImg: "/images/hero/Silk-screen-3.jpg",
-    animatedImg: "/images/joinus/Silk-screen-V.gif",
+    staticImg: "/images/hero/Products-screen-1-img.png",
+    animatedImg: "/images/hero/Products-screen-1.gif",
     title: "การพัฒนาและการออกแบบ"
   },
   {
-    staticImg: "/images/hero/Silk-screen-2.jpg",
-    animatedImg: "/images/joinus/Silk-screen-V2.gif",
+    staticImg: "/images/hero/Products-screen-2-img.png",
+    animatedImg: "/images/hero/Products-screen-2.gif",
     title: "เตรียมพิมพ์"
   },
   {
-    staticImg: "/images/hero/Silk-screen-1.jpg",
-    animatedImg: "/images/joinus/Silk-screen-V3.gif",
+    staticImg: "/images/hero/Products-screen-3-img.png",
+    animatedImg: "/images/hero/Products-screen-3.gif",
     title: "การพิมพ์"
   },
   {
-    staticImg: "/images/hero/Silk-screen-1.jpg",
-    animatedImg: "/images/joinus/Silk-screen-V3.gif",
+    staticImg: "/images/hero/Products-screen-4-img.png",
+    animatedImg: "/images/hero/Products-screen-4.gif",
     title: "หลังพิมพ์"
   },
 ];

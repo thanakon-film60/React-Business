@@ -49,7 +49,7 @@ return (
           <Link
             href={item.href}
             className={`btn btn-secondary dropdown-toggle ${
-              path === item.href ? "active" : ""
+              path === item.href ? "btn-danger" : "btn-secondary"
             }`}
             role="button"
             aria-expanded={submenuOpen}
@@ -60,14 +60,14 @@ return (
         ) : (
           <Link
             href={item.href}
-            className={`btn btn-secondary ${path === item.href ? "active" : ""}`}
+            className={`btn btn-secondary ${path === item.href ? "btn-danger" : "btn-secondary"}`}
           >
             {item.label}
           </Link>
         )
       ) : item.submenu ? (
         <span
-          className="btn btn-secondary dropdown-toggle"
+          className={"btn btn-secondary dropdown-toggle"}
           role="button"
           aria-expanded={submenuOpen}
           onClick={toggleDropdown}

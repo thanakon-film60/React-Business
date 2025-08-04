@@ -38,7 +38,7 @@ a {
 
 /* -------------------------------------------------- */
 .about-bg-image {
-  background-image: url('/images/team/test-about.jpg');
+  background-image: url('/images/team/About.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -317,4 +317,9 @@ nav > .dropdown > span.btn.active {
     background-image: url('/images/footer/Footer 2.png');
 }
 
+/* ----------------------------------------------------------------------------------------- */
+
+.custom-grey {
+  color: #393a3a !important;
+}
 /* ----------------------------------------------------------------------------------------- */
