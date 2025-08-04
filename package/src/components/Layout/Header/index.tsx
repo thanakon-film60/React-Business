@@ -5,12 +5,17 @@ import Image from "next/image";
 import Logo from "./Logo"; // สมมุติว่าคุณมีโลโก้แล้ว
 import HeaderLink from "../Header/Navigation/HeaderLink"; // สมมุติว่าเมนูแต่ละรายการแยก component แล้ว
 import { headerData } from "../../Layout/Header/Navigation/menuData"; 
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const [submenuOpenId, setSubmenuOpenId] = useState<number | null>(null);
-
+  const path = usePathname();
+    useEffect(() => {
+  setSubmenuOpenId(null); 
+}, [path]);
+  
   // ปิดเมนูเมื่อคลิกข้างนอก
 useEffect(() => {
   function handleClickOutside(event: MouseEvent) {

@@ -215,12 +215,16 @@ nav > .dropdown > span.btn {
   border-radius: 0;
 }
 
-nav > .dropdown > a.btn:hover,
-nav > .dropdown > span.btn:hover,
-nav > .dropdown > span.btn.active {
+nav > .dropdown:hover > a.btn,
+nav > .dropdown:hover > span.btn,
+nav > .dropdown:focus-within > a.btn,
+nav > .dropdown:focus-within > span.btn,
+nav > .dropdown:has(.dropdown-menu:hover) > a.btn,
+nav > .dropdown:has(.dropdown-menu:hover) > span.btn {
   background-color: #b50000 !important;
   color: white !important;
 }
+
 /* InvestorRelations */
 /* -------------------------------------------------------------------------------------- */
 .ir-container {
@@ -323,3 +327,8 @@ nav > .dropdown > span.btn.active {
   color: #393a3a !important;
 }
 /* ----------------------------------------------------------------------------------------- */
+/* เติมมาเพื่อลบรอยต่อ */
+.dropdown-menu {
+  border: none !important;
+  box-shadow: none !important;
+}

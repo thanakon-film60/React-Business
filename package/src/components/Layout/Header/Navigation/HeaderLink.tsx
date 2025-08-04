@@ -18,21 +18,20 @@ const HeaderLink: React.FC<{
   const dropdownRef = useRef<HTMLDivElement>(null);
   //------------------------------------------------
    
-  
 
-  const submenuOpen = submenuOpenId === index; //เช็คจาก index
+  const submenuOpen = submenuOpenId === index; 
 
   const handleMouseEnter = () => {
-    if (item.submenu && setSubmenuOpenId) setSubmenuOpenId(index);
+    if (item.submenu) setSubmenuOpenId(index);
   };
 
   const handleMouseLeave = () => {
-    if (item.submenu && setSubmenuOpenId) setSubmenuOpenId(null);
+    if (item.submenu ) setSubmenuOpenId(null);
   };
 
   const toggleDropdown = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (item.submenu && setSubmenuOpenId) {
+    if (item.submenu ) {
       setSubmenuOpenId((prev) => (prev === index ? null : index));
     }
   };
@@ -46,17 +45,17 @@ return (
     >
       {item.href ? (
         item.submenu ? (
-          <Link
-            href={item.href}
+          <span
+            // href={item.href}
             className={`btn btn-secondary dropdown-toggle ${
-              path === item.href ? "btn-danger" : "btn-secondary"
+              path === item.href && item.submenu ? "btn-danger" : "btn-secondary"
             }`}
             role="button"
             aria-expanded={submenuOpen}
             onClick={toggleDropdown}
           >
             {item.label}
-          </Link>
+          </span>
         ) : (
           <Link
             href={item.href}
@@ -81,7 +80,8 @@ return (
       <ul className={`dropdown-menu ${submenuOpen && item.submenu ? "show" : ""}`}>
         {item.submenu?.map((subItem, idx) => (
           <li key={idx}>
-            <Link href={subItem.href} className="dropdown-item">
+            <Link href={subItem.href} className="dropdown-item"
+              onClick={() => setSubmenuOpenId(null)}>
               {subItem.label}
             </Link>
           </li>
