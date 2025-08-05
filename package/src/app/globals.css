@@ -122,3 +122,13 @@ section {
 body {
   font-family: 'Kanit', Tahoma, Arial, sans-serif;
 }
+
+.about-bg-image-background {
+  background-image: url('/images/team/login-background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* เพิ่มเติมเช่นขอบมนหรือเงา */
+  border-radius: 1.5rem; /* ถ้าต้องการโค้งเหมือนของเดิม */
+  min-height: 2000px;      /* กำหนดความสูงขั้นต่ำ */
+}

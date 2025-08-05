@@ -38,7 +38,7 @@ a {
 
 /* -------------------------------------------------- */
 .about-bg-image {
-  background-image: url('/images/team/About.png');
+  background-image: url('/images/team/ABOUT 3.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -324,7 +324,7 @@ nav > .dropdown:has(.dropdown-menu:hover) > span.btn {
 /* ----------------------------------------------------------------------------------------- */
 
 .custom-grey {
-  color: #393a3a !important;
+  color: #f6f8f8 !important;
 }
 /* ----------------------------------------------------------------------------------------- */
 /* เติมมาเพื่อลบรอยต่อ */
@@ -332,3 +332,4 @@ nav > .dropdown:has(.dropdown-menu:hover) > span.btn {
   border: none !important;
   box-shadow: none !important;
 }
+

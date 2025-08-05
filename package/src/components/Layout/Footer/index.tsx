@@ -15,7 +15,7 @@ const Footer = () => {
 
           {/* ที่อยู่/ติดตามเรา */}
           <div className="col-12 col-md-3">
-            <h4 className="text-primary custom-grey fw-bold mb-2">
+            <h4 className="text-primary custom-grey fw-bold mb-2 lh-lg ls-2" style={{letterSpacing:"1.05px"}}>
               บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)
             </h4>
             <p className="text-white mb-2" style={{ fontSize: '1rem' }}>
