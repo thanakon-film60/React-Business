@@ -6,7 +6,6 @@ import Logo from "./Logo"; // สมมุติว่าคุณมีโล�
 import HeaderLink from "../Header/Navigation/HeaderLink"; // สมมุติว่าเมนูแต่ละรายการแยก component แล้ว
 import { headerData } from "../../Layout/Header/Navigation/menuData"; 
 import { usePathname } from "next/navigation";
-import { useMediaQuery } from 'react-responsive';
 
 const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);

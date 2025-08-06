@@ -1,40 +1,40 @@
-// Logo.tsx
+import { useMediaQuery } from 'react-responsive';
 import Image from "next/image";
 import Link from "next/link";
 
 type LogoProps = {
   className?: string;
   style?: React.CSSProperties;
-  variant?: "side" | "horizontal";
 };
 
-const Logo: React.FC<LogoProps> = ({
-  className = "",
-  style,
-  variant = "side",
-}) => {
-  const logoSrc =
-    variant === "horizontal"
-      ? "/images/logo/LOGO-name 2.png"
-      : "/images/logo/LOGO TPP SIDE.png";
-
-  // ความสูงความกว้างปรับตามโลโก้แต่ละอัน (ถ้าจำเป็น)
-  const logoSize =
-    variant === "horizontal"
-      ? { width: 180, height: 42 }
-      : { width: 205, height: 185 };
+const Logo: React.FC<LogoProps> = ({ className = "", style }) => {
+  // Bootstrap xl: 1200px
+  const isDesktop = useMediaQuery({ minWidth: 1200 });
+  const isMobileOrTablet = useMediaQuery({ maxWidth: 1199 });
 
   return (
     <div className={`flex items-center ${className}`} style={style}>
       <Link href="/" className="inline-block flex-shrink-0">
-        <Image
-          src={logoSrc}
-          alt="THAI PACKAGING & PRINTING LOGO"
-          width={logoSize.width}
-          height={logoSize.height}
-          priority
-          className="object-contain"
-        />
+        {isDesktop && (
+          <Image
+            src="/images/logo/LOGO TPP SIDE.png"
+            alt="Desgy Solutions"
+            width={205}
+            height={185}
+            priority
+            className="w-[205px] h-[185px] object-contain"
+          />
+        )}
+        {isMobileOrTablet && (
+          <Image
+            src="/images/logo/LOGO-name 2.png"
+            alt="Desgy Solutions"
+            width={205}
+            height={185}
+            priority
+            className="w-[300px] h-[140px] object-contain"
+          />
+        )}
       </Link>
     </div>
   );
