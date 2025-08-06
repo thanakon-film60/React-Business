@@ -333,3 +333,47 @@ nav > .dropdown:has(.dropdown-menu:hover) > span.btn {
   box-shadow: none !important;
 }
 
+.test-bg{
+  background-color: rgb(55, 171, 242);
+  opacity: 0.4;
+}
+/* ----------------------------------------------------------------------------------------- */
+.awe-parallax, .awe-static {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -3;
+  width: 100%;
+  height: 100%;
+  background-position: 50% 50%;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.awe-static {
+  background-image: url('/images/team/web bg.png');
+}
+
+.overlay-color-1 {
+  opacity: 0.9;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -2;
+}
+/* ----------------------------------------------------------------------------------------- */
+/* ใช้ CSS ควบคุม */
+.logo-mobile {
+  display: none;
+}
+@media (max-width: 1199px) { /* xl breakpoint */
+  .logo-desktop {
+    display: none;
+  }
+  .logo-mobile {
+    display: block;
+  }
+}

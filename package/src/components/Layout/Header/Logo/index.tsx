@@ -1,34 +1,41 @@
+// Logo.tsx
 import Image from "next/image";
 import Link from "next/link";
 
 type LogoProps = {
   className?: string;
   style?: React.CSSProperties;
-  // ไม่ต้องมี showTitleOnMobile แล้ว
+  variant?: "side" | "horizontal";
 };
 
-const Logo: React.FC<LogoProps> = ({ className = "", style, }) => {
+const Logo: React.FC<LogoProps> = ({
+  className = "",
+  style,
+  variant = "side",
+}) => {
+  const logoSrc =
+    variant === "horizontal"
+      ? "/images/logo/LOGO-name 2.png"
+      : "/images/logo/LOGO TPP SIDE.png";
+
+  // ความสูงความกว้างปรับตามโลโก้แต่ละอัน (ถ้าจำเป็น)
+  const logoSize =
+    variant === "horizontal"
+      ? { width: 180, height: 42 }
+      : { width: 205, height: 185 };
+
   return (
     <div className={`flex items-center ${className}`} style={style}>
-      <Link href="/" className="inline-block flex-shrink-0 ">
+      <Link href="/" className="inline-block flex-shrink-0">
         <Image
-          src="/images/logo/logo.png"
-          alt="Desgy Solutions"
-          width={80}
-          height={60}
+          src={logoSrc}
+          alt="THAI PACKAGING & PRINTING LOGO"
+          width={logoSize.width}
+          height={logoSize.height}
           priority
-          className="w-[120px] h-[80px] object-contain"
+          className="object-contain"
         />
       </Link>
-      {/* แสดง h1 h2 เฉพาะ mobile */}
-      <div className="d-xxl-none ">
-        <h1 className="logo-title text-lg font-bold text-black" style={{fontSize: 16}}>
-          THAI PACKAGING & PRINTING PCL
-        </h1>
-        <h2 className="logo-subtitle font-bold text-sm text-black " style={{fontSize: 14}}>
-          บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)
-        </h2>
-      </div>
     </div>
   );
 };

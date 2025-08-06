@@ -27,6 +27,8 @@ const cards = [
 const Dedicated = () => {
   return (
     <section className="relative bg-cover bg-center dark:bg-darkmode overflow-hidden py-10">
+    <div className="awe-parallax awe-static" />
+      <div className="overlay-color-1" />
       <div className="container mx-auto max-w-[1100px]">
         <h2 className="text-center text-2xl font-bold mb-8 underline decoration-red-500 decoration-8" style={{fontSize:"34px"}}>สินค้าและบริการของเรา</h2>
         <br/>
