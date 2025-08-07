@@ -24,51 +24,56 @@ const TabPage = () => {
     },
     {
       date: "03 เมษายน 2568",
-      title: 'ขอเชิญเข้าร่วมงาน "งานประมูลรถบรรทุกมือสอง" ไปรษณีย์ไทย ประจำเดือนเมษายน',
-      image: "/images/insta/new4.jpg",
+      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      image: "/images/New/Dev_Size.png",
     },
     {
       date: "03 เมษายน 2568",
-      title: 'ขอเชิญเข้าร่วมงาน "งานประมูลรถบรรทุกมือสอง" ไปรษณีย์ไทย ประจำเดือนเมษายน',
-      image: "/images/insta/new5.jpg",
+      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      image: "/images/New/Dev_Size.png",
     },
     {
       date: "03 เมษายน 2568",
-      title: 'ขอเชิญเข้าร่วมงาน "งานประมูลรถบรรทุกมือสอง" ไปรษณีย์ไทย ประจำเดือนเมษายน',
-      image: "/images/insta/new6.jpg",
+      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      image: "/images/New/Dev_Size.png",
+    },
+        {
+      date: "03 เมษายน 2568",
+      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      image: "/images/New/Dev_Size.png",
+    },
+    {
+      date: "03 เมษายน 2568",
+      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      image: "/images/New/Dev_Size.png",
     },
   ];
 
   const articleData = [
     {
       date: "13 มิถุนายน 2568",
-      title: "ต่อใบขับขี่หมดอายุ ในปีนี้ หาคำตอบ ใช้เอกสารอะไรบ้าง?",
-      image: "/images/insta/article1.jpg",
+      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      image: "/images/New/Dev_Size.png",
     },
     {
       date: "06 มิถุนายน 2568",
-      title: "เช็กให้ชัวร์! 7 จุดอันตรายที่รถบรรทุกต้องระวังช่วงหน้าฝน",
-      image: "/images/insta/article2.jpg",
+      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      image: "/images/New/Dev_Size.png",
     },
     {
       date: "30 พฤษภาคม 2568",
-      title: 'ทำไม "รถบรรทุก" ต้องติดแผ่นสะท้อนแสงหน้า-ด้านหลัง',
-      image: "/images/insta/article3.jpg",
+      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      image: "/images/New/Dev_Size.png",
     },
     {
       date: "23 พฤษภาคม 2568",
-      title: "5 วิธีเช็คสติ๊กเกอร์ฝ้ากระจกรถช่วงหน้าฝน",
-      image: "/images/insta/article4.jpg",
+      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      image: "/images/New/Dev_Size.png",
     },
     {
       date: "23 พฤษภาคม 2568",
-      title: "5 วิธีเช็คสติ๊กเกอร์ฝ้ากระจกรถช่วงหน้าฝน",
-      image: "/images/insta/article5.jpg",
-    },
-    {
-      date: "23 พฤษภาคม 2568",
-      title: "5 วิธีเช็คสติ๊กเกอร์ฝ้ากระจกรถช่วงหน้าฝน",
-      image: "/images/insta/article6.jpg",
+      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      image: "/images/New/Dev_Size.png",
     },
   ];
 
@@ -121,6 +126,7 @@ const TabPage = () => {
         {/* Left Arrow */}
         <button
           className="absolute -left-2 md:-left-7 top-1/2 -translate-y-1/2 z-10 bg-white/80 text-blue-600 hover:bg-blue-100 w-12 h-12 flex items-center justify-center rounded-full shadow-lg border border-blue-200 disabled:opacity-40 transition"
+          style={{left:"-12rem"}}
           onClick={() => setSlideIndex(i => Math.max(0, i - 1))}
           disabled={slideIndex === 0}
         >
@@ -146,6 +152,7 @@ const TabPage = () => {
         {/* Right Arrow */}
         <button
           className="absolute -right-2 md:-right-7 top-1/2 -translate-y-1/2 z-10 bg-white/80 text-blue-600 hover:bg-blue-100 w-12 h-12 flex items-center justify-center rounded-full shadow-lg border border-blue-200 disabled:opacity-40 transition"
+          style={{left:"80rem"}}
           onClick={() => setSlideIndex(i => Math.min(maxIndex, i + 1))}
           disabled={slideIndex === maxIndex}
         >

@@ -11,7 +11,7 @@ const Aboutus = () => {
             เกี่ยวกับเรา
           </h4> */}
       <div className="container mx-auto lg:max-w-(--breakpoint-xl) relative z-1 md:max-w-(--breakpoint-md)" style={{ maxWidth: "100%" }}>
-        <div className="lg:p-12 px-2 bg-grey dark:bg-darkmode rounded-3xl position-relative mx-auto about-bg-image" style={{ maxWidth: "100%" }} >
+        <div className="lg:p-12 px-2 bg-grey dark:bg-darkmode rounded-none position-relative mx-auto about-bg-image" >
 
 
  
