@@ -22,7 +22,7 @@ const Aboutus = () => {
           <div className="md:w-1/2 w-full flex items-center justify-center p-8 bg-transparent">
             <div className="max-w-xl">
               <strong className="text-3xl font-bold mb-4 text-red-700">
-                <span className="text-micro-blue-200">เกี่ยวกับ</span>&nbsp;
+                <span className="text-gray-500">เกี่ยวกับ</span>&nbsp;
                  ไทยบรรจุภัณฑ์และการพิมพ์
               </strong>
               <p className="mb-4 text-lg text-gray-800 dark:text-white">
