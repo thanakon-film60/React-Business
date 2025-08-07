@@ -8,24 +8,24 @@ const CARD_WIDTH = 320;
 const TabPage = () => {
   const newsData = [
     {
-      date: "06 พฤษภาคม 2568",
-      title: 'ขอเชิญเข้าร่วมงาน "งานประมูลรถบรรทุกมือสอง" ไปรษณีย์ไทย ประจำเดือนพฤษภาคม',
+      date: "15 สิงหาคม 2567",
+      title: 'ซ้อมดับเพลิงประจำปี เพื่อเสริมสร้างความพร้อมรับมือเหตุฉุกเฉินอย่างมีประสิทธิภาพ สร้างจิตสำนึกด้านความปลอดภัย และความร่วมมือในการป้องกันอัคคีภัยในสถานที่ทำงาน',
+      image: "/images/New/Annual_Fire_Drill.png",
+    },
+    {
+      date: "23 พฤษภาคม 2568",
+      title: "ทำบุญประจำปี 2568 เนื่องในโอกาสก้าวเข้าสู่ปีที่ 37 แห่งการดำเนินธุรกิจ  ได้จัดกิจกรรมทำบุญประจำปี ณ บริเวณโรงอาหาร เพื่อเสริมสิริมงคลแก่คณะผู้บริหารและพนักงาน 23 พฤษภาคม 2568",
+      image: "/images/New/Company_Merit-Making_Ceremony.png",
+    },
+        {
+      date: "1 กรกฎาคม 2568",
+      title: 'กิจกรรมสวัสดิการ “แจกสิ่งของอุปโภคบริโภค” ประจำไตรมาส 2/2568   TPP จัดกิจกรรมมอบสิ่งของอุปโภคบริโภคให้แก่พนักงาน เพื่อส่งเสริมสวัสดิการ สร้างขวัญและกำลังใจ วันที่ 1 กรกฎาคม 2568',
       image: "/images/New/Distribution_of_Consumer_Goods.png",
     },
     {
       date: "06 พฤษภาคม 2568",
-      title: "ไปรษณีย์ฯ ประกาศกำไร!!! โตสวนหุ้นฯ 478.9 ล้านบาท ตามที่คาด",
+      title: "ประชุมคณะกรรมการบริหาร – รวมพลังขับเคลื่อนองค์กรสู่ความสำเร็จ เสริมสร้างวิสัยทัศน์ร่วม และกำหนดทิศทางการเติบโตอย่างยั่งยืน",
       image: "/images/New/Board_of_Directors_Meeting.png",
-    },
-    {
-      date: "17 เมษายน 2568",
-      title: "บมจ.ไปรษณีย์ฯ ร่วมสนับสนุนประเพณีสงกรานต์ วัดกิจกรรมบรรเทาภัย กลางผู้บริหาร และผู้บริหารบริษัทในเครือ",
-      image: "/images/New/Company_Merit-Making_Ceremony.png",
-    },
-    {
-      date: "03 เมษายน 2568",
-      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
-      image: "/images/New/Dev_Size.png",
     },
     {
       date: "03 เมษายน 2568",
@@ -96,7 +96,7 @@ const TabPage = () => {
         <button
           className={`px-6 py-2 font-bold text-lg ${
             activeTab === "news"
-              ? "border-b-4 border-blue-600 text-blue-600"
+              ? "border-b-4 border-red-600 text-red-600"
               : "text-gray-500"
           }`}
           onClick={() => {
@@ -110,7 +110,7 @@ const TabPage = () => {
         <button
           className={`px-6 py-2 font-bold text-lg ${
             activeTab === "article"
-              ? "border-b-4 border-blue-600 text-blue-600"
+              ? "border-b-4 border-red-600 text-red-600"
               : "text-gray-500"
           }`}
           onClick={() => {

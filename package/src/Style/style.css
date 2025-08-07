@@ -184,15 +184,15 @@ nav > .dropdown .dropdown-menu {
   min-width: 220px;
   padding: 0;
   border-radius: 0;
-  z-index: 9999;
   display: none; /* เริ่มต้นซ่อนไว้ก่อน */
   margin-top: 0;
   box-shadow: none;
 }
 
+
 nav > .dropdown:hover .dropdown-menu,
 nav > .dropdown:focus-within .dropdown-menu {
-  display: block; /* เมื่อ hover หรือโฟกัสถึงจะโชว์ */
+  display: block; 
 }
 
 nav > .dropdown .dropdown-menu .dropdown-item {
@@ -213,15 +213,33 @@ nav > .dropdown > span.btn {
   border-radius: 0;
 }
 
-nav > .dropdown:hover > a.btn,
+/* nav > .dropdown:hover > a.btn,
 nav > .dropdown:hover > span.btn,
-nav > .dropdown:focus-within > a.btn,
-nav > .dropdown:focus-within > span.btn,
+nav > .dropdown:has(.dropdown-menu.show) > a.btn,
+nav > .dropdown:has(.dropdown-menu.show) > span.btn,
 nav > .dropdown:has(.dropdown-menu:hover) > a.btn,
 nav > .dropdown:has(.dropdown-menu:hover) > span.btn {
   background-color: #b50000 !important;
   color: white !important;
+} */
+
+nav > .dropdown:hover > a.btn,
+nav > .dropdown:hover > span.btn,
+nav > .dropdown:has(.dropdown-menu.show) > a.btn,
+nav > .dropdown:has(.dropdown-menu.show) > span.btn {
+  background-color: #b50000 !important;
+  color: white !important;
 }
+
+
+nav > .dropdown > a.btn:focus,
+nav > .dropdown > span.btn:focus,
+nav > .dropdown > a.btn:active,
+nav > .dropdown > span.btn:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 
 /* InvestorRelations */
 /* -------------------------------------------------------------------------------------- */
@@ -444,3 +462,12 @@ nav > .dropdown:has(.dropdown-menu:hover) > span.btn {
 }
 
 /* ----------------------------------------------------------------------------------------- */
+/* Codeสีแดงที่ใช้งาน */
+.border-red-600 {
+   /* border-width: 1px;   */
+  border-style: solid;
+  border-color: #d6001c;
+}
+.text-red-600 {
+  color: #d6001c;
+}

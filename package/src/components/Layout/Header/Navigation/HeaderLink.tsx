@@ -44,14 +44,12 @@ return (
       ref={dropdownRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      tabIndex={-1}
     >
       {item.href ? (
         item.submenu ? (
           <span
-            // href={item.href}
-            className={`btn btn-secondary dropdown-toggle ${
-              path === item.href && item.submenu ? "btn-danger" : "btn-secondary"
-            }`}
+            className={`btn btn-secondary dropdown-toggle${submenuOpen ? " btn-danger" : ""}`}
             role="button"
             aria-expanded={submenuOpen}
             onClick={toggleDropdown}
@@ -68,7 +66,7 @@ return (
         )
       ) : item.submenu ? (
         <span
-          className={"btn btn-secondary dropdown-toggle"}
+          className={`btn btn-secondary dropdown-toggle${submenuOpen ? " btn-danger" : ""}`}
           role="button"
           aria-expanded={submenuOpen}
           onClick={toggleDropdown}
@@ -79,20 +77,23 @@ return (
         <span className="btn btn-secondary">{item.label}</span>
       )}
 
-      <ul className={`dropdown-menu ${submenuOpen && item.submenu ? "show" : ""}`}>
-        {item.submenu?.map((subItem, idx) => (
-          <li key={idx}>
-            <Link
-              href={subItem.href}
-              className={`dropdown-item${submenuOpen ? " animate__animated animate__fadeInDown" : ""}`}
-              style={{ animationDelay: submenuOpen ? `${idx * 0.03 + 0.01}s` : "0s" }}
-              onClick={() => setSubmenuOpenId(null)}
-            >
-              {subItem.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
+        <ul className={`dropdown-menu ${submenuOpen ? "show" : ""}`}>
+            {item.submenu?.map((subItem, idx) => (
+              <li key={idx}>
+                <Link
+                  href={subItem.href}
+                  className={`dropdown-item${submenuOpen ? " animate__animated animate__fadeInDown" : ""}`}
+                  style={{ animationDelay: submenuOpen ? `${idx * 0.03 + 0.01}s` : "0s" }}
+                  onClick={() => {
+                    setSubmenuOpenId(null);
+                     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+                  }}
+                >
+                  {subItem.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
     </div>
   );
 };
