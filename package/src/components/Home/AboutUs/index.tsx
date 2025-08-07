@@ -21,11 +21,11 @@ const Aboutus = () => {
           {/* ซ้าย: รูปถั่วเป็น bg */}
           <div className="md:w-1/2 w-full flex items-center justify-center p-8 bg-transparent">
             <div className="max-w-xl">
-              <strong className="text-3xl font-bold mb-4 text-red-700">
-                <span className="text-gray-500">เกี่ยวกับ</span>&nbsp;
+              <strong className="text-3xl font-bold mb-4 custom-Charcoal-gray">
+                <span className="custom-Charcoal-gray">เกี่ยวกับ</span>&nbsp;
                  ไทยบรรจุภัณฑ์และการพิมพ์
               </strong>
-              <p className="mb-4 text-lg text-gray-800 dark:text-white">
+              <p className="mb-4 text-lg custom-Ash-gray dark:text-white">
                 <b className="text-red-700">TPP หรือ บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)</b>&nbsp;
                    ผู้นำด้านการผลิตและออกแบบ บรรจุภัณฑ์กระดาษลูกฟูก และ กล่องกระดาษแข็ง พร้อมงานพิมพ์ออฟเซ็ทคุณภาพสูง ด้วยประสบการณ์ยาวนานกว่า 40 ปี 
                    เรามุ่งมั่นพัฒนา นวัตกรรมบรรจุภัณฑ์ และเทคโนโลยีการผลิตที่ทันสมัย เพื่อตอบโจทย์ลูกค้าในอุตสาหกรรมต่างๆ เช่น อาหาร, เครื่องดื่ม, และยานยนต์ 
