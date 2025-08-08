@@ -80,6 +80,8 @@ const TabPage = () => {
   const [activeTab, setActiveTab] = useState<"news" | "article">("news");
   const [slideIndex, setSlideIndex] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0); // <- คุม active ทีละ 1 กล่อง
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+
 
   const data = activeTab === "news" ? newsData : articleData;
   const maxIndex = Math.max(0, data.length - CARDS_PER_PAGE);
@@ -133,21 +135,27 @@ const TabPage = () => {
           <FaChevronLeft size={30} />
         </button>
         <div className="flex gap-7 w-full justify-center transition-all duration-500">
-          {data.slice(slideIndex, slideIndex + CARDS_PER_PAGE).map((item, idx) => (
-            <div
-              key={slideIndex + idx}
-              className="transition-all duration-300"
-              style={{
-                width: CARD_WIDTH,
-                minWidth: CARD_WIDTH,
-                maxWidth: "95vw",
-                cursor: "pointer",
-              }}
-              onClick={() => setActiveIndex(idx)}
-            >
-              <CardItem {...item} active={activeIndex === idx} />
-            </div>
-          ))}
+            {data.slice(slideIndex, slideIndex + CARDS_PER_PAGE).map((item, idx) => {
+              const isActive = activeIndex === idx;
+              const isHovered = hoverIndex === idx;
+              return (
+                <div
+                  key={slideIndex + idx}
+                  className="transition-all duration-300"
+                  style={{
+                    width: CARD_WIDTH,
+                    minWidth: CARD_WIDTH,
+                    maxWidth: "95vw",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setActiveIndex(idx)}
+                  onMouseEnter={() => setHoverIndex(idx)}
+                  onMouseLeave={() => setHoverIndex(null)}
+                >
+                  <CardItem {...item} active={isActive} hovered={isHovered && !isActive} />
+                </div>
+              );
+            })}
         </div>
         {/* Right Arrow */}
         <button
