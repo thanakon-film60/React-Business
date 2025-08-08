@@ -3,8 +3,8 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "./Logo"; // สมมุติว่าคุณมีโลโก้แล้ว
-import HeaderLink from "../Header/Navigation/HeaderLink"; // สมมุติว่าเมนูแต่ละรายการแยก component แล้ว
-import { headerData } from "../../Layout/Header/Navigation/menuData"; 
+import HeaderLink from "./Navigation/HeaderLink"; // สมมุติว่าเมนูแต่ละรายการแยก component แล้ว
+import { headerData } from "./Navigation/menuData"; 
 import { usePathname } from "next/navigation";
 
 const Header = () => {
