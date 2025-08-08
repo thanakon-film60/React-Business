@@ -5,11 +5,19 @@ import Image from "next/image";
 import Logo from "./Logo"; // สมมุติว่าคุณมีโลโก้แล้ว
 import HeaderLink from "../Header/Navigation/HeaderLink"; // สมมุติว่าเมนูแต่ละรายการแยก component แล้ว
 import { headerData } from "../../Layout/Header/Navigation/menuData"; 
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const [submenuOpenId, setSubmenuOpenId] = useState<number | null>(null);
+  const path = usePathname();
+
+
+  useEffect(() => {
+    setSubmenuOpenId(null); 
+  console.log("wtf")
+}, [path]);
 
   // ปิดเมนูเมื่อคลิกข้างนอก
 useEffect(() => {
@@ -20,6 +28,7 @@ useEffect(() => {
       navbarOpen
     ) {
       setNavbarOpen(false);
+      
     }
   }
   if (navbarOpen) {
@@ -37,17 +46,17 @@ useEffect(() => {
     <header className="fixed top-0 left-0 right-0 z-40 bg-white shadow-sm border-b border-black/60">
       <div className="w-full max-w-screen-2xl mx-auto flex items-center h-[100px] px-2 md:px-4 flex-nowrap">
         
-    <nav className="hidden xl:flex flex-1 justify-end gap-2 min-w-0 whitespace-nowrap relative items-center">
-      {menu1.map((item, i) => (
-        <HeaderLink
-          key={i}
-          item={item}
-          index={i}
-          submenuOpenId={submenuOpenId}
-          setSubmenuOpenId={setSubmenuOpenId}
-        />
-      ))}
-    </nav>
+      <nav className="hidden xl:flex flex-1 justify-end gap-2 min-w-0 whitespace-nowrap relative items-center">
+        {menu1.map((item, i) => (
+          <HeaderLink
+            key={i}
+            item={item}
+            index={i}
+            submenuOpenId={submenuOpenId}
+            setSubmenuOpenId={setSubmenuOpenId}
+          />
+        ))}
+      </nav>
 
        
         <div className="flex-shrink-0 flex justify-center px-4">
@@ -56,16 +65,18 @@ useEffect(() => {
 
         
         <nav className="hidden xl:flex flex-1 justify-start gap-3 min-w-0 items-center whitespace-nowrap">
-          {menu2.map((item, i) => (
-            // <HeaderLink key={i + menu1.length} item={item} />
-          <HeaderLink
-          key={i + menu1.length}
-          item={item}
-          index={i}
-          submenuOpenId={submenuOpenId}
-          setSubmenuOpenId={setSubmenuOpenId}
-        />
-          ))}
+          {menu2.map((item, i) => {
+            const index = i + menu1.length; 
+            return (
+              <HeaderLink
+                key={index}
+                item={item}
+                index={index}
+                submenuOpenId={submenuOpenId}
+                setSubmenuOpenId={setSubmenuOpenId}
+              />
+            );
+          })}
         
           <div className="flex gap-4 items-center ml-4">
             <Link href="/en" className="flex items-center gap-1 lang-link">

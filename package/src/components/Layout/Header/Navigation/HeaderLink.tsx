@@ -1,10 +1,11 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import { HeaderItem } from "../../../../types/menu";
 import { usePathname } from "next/navigation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../../../Style/style.css";
+import "animate.css";
 
 const HeaderLink: React.FC<{
   item: HeaderItem;
@@ -13,83 +14,80 @@ const HeaderLink: React.FC<{
   setSubmenuOpenId: React.Dispatch<React.SetStateAction<number | null>>;
   index: number;
 }> = ({ item, submenuOpenId, setSubmenuOpenId, index }) => {
-
   const path = usePathname();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  //------------------------------------------------
-   
-  
 
-  const submenuOpen = submenuOpenId === index; //เช็คจาก index
+  // ปุ่มหลักที่มี submenu เปิดเมนูเมื่อ hover
+  const submenuOpen = submenuOpenId === index;
+  const isMainMenuWithSubmenu = !!item.submenu;
 
-  const handleMouseEnter = () => {
-    if (item.submenu && setSubmenuOpenId) setSubmenuOpenId(index);
-  };
-
-  const handleMouseLeave = () => {
-    if (item.submenu && setSubmenuOpenId) setSubmenuOpenId(null);
-  };
-
-  const toggleDropdown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (item.submenu && setSubmenuOpenId) {
-      setSubmenuOpenId((prev) => (prev === index ? null : index));
-    }
-  };
-
-return (
+  return (
     <div
-      className={"dropdown"}
+      className="dropdown"
       ref={dropdownRef}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setSubmenuOpenId(index)}
+      onMouseLeave={() => setSubmenuOpenId(null)}
+      tabIndex={-1}
+      style={{ position: "relative" }}
     >
-      {item.href ? (
-        item.submenu ? (
-          <Link
-            href={item.href}
-            className={`btn btn-secondary dropdown-toggle ${
-              path === item.href ? "active" : ""
-            }`}
-            role="button"
-            aria-expanded={submenuOpen}
-            onClick={toggleDropdown}
-          >
-            {item.label}
-          </Link>
-        ) : (
-          <Link
-            href={item.href}
-            className={`btn btn-secondary ${path === item.href ? "active" : ""}`}
-          >
-            {item.label}
-          </Link>
-        )
-      ) : item.submenu ? (
+      {/* ปุ่มหลักที่มี submenu (กดไม่ได้) */}
+      {isMainMenuWithSubmenu ? (
         <span
-          className="btn btn-secondary dropdown-toggle"
+          className={`btn btn-secondary dropdown-toggle${submenuOpen ? " btn-danger" : ""} menu-main-disabled`}
           role="button"
           aria-expanded={submenuOpen}
-          onClick={toggleDropdown}
+          tabIndex={-1}
+          // ป้องกันคลิก/โฟกัส
+          style={{
+            cursor: "pointer",
+            pointerEvents: "none",
+            userSelect: "none"
+          }}
         >
           {item.label}
         </span>
       ) : (
-        <span className="btn btn-secondary">{item.label}</span>
+        // ปุ่มหลักที่ไม่มี submenu (กดได้)
+        item.href ? (
+          <Link
+            href={item.href}
+            className={`btn btn-secondary ${path === item.href ? "btn-danger" : ""}`}
+          >
+            {item.label}
+          </Link>
+        ) : (
+          <span className="btn btn-secondary">{item.label}</span>
+        )
       )}
 
-      <ul className={`dropdown-menu ${submenuOpen && item.submenu ? "show" : ""}`}>
-        {item.submenu?.map((subItem, idx) => (
-          <li key={idx}>
-            <Link href={subItem.href} className="dropdown-item">
-              {subItem.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {/* เมนูย่อย */}
+      {isMainMenuWithSubmenu && (
+        <ul
+          className={`dropdown-menu ${submenuOpen ? "show" : ""}`}
+          style={{
+            display: submenuOpen ? "block" : "none",
+            zIndex: 1000,
+          }}
+        >
+          {item.submenu?.map((subItem, idx) => (
+            <li key={idx}>
+              <Link
+                href={subItem.href}
+                className={`dropdown-item${submenuOpen ? " animate__animated animate__fadeInDown" : ""}`}
+                style={{ animationDelay: submenuOpen ? `${idx * 0.03 + 0.01}s` : "0s" }}
+                onClick={() => {
+                  setSubmenuOpenId(null); // ปิดเมนูทันทีหลังคลิก
+                  if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+                }}
+              >
+                {subItem.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
-
 
 export default HeaderLink;

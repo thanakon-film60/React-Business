@@ -3,23 +3,23 @@ import React from "react";
 
 const cards = [
   {
-    staticImg: "/images/hero/Silk-screen-3.jpg",
-    animatedImg: "/images/joinus/Silk-screen-V.gif",
+    staticImg: "/images/hero/Products-screen-1-img.png",
+    animatedImg: "/images/hero/Products-screen-1.gif",
     title: "การพัฒนาและการออกแบบ"
   },
   {
-    staticImg: "/images/hero/Silk-screen-2.jpg",
-    animatedImg: "/images/joinus/Silk-screen-V2.gif",
+    staticImg: "/images/hero/Products-screen-2-img.png",
+    animatedImg: "/images/hero/Products-screen-2.gif",
     title: "เตรียมพิมพ์"
   },
   {
-    staticImg: "/images/hero/Silk-screen-1.jpg",
-    animatedImg: "/images/joinus/Silk-screen-V3.gif",
+    staticImg: "/images/hero/Products-screen-3-img.png",
+    animatedImg: "/images/hero/Products-screen-3.gif",
     title: "การพิมพ์"
   },
   {
-    staticImg: "/images/hero/Silk-screen-1.jpg",
-    animatedImg: "/images/joinus/Silk-screen-V3.gif",
+    staticImg: "/images/hero/Products-screen-4-img.png",
+    animatedImg: "/images/hero/Products-screen-4.gif",
     title: "หลังพิมพ์"
   },
 ];
@@ -27,6 +27,8 @@ const cards = [
 const Dedicated = () => {
   return (
     <section className="relative bg-cover bg-center dark:bg-darkmode overflow-hidden py-10">
+    <div className="awe-parallax awe-static" />
+      <div className="overlay-color-1" />
       <div className="container mx-auto max-w-[1100px]">
         <h2 className="text-center text-2xl font-bold mb-8 underline decoration-red-500 decoration-8" style={{fontSize:"34px"}}>สินค้าและบริการของเรา</h2>
         <br/>

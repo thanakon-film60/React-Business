@@ -1,34 +1,41 @@
+import { useMediaQuery } from 'react-responsive';
 import Image from "next/image";
 import Link from "next/link";
 
 type LogoProps = {
   className?: string;
   style?: React.CSSProperties;
-  // ไม่ต้องมี showTitleOnMobile แล้ว
 };
 
-const Logo: React.FC<LogoProps> = ({ className = "", style, }) => {
+const Logo: React.FC<LogoProps> = ({ className = "", style }) => {
+  // Bootstrap xl: 1200px
+  const isDesktop = useMediaQuery({ minWidth: 1200 });
+  const isMobileOrTablet = useMediaQuery({ maxWidth: 1199 });
+
   return (
     <div className={`flex items-center ${className}`} style={style}>
-      <Link href="/" className="inline-block flex-shrink-0 ">
-        <Image
-          src="/images/logo/logo.png"
-          alt="Desgy Solutions"
-          width={80}
-          height={60}
-          priority
-          className="w-[120px] h-[80px] object-contain"
-        />
+      <Link href="/" className="inline-block flex-shrink-0">
+        {isDesktop && (
+          <Image
+            src="/images/logo/LOGO TPP SIDE.png"
+            alt="Desgy Solutions"
+            width={205}
+            height={185}
+            priority
+            className="w-[205px] h-[185px] object-contain"
+          />
+        )}
+        {isMobileOrTablet && (
+          <Image
+            src="/images/logo/LOGO-name-TPP.png"
+            alt="Desgy Solutions"
+            width={205}
+            height={185}
+            priority
+            className="w-[300px] h-[140px] object-contain"
+          />
+        )}
       </Link>
-      {/* แสดง h1 h2 เฉพาะ mobile */}
-      <div className="d-xxl-none ">
-        <h1 className="logo-title text-lg font-bold text-black" style={{fontSize: 16}}>
-          THAI PACKAGING & PRINTING PCL
-        </h1>
-        <h2 className="logo-subtitle font-bold text-sm text-black " style={{fontSize: 14}}>
-          บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)
-        </h2>
-      </div>
     </div>
   );
 };

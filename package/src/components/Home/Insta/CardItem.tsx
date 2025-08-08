@@ -5,11 +5,30 @@ interface CardItemProps {
   image: string;
   date: string;
   title: string;
+  active?: boolean;
+  hovered?: boolean;
 }
 
-const CardItem: React.FC<CardItemProps> = ({ image, date, title }) => {
+const CardItem: React.FC<CardItemProps> = ({ image, date, title,active,hovered }) => {
   return (
-    <div className="bg-white rounded-lg p-3 flex flex-col shadow group hover:shadow-lg transition">
+ <div
+          className={
+            `bg-white rounded-lg p-3 flex flex-col shadow group hover:shadow-lg transition
+            ${active
+              ? "border-4 border-red-500"   // แดงเข้ม
+              : hovered
+              ? "border-4 border-red-300"   // แดงจาง
+              : "border border-gray-200"
+            }`
+          }
+          style={{
+            minHeight: 420,
+            maxWidth: 360,
+            width: "100%",
+            boxShadow: active ? "0 0 0 3px #e03e3e55" : hovered ? "0 0 0 2px #e03e3e22" : undefined,
+            transition: "box-shadow 0.2s, border-color 0.2s"
+          }}
+        >
       {/* Image */}
         <div className="w-full mb-2 rounded-lg overflow-hidden bg-blue-100">
           <Image

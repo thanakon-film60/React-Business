@@ -41,11 +41,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${font.className}`}>
+      <body className={`about-bg-image-background ${font.className}`}>
         <Aoscompo>
-          <Header />
-          {children}
-          <Footer />
+          <div className="layout-grid">
+            <Header />
+            {/* main content */}
+            <main className="flex-grow-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </Aoscompo>
         <ScrollToTop />
       </body>
