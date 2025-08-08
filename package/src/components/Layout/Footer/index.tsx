@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react";
 
 const Footer = () => {
   return (
-    <footer className="bg-danger footer-img1 py-4">
+    <footer className="bg-danger footer-img1 pt-4">
       <div className="container">
         <div className="row gy-4 gx-4 text-white">
           {/* โลโก้ + ที่อยู่/ติดตามเรา */}

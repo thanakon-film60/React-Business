@@ -147,3 +147,9 @@ html, body, #__next {
 .flex-grow-1 {
   flex: 1 1 0% !important;
 }
+/* ---------------------------------------------------------------------------------------------------------------- */
+.layout-grid {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}

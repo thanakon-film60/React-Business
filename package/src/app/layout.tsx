@@ -43,7 +43,7 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className={`about-bg-image-background ${font.className}`}>
         <Aoscompo>
-          <div className="min-vh-100 d-flex flex-column">
+          <div className="layout-grid">
             <Header />
             {/* main content */}
             <main className="flex-grow-1">
