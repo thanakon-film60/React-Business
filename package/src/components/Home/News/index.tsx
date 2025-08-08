@@ -9,42 +9,50 @@ const TabPage = () => {
   const newsData = [
     {
       date: "15 สิงหาคม 2567",
-      title: 'ซ้อมดับเพลิงประจำปี เพื่อเสริมสร้างความพร้อมรับมือเหตุฉุกเฉินอย่างมีประสิทธิภาพ สร้างจิตสำนึกด้านความปลอดภัย และความร่วมมือในการป้องกันอัคคีภัยในสถานที่ทำงาน',
+      title:
+        "ซ้อมดับเพลิงประจำปี เพื่อเสริมสร้างความพร้อมรับมือเหตุฉุกเฉินอย่างมีประสิทธิภาพ สร้างจิตสำนึกด้านความปลอดภัย และความร่วมมือในการป้องกันอัคคีภัยในสถานที่ทำงาน",
       image: "/images/New/Annual_Fire_Drill.png",
     },
     {
       date: "23 พฤษภาคม 2568",
-      title: "ทำบุญประจำปี 2568 เนื่องในโอกาสก้าวเข้าสู่ปีที่ 37 แห่งการดำเนินธุรกิจ  ได้จัดกิจกรรมทำบุญประจำปี ณ บริเวณโรงอาหาร เพื่อเสริมสิริมงคลแก่คณะผู้บริหารและพนักงาน 23 พฤษภาคม 2568",
+      title:
+        "ทำบุญประจำปี 2568 เนื่องในโอกาสก้าวเข้าสู่ปีที่ 37 แห่งการดำเนินธุรกิจ  ได้จัดกิจกรรมทำบุญประจำปี ณ บริเวณโรงอาหาร เพื่อเสริมสิริมงคลแก่คณะผู้บริหารและพนักงาน 23 พฤษภาคม 2568",
       image: "/images/New/Company_Merit-Making_Ceremony.png",
     },
-        {
+    {
       date: "1 กรกฎาคม 2568",
-      title: 'กิจกรรมสวัสดิการ “แจกสิ่งของอุปโภคบริโภค” ประจำไตรมาส 2/2568   TPP จัดกิจกรรมมอบสิ่งของอุปโภคบริโภคให้แก่พนักงาน เพื่อส่งเสริมสวัสดิการ สร้างขวัญและกำลังใจ วันที่ 1 กรกฎาคม 2568',
+      title:
+        "กิจกรรมสวัสดิการ “แจกสิ่งของอุปโภคบริโภค” ประจำไตรมาส 2/2568   TPP จัดกิจกรรมมอบสิ่งของอุปโภคบริโภคให้แก่พนักงาน เพื่อส่งเสริมสวัสดิการ สร้างขวัญและกำลังใจ วันที่ 1 กรกฎาคม 2568",
       image: "/images/New/Distribution_of_Consumer_Goods.png",
     },
     {
       date: "06 พฤษภาคม 2568",
-      title: "ประชุมคณะกรรมการบริหาร – รวมพลังขับเคลื่อนองค์กรสู่ความสำเร็จ เสริมสร้างวิสัยทัศน์ร่วม และกำหนดทิศทางการเติบโตอย่างยั่งยืน",
+      title:
+        "ประชุมคณะกรรมการบริหาร – รวมพลังขับเคลื่อนองค์กรสู่ความสำเร็จ เสริมสร้างวิสัยทัศน์ร่วม และกำหนดทิศทางการเติบโตอย่างยั่งยืน",
       image: "/images/New/Board_of_Directors_Meeting.png",
     },
     {
       date: "03 เมษายน 2568",
-      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      title:
+        "xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx",
       image: "/images/New/Dev_Size.png",
     },
     {
       date: "03 เมษายน 2568",
-      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
-      image: "/images/New/Dev_Size.png",
-    },
-        {
-      date: "03 เมษายน 2568",
-      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      title:
+        "xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx",
       image: "/images/New/Dev_Size.png",
     },
     {
       date: "03 เมษายน 2568",
-      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      title:
+        "xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx",
+      image: "/images/New/Dev_Size.png",
+    },
+    {
+      date: "03 เมษายน 2568",
+      title:
+        "xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx",
       image: "/images/New/Dev_Size.png",
     },
   ];
@@ -52,27 +60,32 @@ const TabPage = () => {
   const articleData = [
     {
       date: "13 มิถุนายน 2568",
-      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      title:
+        "xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx",
       image: "/images/New/Dev_Size.png",
     },
     {
       date: "06 มิถุนายน 2568",
-      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      title:
+        "xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx",
       image: "/images/New/Dev_Size.png",
     },
     {
       date: "30 พฤษภาคม 2568",
-      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      title:
+        "xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx",
       image: "/images/New/Dev_Size.png",
     },
     {
       date: "23 พฤษภาคม 2568",
-      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      title:
+        "xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx",
       image: "/images/New/Dev_Size.png",
     },
     {
       date: "23 พฤษภาคม 2568",
-      title: 'xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx',
+      title:
+        "xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx",
       image: "/images/New/Dev_Size.png",
     },
   ];
@@ -81,7 +94,6 @@ const TabPage = () => {
   const [slideIndex, setSlideIndex] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0); // <- คุม active ทีละ 1 กล่อง
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-
 
   const data = activeTab === "news" ? newsData : articleData;
   const maxIndex = Math.max(0, data.length - CARDS_PER_PAGE);
@@ -128,14 +140,16 @@ const TabPage = () => {
         {/* Left Arrow */}
         <button
           className="absolute -left-2 md:-left-7 top-1/2 -translate-y-1/2 z-10 bg-white/80 text-blue-600 hover:bg-blue-100 w-12 h-12 flex items-center justify-center rounded-full shadow-lg border border-blue-200 disabled:opacity-40 transition"
-          style={{left:"-12rem"}}
-          onClick={() => setSlideIndex(i => Math.max(0, i - 1))}
+          style={{ left: "-12rem" }}
+          onClick={() => setSlideIndex((i) => Math.max(0, i - 1))}
           disabled={slideIndex === 0}
         >
           <FaChevronLeft size={30} />
         </button>
         <div className="flex gap-7 w-full justify-center transition-all duration-500">
-            {data.slice(slideIndex, slideIndex + CARDS_PER_PAGE).map((item, idx) => {
+          {data
+            .slice(slideIndex, slideIndex + CARDS_PER_PAGE)
+            .map((item, idx) => {
               const isActive = activeIndex === idx;
               const isHovered = hoverIndex === idx;
               return (
@@ -152,7 +166,11 @@ const TabPage = () => {
                   onMouseEnter={() => setHoverIndex(idx)}
                   onMouseLeave={() => setHoverIndex(null)}
                 >
-                  <CardItem {...item} active={isActive} hovered={isHovered && !isActive} />
+                  <CardItem
+                    {...item}
+                    active={isActive}
+                    hovered={isHovered && !isActive}
+                  />
                 </div>
               );
             })}
@@ -160,8 +178,8 @@ const TabPage = () => {
         {/* Right Arrow */}
         <button
           className="absolute -right-2 md:-right-7 top-1/2 -translate-y-1/2 z-10 bg-white/80 text-blue-600 hover:bg-blue-100 w-12 h-12 flex items-center justify-center rounded-full shadow-lg border border-blue-200 disabled:opacity-40 transition"
-          style={{left:"80rem"}}
-          onClick={() => setSlideIndex(i => Math.min(maxIndex, i + 1))}
+          style={{ left: "80rem" }}
+          onClick={() => setSlideIndex((i) => Math.min(maxIndex, i + 1))}
           disabled={slideIndex === maxIndex}
         >
           <FaChevronRight size={30} />
@@ -172,15 +190,15 @@ const TabPage = () => {
         {Array.from({ length: maxIndex + 1 }).map((_, i) => (
           <button
             key={i}
-            className={`w-3 h-3 mx-1 rounded-full transition ${slideIndex === i ? "bg-blue-600" : "bg-gray-300"}`}
+            className={`w-3 h-3 mx-1 rounded-full transition ${
+              slideIndex === i ? "bg-blue-600" : "bg-gray-300"
+            }`}
             onClick={() => setSlideIndex(i)}
           />
         ))}
       </div>
       <div className="flex justify-center mt-6">
-        <button className="ir-btn ir-btn-glow">
-          ดูทั้งหมด
-        </button>
+        <button className="ir-btn ir-btn-glow">ดูทั้งหมด</button>
       </div>
       <br />
     </div>
