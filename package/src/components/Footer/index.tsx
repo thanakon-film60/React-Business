@@ -17,15 +17,23 @@ const Footer = () => {
               className="mb-3 img-fluid"
             />
             <p>
-              9/9 หมู่ 6 ถนนกิ่งแก้ว<br />
-              ตำบลราชาเทวะ อำเภอบางพลี<br />
+              9/9 หมู่ 6 ถนนกิ่งแก้ว
+              <br />
+              ตำบลราชาเทวะ อำเภอบางพลี
+              <br />
               จังหวัดสมุทรปราการ 10540
             </p>
             <h5 className="text-white fw-bold">ติดตามเรา</h5>
             <div className="d-flex gap-3 ">
-              <Link href="#"><Icon icon="ic:baseline-facebook" fontSize={24} color="white" /></Link>
-              <Link href="#"><Icon icon="simple-icons:line" fontSize={24} color="white"/></Link>
-              <Link href="#"><Icon icon="mdi:youtube" fontSize={24} color="white"/></Link>
+              <Link href="#">
+                <Icon icon="ic:baseline-facebook" fontSize={24} color="white" />
+              </Link>
+              <Link href="#">
+                <Icon icon="simple-icons:line" fontSize={24} color="white" />
+              </Link>
+              <Link href="#">
+                <Icon icon="mdi:youtube" fontSize={24} color="white" />
+              </Link>
             </div>
           </div>
 
@@ -33,12 +41,14 @@ const Footer = () => {
           <div className="col-md-3 col-sm-6">
             <h5 className="text-white fw-bold">ติดต่อสอบถาม</h5>
             <p>
-              02-175-2201-8<br />
+              02-175-2201-8
+              <br />
               Contact@microleasingplc.com
             </p>
             <h6 className="text-white fw-bold mt-3">เวลาทำการ</h6>
             <p>
-              จันทร์ - เสาร์ 8.30 - 17.30 น.<br />
+              จันทร์ - เสาร์ 8.30 - 17.30 น.
+              <br />
               วันหยุด วันอาทิตย์
             </p>
           </div>
@@ -47,10 +57,26 @@ const Footer = () => {
           <div className="col-md-3 col-sm-6">
             <h5 className="text-white fw-bold">เกี่ยวกับเรา</h5>
             <ul className="list-unstyled">
-              <li><Link href="#" className="text-white text-decoration-none">เกี่ยวกับเรา</Link></li>
-              <li><Link href="#" className="text-white text-decoration-none">ติดต่อเรา</Link></li>
-              <li><Link href="#" className="text-white text-decoration-none">ร่วมงานกับเรา</Link></li>
-              <li><Link href="#" className="text-white text-decoration-none">นักลงทุนสัมพันธ์</Link></li>
+              <li>
+                <Link href="#" className="text-white text-decoration-none">
+                  เกี่ยวกับเรา
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-white text-decoration-none">
+                  ติดต่อเรา
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-white text-decoration-none">
+                  ร่วมงานกับเรา
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-white text-decoration-none">
+                  นักลงทุนสัมพันธ์
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -58,10 +84,26 @@ const Footer = () => {
           <div className="col-md-3 col-sm-6">
             <h5 className="text-white fw-bold">สินค้าและบริการ</h5>
             <ul className="list-unstyled">
-              <li><Link href="#" className="text-white text-decoration-none">บริการของเรา</Link></li>
-              <li><Link href="#" className="text-white text-decoration-none">Pakku Packaging</Link></li>
-              <li><Link href="#" className="text-white text-decoration-none">สินค้าอื่นๆ</Link></li>
-              <li><Link href="#" className="text-white text-decoration-none">สอบถามบริการ</Link></li>
+              <li>
+                <Link href="#" className="text-white text-decoration-none">
+                  บริการของเรา
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-white text-decoration-none">
+                  Pakku Packaging
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-white text-decoration-none">
+                  สินค้าอื่นๆ
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-white text-decoration-none">
+                  สอบถามบริการ
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -69,21 +111,37 @@ const Footer = () => {
 
       {/* Bottom Bar */}
       <div className="bg-white py-3 mt-4">
-        <div className="container d-flex flex-column flex-md-row justify-content-between align-items-center text-center gap-2 text-secondary">
+        <div className="container d-flex flex-wrap justify-content-between align-items-center text-secondary">
           <span>
-            © สงวนลิขสิทธิ์ พ.ศ. 2568 บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)
+            © สงวนลิขสิทธิ์ พ.ศ. 2568 บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด
+            (มหาชน)
           </span>
           <ul className="list-inline mb-0">
             <li className="list-inline-item">
-              <Link href="#" className="text-secondary text-decoration-underline">ข้อกำหนดและเงื่อนไข</Link>
+              <Link
+                href="#"
+                className="text-secondary text-decoration-underline"
+              >
+                ข้อกำหนดและเงื่อนไข
+              </Link>
             </li>
             <li className="list-inline-item">|</li>
             <li className="list-inline-item">
-              <Link href="#" className="text-secondary text-decoration-underline">การคุ้มครองข้อมูลส่วนบุคคล</Link>
+              <Link
+                href="#"
+                className="text-secondary text-decoration-underline"
+              >
+                การคุ้มครองข้อมูลส่วนบุคคล
+              </Link>
             </li>
             <li className="list-inline-item">|</li>
             <li className="list-inline-item">
-              <Link href="#" className="text-secondary text-decoration-underline">นโยบายการใช้คุกกี้</Link>
+              <Link
+                href="#"
+                className="text-secondary text-decoration-underline"
+              >
+                นโยบายการใช้คุกกี้
+              </Link>
             </li>
           </ul>
         </div>
