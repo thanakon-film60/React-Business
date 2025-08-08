@@ -1,7 +1,7 @@
 "use client";
 import { useRef } from "react";
 import Link from "next/link";
-import { HeaderItem } from "../../../../types/menu";
+import { HeaderItem } from "../../../types/menu";
 import { usePathname } from "next/navigation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../../../Style/style.css";
