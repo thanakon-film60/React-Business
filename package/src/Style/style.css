@@ -471,3 +471,14 @@ nav > .dropdown > span.btn:active {
 .text-red-600 {
   color: #d6001c;
 }
+
+
+/* ----------------------------------------------------------------------------------------- */
+
+.menu-main-disabled {
+  pointer-events: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+
