@@ -26,7 +26,7 @@ const data = [
 
 export default function InvestorRelations() {
   return (
-    <section className="relative bg-cover bg-center dark:bg-darkmode overflow-hidden py-10">
+    <section className="relative bg-cover bg-center dark:bg-darkmode overflow-hidden py-10" style={{height:"730px"}}>
       <div className="container mx-auto max-w-[1100px]">
         <h2 className="text-center text-2xl font-bold mb-8 underline decoration-red-500 decoration-8" style={{ fontSize: "34px" }}>
           นักลงทุนสัมพันธ์
@@ -73,7 +73,7 @@ export default function InvestorRelations() {
           ))}
         </div>
         <div className="flex justify-center mt-6">
-          <button className="px-8 py-2 bg-yellow-400 rounded-full shadow font-bold hover:bg-yellow-500 transition">
+          <button className="ir-btn ir-btn-glow">
             ดูทั้งหมด
           </button>
         </div>

@@ -27,7 +27,7 @@ const Logo: React.FC<LogoProps> = ({ className = "", style }) => {
         )}
         {isMobileOrTablet && (
           <Image
-            src="/images/logo/LOGO-name 2.png"
+            src="/images/logo/LOGO-name-TPP.png"
             alt="Desgy Solutions"
             width={205}
             height={185}
