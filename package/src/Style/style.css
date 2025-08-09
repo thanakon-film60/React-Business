@@ -1,23 +1,29 @@
 /* ฟอนต์ Inter */
 @font-face {
-  font-family: 'Kanit';
-  src: url('/fonts/Kanit-Regular.ttf') format('truetype');
+  font-family: "Kanit";
+  src: url("/fonts/Kanit-Regular.ttf") format("truetype");
   font-weight: 400;
 }
 @font-face {
-  font-family: 'Kanit';
-  src: url('/fonts/Kanit-Bold.ttf') format('truetype');
+  font-family: "Kanit";
+  src: url("/fonts/Kanit-Bold.ttf") format("truetype");
   font-weight: 700;
 }
 
 body {
-  font-family: 'Kanit', Tahoma, Arial, sans-serif;
+  font-family: "Kanit", Tahoma, Arial, sans-serif;
 }
 
-h1 { font-size: 16px; }
-h2 { font-size: 14px; }
+h1 {
+  font-size: 16px;
+}
+h2 {
+  font-size: 14px;
+}
 
-.no-decoration { text-decoration: none !important; }
+.no-decoration {
+  text-decoration: none !important;
+}
 
 @media (min-width: 1250px) {
   .logo-title,
@@ -38,11 +44,11 @@ a {
 
 /* -------------------------------------------------- */
 .about-bg-image {
-  background-image: url('/images/team/ABOUT 3.png');
+  background-image: url("/images/team/About_3.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 400px;      /* กำหนดความสูงขั้นต่ำ */
+  min-height: 400px; /* กำหนดความสูงขั้นต่ำ */
 }
 
 /* ------------------------------------------------------------------ */
@@ -67,7 +73,7 @@ a {
 @media (min-width: 768px) {
   .investor-grid {
     grid-template-columns: repeat(2, 1fr); /* 2 columns */
-    grid-template-rows: repeat(3, 1fr);    /* 3 rows */
+    grid-template-rows: repeat(3, 1fr); /* 3 rows */
   }
 }
 
@@ -80,7 +86,7 @@ a {
   border: 1px solid transparent;
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.05);
   cursor: pointer;
   transition: background 0.3s, color 0.3s, box-shadow 0.3s;
   outline: none;
@@ -117,7 +123,7 @@ a {
 .investor-btn:hover,
 .investor-btn:focus {
   background: #15803d;
-  box-shadow: 0 4px 16px 0 rgba(0,0,0,0.09);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.09);
 }
 .investor-btn:hover .icon-bg,
 .investor-btn:focus .icon-bg {
@@ -133,7 +139,7 @@ a {
 }
 /* -------------------------------------------------------------------------------------------------------------- */
 .text-micro-yellow {
-  color: #FFD600;
+  color: #ffd600;
   font-weight: bold;
 }
 
@@ -162,7 +168,7 @@ a {
   color: #6c757d;
 }
 
-.btn-secondary:hover, 
+.btn-secondary:hover,
 .btn-secondary:focus {
   background-color: transparent; /* hover แล้วไม่มีพื้นหลัง */
   border: none;
@@ -177,7 +183,7 @@ nav > .dropdown {
 
 nav > .dropdown .dropdown-menu {
   position: absolute;
-  top: 100%; 
+  top: 100%;
   left: 0;
   background-color: #b50000; /* สีแดงตามภาพตัวอย่าง */
   color: #fff;
@@ -189,10 +195,9 @@ nav > .dropdown .dropdown-menu {
   box-shadow: none;
 }
 
-
 nav > .dropdown:hover .dropdown-menu,
 nav > .dropdown:focus-within .dropdown-menu {
-  display: block; 
+  display: block;
 }
 
 nav > .dropdown .dropdown-menu .dropdown-item {
@@ -231,7 +236,6 @@ nav > .dropdown:has(.dropdown-menu.show) > span.btn {
   color: white !important;
 }
 
-
 nav > .dropdown > a.btn:focus,
 nav > .dropdown > span.btn:focus,
 nav > .dropdown > a.btn:active,
@@ -239,7 +243,6 @@ nav > .dropdown > span.btn:active {
   outline: none !important;
   box-shadow: none !important;
 }
-
 
 /* InvestorRelations */
 /* -------------------------------------------------------------------------------------- */
@@ -262,7 +265,7 @@ nav > .dropdown > span.btn:active {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   background: #fff;
   transition: box-shadow 0.2s;
   cursor: pointer;
@@ -291,7 +294,7 @@ nav > .dropdown > span.btn:active {
   font-weight: bold;
   text-align: left;
   padding: 0 0 20px 20px;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.27);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.27);
 }
 
 /* Responsive for tablet */
@@ -326,15 +329,15 @@ nav > .dropdown > span.btn:active {
   font-size: 15px !important;
 }
 
-.pl-0{
+.pl-0 {
   padding-left: 0px;
 }
 
-.footer-img1{
-    background-image: url('/images/footer/Footer 1.png');
+.footer-img1 {
+  background-image: url("/images/footer/Footer 1.png");
 }
-.footer-img2{
-    background-image: url('/images/footer/Footer 2.png');
+.footer-img2 {
+  background-image: url("/images/footer/Footer 2.png");
 }
 
 /* ----------------------------------------------------------------------------------------- */
@@ -349,12 +352,13 @@ nav > .dropdown > span.btn:active {
   box-shadow: none !important;
 }
 
-.test-bg{
+.test-bg {
   background-color: rgb(55, 171, 242);
   opacity: 0.4;
 }
 /* ----------------------------------------------------------------------------------------- */
-.awe-parallax, .awe-static {
+.awe-parallax,
+.awe-static {
   position: absolute;
   top: 0;
   left: 0;
@@ -368,7 +372,7 @@ nav > .dropdown > span.btn:active {
 }
 
 .awe-static {
-  background-image: url('/images/team/web bg.png');
+  background-image: url("/images/team/web bg.png");
 }
 
 .overlay-color-1 {
@@ -385,7 +389,8 @@ nav > .dropdown > span.btn:active {
 .logo-mobile {
   display: none;
 }
-@media (max-width: 1199px) { /* xl breakpoint */
+@media (max-width: 1199px) {
+  /* xl breakpoint */
   .logo-desktop {
     display: none;
   }
@@ -398,11 +403,11 @@ nav > .dropdown > span.btn:active {
 .custom-red {
   color: #d6001c !important;
 }
-.custom-Charcoal-gray  {
+.custom-Charcoal-gray {
   color: #242424 !important;
 }
 .custom-Ash-gray {
-  color: #2C2C2C !important;
+  color: #2c2c2c !important;
 }
 /* ----------------------------------------------------------------------------------------- */
 .card-corner-red {
@@ -414,7 +419,8 @@ nav > .dropdown > span.btn:active {
 .card-corner-red::before {
   content: "";
   position: absolute;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 48px;
   height: 48px;
   /* border-top: 8px solid #ff2d2d;
@@ -437,14 +443,14 @@ nav > .dropdown > span.btn:active {
   position: relative;
   text-decoration: none;
   text-transform: uppercase;
-  background: #E1332D;
+  background: #e1332d;
   border-radius: 9999px; /* Full rounded */
   text-align: center;
   transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
   border: 0 solid;
-  box-shadow: inset 0 0 20px rgba(255,255,255,0);
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0);
   outline: 1px solid;
-  outline-color: rgba(255,255,255,0.5);
+  outline-color: rgba(255, 255, 255, 0.5);
   outline-offset: 0px;
   text-shadow: none;
   display: inline-block;
@@ -452,10 +458,9 @@ nav > .dropdown > span.btn:active {
 
 .ir-btn-glow:hover {
   border: 1px solid #fff;
-  box-shadow:
-    inset 0 0 20px rgba(255,255,255,0.5),
-    0 0 20px rgba(255,255,255,0.2);
-  outline-color: rgba(255,255,255,0);
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5),
+    0 0 20px rgba(255, 255, 255, 0.2);
+  outline-color: rgba(255, 255, 255, 0);
   outline-offset: 15px;
   text-shadow: 1px 1px 2px #427388;
   background: #d22e29;
@@ -464,14 +469,13 @@ nav > .dropdown > span.btn:active {
 /* ----------------------------------------------------------------------------------------- */
 /* Codeสีแดงที่ใช้งาน */
 .border-red-600 {
-   /* border-width: 1px;   */
+  /* border-width: 1px;   */
   border-style: solid;
   border-color: #d6001c;
 }
 .text-red-600 {
   color: #d6001c;
 }
-
 
 /* ----------------------------------------------------------------------------------------- */
 
@@ -481,4 +485,256 @@ nav > .dropdown > span.btn:active {
   cursor: pointer;
 }
 
+/* -------------------------------------GPT 5---------------------------------------------------- */
+/* ==== Breakpoint Controller: 1600px ==== */
+/* mobile-first: <1600px */
+.desktop-1600 {
+  display: none !important;
+}
+.mobile-1600 {
+  display: flex !important;
+}
 
+/* ≥1600px = โชว์เดสก์ท็อป, ซ่อนมือถือ */
+@media (min-width: 1600px) {
+  .desktop-1600 {
+    display: flex !important;
+  }
+  .mobile-1600 {
+    display: none !important;
+  }
+}
+
+/* ให้เอกสารสูงเต็ม เพื่อ fallback กรณีบางเบราว์เซอร์ */
+html,
+body {
+  height: 100%;
+}
+
+/* ==== Drawer overlay ==== */
+.drawer-overlay {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: saturate(120%) blur(2px);
+}
+
+/* ==== Drawer panel (รวมทุกอย่างที่ต้องการ) ==== */
+.drawer-panel {
+  width: min(88vw, 380px);
+  max-width: 100%;
+
+  /* สูงเท่าหน้าจอจริง แบบครอบคลุมทุกเบราว์เซอร์ */
+  height: 100vh; /* fallback */
+  height: 100dvh; /* modern browsers */
+  min-height: -webkit-fill-available; /* Safari เก่า */
+
+  background: #fff; /* พื้นหลังขาวล้วน */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
+  border-left: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* ==== Header (ขาวล้วน, จัดเรียงสวย) ==== */
+.drawer-header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 16px;
+  background: #fff; /* เอา gradient ออก ตามคำขอ */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  z-index: 1;
+}
+.drawer-title {
+  font-weight: 800;
+}
+
+/* ==== Nav (ส่วนที่เลื่อน) ==== */
+.drawer-nav {
+  padding: 12px 10px 24px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Details / summary สไตล์เดิม */
+.drawer-details summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 10px 8px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+.drawer-details[open] summary {
+  background: #f8fafc;
+}
+
+/* รายการลิงก์ใน Drawer */
+.drawer-item {
+  display: block;
+  color: #111;
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+.drawer-item:hover {
+  background: #f1f5f9;
+  color: #b70000;
+}
+
+/* ==== Footer ภาษา (ชิดล่าง, พื้นขาว) ==== */
+.drawer-lang {
+  padding: 14px 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff; /* ขาวล้วน */
+  padding-bottom: max(14px, env(safe-area-inset-bottom)); /* กันรอยบาก iPhone */
+}
+.drawer-lang a {
+  color: #111;
+  text-decoration: none;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.drawer-lang a:hover {
+  color: #b70000;
+}
+
+/* Scrollbar สวย ๆ */
+.drawer-nav::-webkit-scrollbar {
+  width: 10px;
+}
+.drawer-nav::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 10px;
+}
+.drawer-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* -------------------------------------GPT 5---------------------------------------------------- */
+
+/* ===== Drawer: Compact mode (override) ===== */
+
+/* แคบลงนิดให้ดูแน่นขึ้น */
+.drawer-panel {
+  width: min(84vw, 340px);
+}
+
+/* Header กะทัดรัด */
+.drawer-header {
+  padding: 10px 12px;
+}
+
+/* โซนเมนู: ลด padding และช่องไฟ */
+.drawer-nav {
+  padding: 8px 8px 12px;
+}
+.drawer-details summary {
+  padding: 8px 8px;
+  margin: 2px 0;
+  line-height: 1.25;
+}
+.drawer-item {
+  padding: 8px 10px;
+  margin: 2px 0;
+  line-height: 1.25;
+  /* น้ำหนักตัวหนังสือเบาลงหน่อยเพื่อไม่ให้ดูเทอะทะ */
+  font-weight: 600;
+}
+
+/* ฟุตเตอร์ภาษา: ลด padding + ระยะไอคอน */
+.drawer-lang {
+  padding: 10px 12px;
+}
+.drawer-lang a {
+  gap: 8px;
+}
+
+/* --- Extra compact เมื่อความสูงจอเตี้ย --- */
+@media (max-height: 780px) {
+  .drawer-panel {
+    width: min(88vw, 330px);
+  }
+  .drawer-header {
+    padding: 8px 10px;
+  }
+  .drawer-nav {
+    padding: 6px 6px 10px;
+  }
+  .drawer-details summary {
+    padding: 6px 6px;
+  }
+  .drawer-item {
+    padding: 6px 8px;
+  }
+  .drawer-lang {
+    padding: 8px 10px;
+  }
+}
+
+:root {
+  --drawer-w: 330px;
+}
+
+.drawer-header {
+  width: var(--drawer-w) !important;
+}
+.drawer-panel {
+  width: var(--drawer-w) !important;
+  max-width: calc(100vw - 16px);
+}
+/* ----------------------------------------------------------------------------------------------------------- */
+
+/* ขนาด panel แบบโค้ดเก่า: 80% มือถือ, 30% จอ >= 600px */
+.drawer-panel {
+  width: 80vw;
+  max-width: calc(100vw - 16px);
+}
+@media (min-width: 600px) {
+  .drawer-panel {
+    width: 30vw;
+  }
+}
+
+/* แอนิเมชันเข้า: ไล่เฟด + สไลด์นิด ๆ เหมือนสไตล์เดิม */
+@keyframes drawer-slide-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* เมื่อ isOpen = true เราจะใส่คลาส wrapper นี้จากคอมโพเนนต์ */
+.drawer-enter .drawer-title,
+.drawer-enter .drawer-close,
+.drawer-enter .drawer-lang {
+  animation: drawer-slide-fade-in 0.35s ease both;
+}
+
+/* ใช้กับแต่ละรายการเมนู (กำหนด delay เป็นรายชิ้นจาก inline style) */
+.drawer-item-anim {
+  opacity: 0;
+  animation: drawer-slide-fade-in 0.35s ease both;
+}
+
+/* ปรับ motion สำหรับคนที่ลดแอนิเมชัน */
+@media (prefers-reduced-motion: reduce) {
+  .drawer-backdrop {
+    transition: none !important;
+  }
+  .drawer-item-anim,
+  .drawer-enter .drawer-title,
+  .drawer-enter .drawer-close,
+  .drawer-enter .drawer-lang {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
