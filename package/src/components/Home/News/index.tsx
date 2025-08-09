@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CardItem from "./CardItem";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import "animate.css";
 
 const CARDS_PER_PAGE = 4;
 const CARD_WIDTH = 320;
@@ -92,8 +93,10 @@ const TabPage = () => {
 
   const [activeTab, setActiveTab] = useState<"news" | "article">("news");
   const [slideIndex, setSlideIndex] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0); // <- คุม active ทีละ 1 กล่อง
+  const [activeIndex, setActiveIndex] = useState(0);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const [paused, setPaused] = useState(false);
+  const [direction, setDirection] = useState<"left" | "right">("right");
 
   const data = activeTab === "news" ? newsData : articleData;
   const maxIndex = Math.max(0, data.length - CARDS_PER_PAGE);
@@ -102,6 +105,17 @@ const TabPage = () => {
   React.useEffect(() => {
     setActiveIndex(0);
   }, [slideIndex, activeTab]);
+
+  // ---------------------------------------------------------------------------------------------------------------
+
+  React.useEffect(() => {
+    if (paused || maxIndex === 0) return;
+    const id = setInterval(() => {
+      setDirection("right"); // << เพิ่มบรรทัดนี้
+      setSlideIndex((i) => (i >= maxIndex ? 0 : i + 1));
+    }, 3000);
+    return () => clearInterval(id);
+  }, [paused, maxIndex]);
 
   return (
     <div className="w-full px-2 md:px-4 max-w-6xl mx-auto relative">
@@ -115,10 +129,10 @@ const TabPage = () => {
           }`}
           onClick={() => {
             setActiveTab("news");
+            setDirection("right");
             setSlideIndex(0);
             setActiveIndex(0);
-          }}
-        >
+          }}>
           ข่าวสารและกิจกรรม
         </button>
         <button
@@ -131,19 +145,24 @@ const TabPage = () => {
             setActiveTab("article");
             setSlideIndex(0);
             setActiveIndex(0);
-          }}
-        >
+          }}>
           บทความ
         </button>
       </div>
-      <div className="relative flex items-center justify-center min-h-[400px]">
+      <div
+        className="relative flex items-center justify-center min-h-[400px]"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}>
         {/* Left Arrow */}
+
         <button
           className="absolute -left-2 md:-left-7 top-1/2 -translate-y-1/2 z-10 bg-white/80 text-blue-600 hover:bg-blue-100 w-12 h-12 flex items-center justify-center rounded-full shadow-lg border border-blue-200 disabled:opacity-40 transition"
           style={{ left: "-12rem" }}
-          onClick={() => setSlideIndex((i) => Math.max(0, i - 1))}
-          disabled={slideIndex === 0}
-        >
+          onClick={() => {
+            setDirection("left");
+            setSlideIndex((i) => Math.max(0, i - 1));
+          }}
+          disabled={slideIndex === 0}>
           <FaChevronLeft size={30} />
         </button>
         <div className="flex gap-7 w-full justify-center transition-all duration-500">
@@ -164,12 +183,12 @@ const TabPage = () => {
                   }}
                   onClick={() => setActiveIndex(idx)}
                   onMouseEnter={() => setHoverIndex(idx)}
-                  onMouseLeave={() => setHoverIndex(null)}
-                >
+                  onMouseLeave={() => setHoverIndex(null)}>
                   <CardItem
                     {...item}
                     active={isActive}
                     hovered={isHovered && !isActive}
+                    direction={direction}
                   />
                 </div>
               );
@@ -179,24 +198,42 @@ const TabPage = () => {
         <button
           className="absolute -right-2 md:-right-7 top-1/2 -translate-y-1/2 z-10 bg-white/80 text-blue-600 hover:bg-blue-100 w-12 h-12 flex items-center justify-center rounded-full shadow-lg border border-blue-200 disabled:opacity-40 transition"
           style={{ left: "80rem" }}
-          onClick={() => setSlideIndex((i) => Math.min(maxIndex, i + 1))}
-          disabled={slideIndex === maxIndex}
-        >
+          onClick={() => {
+            setDirection("right");
+            setSlideIndex((i) => Math.min(maxIndex, i + 1));
+          }}
+          disabled={slideIndex === maxIndex}>
           <FaChevronRight size={30} />
         </button>
       </div>
       {/* Dots */}
-      <div className="flex justify-center mt-6">
-        {Array.from({ length: maxIndex + 1 }).map((_, i) => (
-          <button
-            key={i}
-            className={`w-3 h-3 mx-1 rounded-full transition ${
-              slideIndex === i ? "bg-blue-600" : "bg-gray-300"
-            }`}
-            onClick={() => setSlideIndex(i)}
-          />
-        ))}
+      {/* Dots */}
+      <div className="mt-6 w-full py-3">
+        <div className="flex justify-center items-center gap-3">
+          {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+            <button
+              key={i}
+              aria-label={`ไปหน้า ${i + 1}`}
+              aria-current={slideIndex === i}
+              onClick={() => {
+                setDirection(i > slideIndex ? "right" : "left");
+                setSlideIndex(i);
+              }}
+              className="p-1">
+              <span
+                className={
+                  slideIndex === i
+                    ? // จุด active = วงแหวนขาว กลางโปร่ง ให้เห็นพื้นหลังเข้ม
+                      "block w-2.5 h-2.5 rounded-full bg-transparent ring-2 ring-white ring-offset-2 ring-offset-[#2b3040] transition"
+                    : // จุดปกติ = เทาๆ
+                      "block w-2.5 h-2.5 rounded-full bg-gray-400/70 transition"
+                }
+              />
+            </button>
+          ))}
+        </div>
       </div>
+
       <div className="flex justify-center mt-6">
         <button className="ir-btn ir-btn-glow">ดูทั้งหมด</button>
       </div>
