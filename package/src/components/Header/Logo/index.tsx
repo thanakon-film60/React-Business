@@ -1,4 +1,4 @@
-import { useMediaQuery } from 'react-responsive';
+import { useMediaQuery } from "react-responsive";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,8 +9,8 @@ type LogoProps = {
 
 const Logo: React.FC<LogoProps> = ({ className = "", style }) => {
   // Bootstrap xl: 1200px
-  const isDesktop = useMediaQuery({ minWidth: 1200 });
-  const isMobileOrTablet = useMediaQuery({ maxWidth: 1199 });
+  const isDesktop = useMediaQuery({ minWidth: 1600 });
+  const isMobileOrTablet = useMediaQuery({ maxWidth: 1600 });
 
   return (
     <div className={`flex items-center ${className}`} style={style}>
