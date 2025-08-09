@@ -29,8 +29,7 @@ const HeaderLink: React.FC<{
       onMouseEnter={() => setSubmenuOpenId(index)}
       onMouseLeave={() => setSubmenuOpenId(null)}
       tabIndex={-1}
-      style={{ position: "relative" }}
-    >
+      style={{ position: "relative" }}>
       {/* ปุ่มหลักที่มี submenu (กดไม่ได้) */}
       {isMainMenuWithSubmenu ? (
         <span
@@ -45,8 +44,7 @@ const HeaderLink: React.FC<{
             cursor: "pointer",
             pointerEvents: "none",
             userSelect: "none",
-          }}
-        >
+          }}>
           {item.label}
         </span>
       ) : // ปุ่มหลักที่ไม่มี submenu (กดได้)
@@ -55,8 +53,7 @@ const HeaderLink: React.FC<{
           href={item.href}
           className={`btn btn-secondary ${
             path === item.href ? "btn-danger" : ""
-          }`}
-        >
+          }`}>
           {item.label}
         </Link>
       ) : (
@@ -70,8 +67,7 @@ const HeaderLink: React.FC<{
           style={{
             display: submenuOpen ? "block" : "none",
             zIndex: 1000,
-          }}
-        >
+          }}>
           {item.submenu?.map((subItem, idx) => (
             <li key={idx}>
               <Link
@@ -86,8 +82,7 @@ const HeaderLink: React.FC<{
                   setSubmenuOpenId(null); // ปิดเมนูทันทีหลังคลิก
                   if (document.activeElement instanceof HTMLElement)
                     document.activeElement.blur();
-                }}
-              >
+                }}>
                 {subItem.label}
               </Link>
             </li>
