@@ -2,20 +2,18 @@
 import { useEffect, useRef, useState } from "react";
 
 interface HeroProps {
-  setIsLoading: (val: boolean) => void;
+  setIsLoading?: (val: boolean) => void; // optional เผื่อบางหน้ายังไม่ได้ส่งมา
 }
 
-const Hero = ({ setIsLoading }: HeroProps) => {
-  const [hasLoaded, setHasLoaded] = useState(false);
+export default function Hero({ setIsLoading }: HeroProps) {
+  const [ready, setReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    if (hasLoaded) setIsLoading(false);
-  }, [hasLoaded, setIsLoading]);
-
+  // เล่น/หยุดตามการมองเห็น
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
+
     const io = new IntersectionObserver(
       ([entry]) => {
         if (!entry) return;
@@ -24,25 +22,32 @@ const Hero = ({ setIsLoading }: HeroProps) => {
       },
       { threshold: 0.25 }
     );
+
     io.observe(el);
     return () => io.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (ready && setIsLoading) setIsLoading(false);
+  }, [ready, setIsLoading]);
+
   return (
     <section
       id="main-banner"
-      className="relative w-full min-h-[60svh] md:min-h-[80svh] lg:min-h-[100svh] flex items-center justify-center overflow-hidden mt-5"
+      className="hero-video mt-5"
       aria-label="Company hero video">
       <video
         ref={videoRef}
-        className="hidden md:block absolute inset-0 w-full h-full object-cover z-[-1] motion-reduce:hidden"
+        className="bg-media"
         autoPlay
-        loop
         muted
+        loop
         playsInline
         preload="metadata"
         poster="/images/video/fixed-banner-poster.jpg"
-        onLoadedData={() => setHasLoaded(true)}
+        onLoadedData={() => setReady(true)}
+        onPlay={() => setReady(true)}
+        onError={() => setReady(true)}
         aria-hidden="true"
         tabIndex={-1}
         disablePictureInPicture>
@@ -51,16 +56,11 @@ const Hero = ({ setIsLoading }: HeroProps) => {
       </video>
 
       <img
+        className="bg-fallback"
         src="/images/video/fixed-banner-poster.jpg"
         alt=""
-        className="md:hidden absolute inset-0 w-full h-full object-cover z-[-1]"
       />
-
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
-
-      <div className="relative z-[1] w-full max-w-screen-xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 text-white"></div>
+      <div className="relative z-[1] w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 text-white"></div>
     </section>
   );
-};
-
-export default Hero;
+}
