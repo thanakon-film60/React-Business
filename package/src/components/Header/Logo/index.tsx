@@ -17,7 +17,7 @@ const Logo: React.FC<LogoProps> = ({ className = "", style }) => {
       <Link href="/" className="inline-block flex-shrink-0">
         {isDesktop && (
           <Image
-            src="/images/logo/LOGO TPP SIDE.png"
+            src="/images/logo/LOGO-TPP-SIDE.webp"
             alt="Desgy Solutions"
             width={205}
             height={185}
@@ -27,7 +27,7 @@ const Logo: React.FC<LogoProps> = ({ className = "", style }) => {
         )}
         {isMobileOrTablet && (
           <Image
-            src="/images/logo/LOGO-name-TPP.png"
+            src="/images/logo/LOGO-name-2.webp"
             alt="Desgy Solutions"
             width={205}
             height={185}
