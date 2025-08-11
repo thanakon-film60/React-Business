@@ -1,36 +1,66 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface HeroProps {
-  setIsLoading: (val: boolean) => void;
+  setIsLoading?: (val: boolean) => void; // optional เผื่อบางหน้ายังไม่ได้ส่งมา
 }
 
-const Hero = ({ setIsLoading }: HeroProps) => {
-  const [hasLoaded, setHasLoaded] = useState(false);
+export default function Hero({ setIsLoading }: HeroProps) {
+  const [ready, setReady] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // เล่น/หยุดตามการมองเห็น
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return;
+        if (entry.isIntersecting) el.play().catch(() => {});
+        else el.pause();
+      },
+      { threshold: 0.25 }
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
-    if (hasLoaded) setIsLoading(false);
-  }, [hasLoaded]);
+    if (ready && setIsLoading) setIsLoading(false);
+  }, [ready, setIsLoading]);
 
   return (
     <section
-      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden z-1 mt-[20px]"
       id="main-banner"
-    >
+      className="hero-video mt-5"
+      aria-label="Company hero video">
       <video
-        src="/images/video/fixed-banner-video.mp4"
-        className="w-full h-full object-cover absolute top-0 left-0"
+        ref={videoRef}
+        className="bg-media"
         autoPlay
-        loop
         muted
+        loop
         playsInline
-        onLoadedData={() => setHasLoaded(true)}
+        preload="metadata"
+        poster="/images/video/fixed-banner-poster.jpg"
+        onLoadedData={() => setReady(true)}
+        onPlay={() => setReady(true)}
+        onError={() => setReady(true)}
+        aria-hidden="true"
+        tabIndex={-1}
+        disablePictureInPicture>
+        <source src="/images/video/fixed-banner-video.webm" type="video/webm" />
+        <source src="/images/video/fixed-banner-video.mp4" type="video/mp4" />
+      </video>
+
+      <img
+        className="bg-fallback"
+        src="/images/video/fixed-banner-poster.jpg"
+        alt=""
       />
-      <div className="relative z-10 w-full flex justify-center items-center">
-        {/* Content overlay บนวีดีโอ (ถ้ามี) */}
-      </div>
+      <div className="relative z-[1] w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 text-white"></div>
     </section>
   );
-};
-
-export default Hero;
+}

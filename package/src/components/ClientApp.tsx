@@ -5,20 +5,22 @@ import Aboutus from "@/components/Home/AboutUs";
 import Dedicated from "@/components/Home/Detail";
 import Insta from "@/components/Home/News";
 import InvestorRelations from "@/components/InvestorRelations";
-import Loading from "@/app/loading";
 
 export default function ClientApp() {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
-    <>
-      <main>
-        <Hero setIsLoading={setIsLoading} />
-        <Aboutus />
-        <Dedicated />
-        <InvestorRelations />
-        <Insta />
-      </main>
-    </>
+    <main className="overflow-x-clip">
+      <Hero setIsLoading={setIsLoading} />
+      <div className="h-12" aria-hidden />
+      <Aboutus />
+      <Dedicated />
+      <InvestorRelations />
+      <Insta />
+    </main>
   );
+}
+
+{
+  /* <div className="h-12" aria-hidden />; */
 }
