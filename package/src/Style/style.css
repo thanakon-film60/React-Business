@@ -760,31 +760,27 @@ body {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
 }
 /* ----------------------------------------------------------------------------------------------------------- */
-
-/* === Fullscreen hero background video === */
+/* === Mobile-first: ไม่บังคับสูงเต็มจอ === */
 .hero-video {
   position: relative;
   overflow: hidden;
-
-  /* ครอบคลุมทุกบราวเซอร์ */
-  min-height: 100vh; /* fallback เก่า */
-  min-height: 100svh; /* Safari/iOS บางรุ่น */
-  min-height: 100dvh; /* แนะนำสุด: พื้นที่มองเห็นจริง */
+  min-height: 0 !important;
+  aspect-ratio: 16 / 9; /* เพื่อไม่ให้คอนเทนเนอร์ยุบ */
 }
 
-/* วิดีโอ/รูปให้ปูเต็มพื้นหลัง */
+/* พื้นหลังวิดีโอ/รูป */
 .hero-video > .bg-media,
 .hero-video > .bg-fallback {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* ไม่อยากถูกครอป -> เปลี่ยนเป็น contain */
-  object-position: center 40%; /* เลื่อนกรอบโฟกัสถ้าหัวเรื่องอยู่ส่วนบนของเฟรม */
+  object-fit: cover;
+  object-position: center 40%;
   z-index: -1;
 }
 
-/* ลด Motion → ใช้รูปแทนวิดีโอ */
+/* ลด motion */
 .hero-video > .bg-fallback {
   display: none;
 }
@@ -797,7 +793,7 @@ body {
   }
 }
 
-/* ไล่โทนให้อ่านตัวอักษรง่ายขึ้น (เลือกใส่ได้) */
+/* ไล่โทน */
 .hero-video::after {
   content: "";
   position: absolute;
@@ -811,9 +807,77 @@ body {
   );
 }
 
-/* กันเนื้อหาชนขอบล่างบนมือถือมีรอยบาก */
+/* กันรอยบากล่าง */
 @supports (padding: max(0px)) {
   .hero-video {
     padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
+}
+
+/* ===== Desktop และจอใหญ่ขึ้นไป ===== */
+:root {
+  --header-h: 0px;
+} /* ถ้า header “fixed/overlay” ให้ใส่ความสูงจริง เช่น 88px */
+
+@media (min-width: 768px) {
+  .hero-video {
+    /* เอาอัตราส่วนออก และบังคับให้เต็มจอ */
+    aspect-ratio: auto !important;
+    min-height: calc(100dvh - var(--header-h)) !important;
+  }
+
+  /* fallback เผื่อเบราว์เซอร์ไม่รองรับ dvh */
+  @supports not (height: 100dvh) {
+    .hero-video {
+      min-height: calc(100vh - var(--header-h)) !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------ */
+/* --- Section Title (เฉพาะหัวข้อแบบนี้) --- */
+:root {
+  --title-accent: #ef4444; /* สีเส้นใต้ */
+  --title-size-min: 22px; /* มือถือเล็ก */
+  --title-size-pref: 3.2vw; /* ค่ากลางแบบ fluid */
+  --title-size-max: 34px; /* เดสก์ท็อป */
+  --title-deco-thickness: 8px; /* ความหนาเส้นใต้ */
+  --title-deco-offset: 8px; /* ระยะห่างจากตัวหนังสือ */
+}
+
+.tpp-section-title {
+  margin: 0 0 2rem 0;
+  text-align: center;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  color: currentColor; /* สืบสีจาก parent */
+
+  /* ขนาดตัวอักษรแบบ responsive */
+  font-size: clamp(
+    var(--title-size-min),
+    var(--title-size-pref),
+    var(--title-size-max)
+  );
+
+  /* เส้นใต้สไตล์หนา */
+  text-decoration-line: underline;
+  text-decoration-color: var(--title-accent);
+  text-decoration-thickness: var(--title-deco-thickness);
+  text-underline-offset: var(--title-deco-offset);
+}
+
+/* มือถือเล็กมาก: ลดความหนา/offset ให้บาลานซ์ */
+@media (max-width: 380px) {
+  .tpp-section-title {
+    text-decoration-thickness: 6px;
+    text-underline-offset: 6px;
+  }
+}
+
+/* จอใหญ่มาก: ขยายได้อีกนิด (ถ้าต้องการ) */
+@media (min-width: 1536px) {
+  .tpp-section-title {
+    font-size: clamp(26px, 2vw, 40px);
   }
 }

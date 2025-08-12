@@ -36,7 +36,8 @@ export default function RootLayout({
   return (
     <html lang="th" suppressHydrationWarning>
       <body
-        className={`about-bg-image-background min-h-dvh overflow-x-hidden antialiased ${font.className}`}>
+        className={`about-bg-image-background min-h-dvh overflow-x-hidden antialiased ${font.className}`}
+      >
         <LoadingProvider>
           {/* ชิ้นส่วนที่แตะ URL/router หรือใช้งาน browser-only → ครอบด้วย Suspense */}
           <Suspense fallback={null}>
