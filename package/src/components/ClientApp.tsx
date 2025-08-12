@@ -19,12 +19,10 @@ export default function ClientApp() {
     >
       <Hero setIsLoading={setIsLoading} />
 
-      {/* ระยะห่างระหว่าง section แบบ responsive */}
       <div className="h-8 sm:h-10" aria-hidden />
 
       <Aboutus />
 
-      {/* กันกริด/ชั้นในที่อาจขยายกว้างเกินจอ */}
       <section className="min-w-0 max-w-[100vw] overflow-x-hidden">
         <Dedicated />
       </section>
