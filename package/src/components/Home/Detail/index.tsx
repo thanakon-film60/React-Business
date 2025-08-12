@@ -30,18 +30,15 @@ const Dedicated = () => {
       <div className="awe-parallax awe-static" />
       <div className="overlay-color-1" />
       <div className="mx-auto w-full max-w-[1100px] px-4">
-        <h2
-          className="text-center text-2xl font-bold mb-8 underline decoration-red-500 decoration-8"
-          style={{ fontSize: "34px" }}>
-          สินค้าและบริการของเรา
-        </h2>
+        <h2 className="tpp-section-title">สินค้าและบริการของเรา</h2>
         <br />
         <br />
         <div className="grid min-w-0 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {cards.map((item, i) => (
             <div
               key={i}
-              className="group relative w-full h-[250px] shadow-lg rounded-[16px] overflow-hidden flex items-end cursor-pointer">
+              className="group relative w-full h-[250px] shadow-lg rounded-[16px] overflow-hidden flex items-end cursor-pointer"
+            >
               {/* รูป static */}
               <img
                 src={item.staticImg}
@@ -63,7 +60,8 @@ const Dedicated = () => {
                     0px 0px 12px #fff,
                     0px 4px 16px rgba(0,0,0,0.8)
                   `,
-                }}>
+                }}
+              >
                 {item.title}
               </p>
             </div>

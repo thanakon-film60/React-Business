@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import CardItem from "./CardItem";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "animate.css";
 
-const CARDS_PER_PAGE = 4;
-const CARD_WIDTH = 320;
+const DEFAULT_CARDS_PER_PAGE = 4;
+const CARD_WIDTH_CLAMP = "clamp(220px, 86vw, 320px)"; // มือถือเต็มจอ, จอใหญ่ไม่เกิน 320px
+
+function computeCardsPerPage(w: number) {
+  if (w < 640) return 1; // < sm
+  if (w < 1024) return 2; // sm - md
+  if (w < 1280) return 3; // md - lg
+  return 4; // ≥ lg
+}
 
 const TabPage = () => {
   const newsData = [
@@ -97,21 +104,51 @@ const TabPage = () => {
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const [paused, setPaused] = useState(false);
   const [direction, setDirection] = useState<"left" | "right">("right");
+  const [cardsPerPage, setCardsPerPage] = useState(DEFAULT_CARDS_PER_PAGE);
+
+  // คำนวณจำนวนการ์ดต่อหน้าตามขนาดหน้าต่าง
+  useEffect(() => {
+    const update = () => {
+      if (typeof window === "undefined") return;
+      setCardsPerPage(computeCardsPerPage(window.innerWidth));
+    };
+    update();
+    let t: number | undefined;
+    const onResize = () => {
+      clearTimeout(t);
+      // debounce เล็กน้อย กันกระพริบ
+      t = window.setTimeout(update, 120);
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
 
   const data = activeTab === "news" ? newsData : articleData;
-  const maxIndex = Math.max(0, data.length - CARDS_PER_PAGE);
 
-  // ทุกครั้งที่เปลี่ยน slide/page หรือ tab ให้ active ใบแรก
-  React.useEffect(() => {
+  // max index ตามจำนวนการ์ดต่อหน้า
+  const maxIndex = useMemo(
+    () => Math.max(0, data.length - cardsPerPage),
+    [data.length, cardsPerPage]
+  );
+
+  // รีเซ็ต active ใบแรกเมื่อเปลี่ยนหน้า/แท็บ
+  useEffect(() => {
     setActiveIndex(0);
   }, [slideIndex, activeTab]);
 
-  // ---------------------------------------------------------------------------------------------------------------
+  // รักษา slideIndex ให้ไม่เกิน maxIndex เมื่อหน้าจอ/แท็บเปลี่ยน
+  useEffect(() => {
+    setSlideIndex((i) => (i > maxIndex ? maxIndex : i));
+  }, [maxIndex, activeTab]);
 
-  React.useEffect(() => {
+  // Auto slide
+  useEffect(() => {
     if (paused || maxIndex === 0) return;
     const id = setInterval(() => {
-      setDirection("right"); // << เพิ่มบรรทัดนี้
+      setDirection("right");
       setSlideIndex((i) => (i >= maxIndex ? 0 : i + 1));
     }, 3000);
     return () => clearInterval(id);
@@ -132,7 +169,8 @@ const TabPage = () => {
             setDirection("right");
             setSlideIndex(0);
             setActiveIndex(0);
-          }}>
+          }}
+        >
           ข่าวสารและกิจกรรม
         </button>
         <button
@@ -145,29 +183,49 @@ const TabPage = () => {
             setActiveTab("article");
             setSlideIndex(0);
             setActiveIndex(0);
-          }}>
+          }}
+        >
           บทความ
         </button>
       </div>
-      <div
-        className="relative flex items-center justify-center min-h-[400px]"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}>
-        {/* Left Arrow */}
 
+      {/* Slider */}
+      <div
+        className="
+            relative flex items-center justify-center min-h-[420px] sm:min-h-[440px]
+            overflow-visible
+            [--arrow-shift:0]            /* มือถือ: ไม่ยื่นออกไป */
+            sm:[--arrow-shift:350%]      /* ≥sm: ยื่นออกข้าง 120% (ปรับเองได้) */
+          "
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onTouchStart={() => setPaused(true)}
+        onTouchEnd={() => setPaused(false)}
+      >
+        {/* Left Arrow */}
         <button
-          className="absolute -left-2 md:-left-7 top-1/2 -translate-y-1/2 z-10 bg-white/80 text-blue-600 hover:bg-blue-100 w-12 h-12 flex items-center justify-center rounded-full shadow-lg border border-blue-200 disabled:opacity-40 transition"
-          style={{ left: "-12rem" }}
+          className="
+              absolute left-0 top-1/2 -translate-y-1/2
+              -translate-x-[var(--arrow-shift)]
+              z-10 bg-white/80 text-blue-600 hover:bg-blue-100
+              w-10 h-10 md:w-12 md:h-12 flex items-center justify-center
+              rounded-full shadow-lg border border-blue-200 disabled:opacity-40 transition
+            "
           onClick={() => {
             setDirection("left");
             setSlideIndex((i) => Math.max(0, i - 1));
           }}
-          disabled={slideIndex === 0}>
-          <FaChevronLeft size={30} />
+          disabled={slideIndex === 0}
+          aria-label="ก่อนหน้า"
+        >
+          <FaChevronLeft size={22} className="md:!hidden" />
+          <FaChevronLeft size={30} className="hidden md:!block" />
         </button>
-        <div className="flex gap-7 w-full justify-center transition-all duration-500">
+
+        {/* Track */}
+        <div className="flex gap-4 sm:gap-7 w-full justify-center transition-all duration-500">
           {data
-            .slice(slideIndex, slideIndex + CARDS_PER_PAGE)
+            .slice(slideIndex, slideIndex + cardsPerPage)
             .map((item, idx) => {
               const isActive = activeIndex === idx;
               const isHovered = hoverIndex === idx;
@@ -176,14 +234,15 @@ const TabPage = () => {
                   key={slideIndex + idx}
                   className="transition-all duration-300"
                   style={{
-                    width: CARD_WIDTH,
-                    minWidth: CARD_WIDTH,
+                    width: CARD_WIDTH_CLAMP,
+                    minWidth: CARD_WIDTH_CLAMP,
                     maxWidth: "95vw",
                     cursor: "pointer",
                   }}
                   onClick={() => setActiveIndex(idx)}
                   onMouseEnter={() => setHoverIndex(idx)}
-                  onMouseLeave={() => setHoverIndex(null)}>
+                  onMouseLeave={() => setHoverIndex(null)}
+                >
                   <CardItem
                     {...item}
                     active={isActive}
@@ -194,19 +253,28 @@ const TabPage = () => {
               );
             })}
         </div>
+
         {/* Right Arrow */}
         <button
-          className="absolute -right-2 md:-right-7 top-1/2 -translate-y-1/2 z-10 bg-white/80 text-blue-600 hover:bg-blue-100 w-12 h-12 flex items-center justify-center rounded-full shadow-lg border border-blue-200 disabled:opacity-40 transition"
-          style={{ left: "80rem" }}
+          className="
+              absolute right-0 top-1/2 -translate-y-1/2
+              translate-x-[var(--arrow-shift)]
+              z-10 bg-white/80 text-blue-600 hover:bg-blue-100
+              w-10 h-10 md:w-12 md:h-12 flex items-center justify-center
+              rounded-full shadow-lg border border-blue-200 disabled:opacity-40 transition
+            "
           onClick={() => {
             setDirection("right");
             setSlideIndex((i) => Math.min(maxIndex, i + 1));
           }}
-          disabled={slideIndex === maxIndex}>
-          <FaChevronRight size={30} />
+          disabled={slideIndex === maxIndex}
+          aria-label="ถัดไป"
+        >
+          <FaChevronRight size={22} className="md:!hidden" />
+          <FaChevronRight size={30} className="hidden md:!block" />
         </button>
       </div>
-      {/* Dots */}
+
       {/* Dots */}
       <div className="mt-6 w-full py-3">
         <div className="flex justify-center items-center gap-3">
@@ -219,14 +287,13 @@ const TabPage = () => {
                 setDirection(i > slideIndex ? "right" : "left");
                 setSlideIndex(i);
               }}
-              className="p-1">
+              className="p-1"
+            >
               <span
                 className={
                   slideIndex === i
-                    ? // จุด active = วงแหวนขาว กลางโปร่ง ให้เห็นพื้นหลังเข้ม
-                      "block w-2.5 h-2.5 rounded-full bg-transparent ring-2 ring-white ring-offset-2 ring-offset-[#2b3040] transition"
-                    : // จุดปกติ = เทาๆ
-                      "block w-2.5 h-2.5 rounded-full bg-gray-400/70 transition"
+                    ? "block w-2.5 h-2.5 rounded-full bg-transparent ring-2 ring-white ring-offset-2 ring-offset-[#2b3040] transition"
+                    : "block w-2.5 h-2.5 rounded-full bg-gray-400/70 transition"
                 }
               />
             </button>
@@ -234,6 +301,7 @@ const TabPage = () => {
         </div>
       </div>
 
+      {/* CTA */}
       <div className="flex justify-center mt-6">
         <button className="ir-btn ir-btn-glow">ดูทั้งหมด</button>
       </div>
