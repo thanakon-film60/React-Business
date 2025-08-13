@@ -746,7 +746,7 @@ body {
   inset: 0; /* top:0; right:0; bottom:0; left:0 */
   z-index: -1; /* อยู่หลังทุกอย่าง */
   pointer-events: none; /* ไม่บังการคลิก */
-  background-image: url("/images/Home/WEB_BG.gif");
+  background-image: url("/images/Home/New_BG.gif");
   background-size: cover;
   background-position: center;
   /* ถ้าต้องการเอฟเฟกต์แนบพื้นหลังแบบ dedicated */
