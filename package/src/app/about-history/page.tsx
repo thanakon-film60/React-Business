@@ -93,7 +93,7 @@ function Hero() {
       {/* Top montage / hero */}
       <div className="relative h-[240px] sm:h-[320px] md:h-[420px] lg:h-[520px]">
         <Image
-          src="/images/history/hero.jpg" // TODO: ใส่ภาพของคุณ
+          src="/images/history/bg-history.jpg"
           alt="ประวัติองค์กร"
           fill
           priority
@@ -105,7 +105,7 @@ function Hero() {
       {/* Secondary strip image */}
       <div className="relative h-[260px] sm:h-[320px] md:h-[380px] lg:h-[420px]">
         <Image
-          src="/images/history/strip.jpg" // TODO: ใส่ภาพของคุณ
+          src="/images/history/bg-story.jpg"
           alt="โรงงานและถังเก็บ"
           fill
           className="object-cover"
@@ -180,8 +180,7 @@ function TimelineSection({
             {Array.from({ length: maxItems }).map((_, i) => (
               <li
                 key={i}
-                className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-stretch"
-              >
+                className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-stretch">
                 {/* Left column item */}
                 <div className="md:pr-8 relative">
                   {leftItems[i] ? (
@@ -232,8 +231,7 @@ function TimelineCard({
     <article
       className={`rounded-2xl bg-white border border-neutral-200 p-5 md:p-6 shadow-sm ${
         align === "left" ? "md:text-right" : ""
-      }`}
-    >
+      }`}>
       <div className="text-xs font-semibold tracking-wider text-green-700">
         {year}
       </div>
