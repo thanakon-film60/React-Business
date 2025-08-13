@@ -14,20 +14,20 @@ export default function ClientApp() {
       className="
         relative isolate
         min-w-0 max-w-[100vw]
-        overflow-x-hidden   /* แทน overflow-x-clip */
-      "
-    >
+        overflow-x-hidden   /* แทน overflow-x-clip */">
       <Hero setIsLoading={setIsLoading} />
 
       <div className="h-8 sm:h-10" aria-hidden />
-
+      {/* <div className="mb-1 sm:mb-1">
+        <Aboutus />
+      </div> */}
       <Aboutus />
-
-      <section className="min-w-0 max-w-[100vw] overflow-x-hidden">
+      <section className="min-w-0 max-w-[100vw] overflow-x-hidden pb-0 -mb-10">
         <Dedicated />
       </section>
-
-      <InvestorRelations />
+      <div className="-mt-8">
+        <InvestorRelations />
+      </div>
       <Insta />
     </main>
   );
