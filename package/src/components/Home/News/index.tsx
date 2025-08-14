@@ -169,8 +169,7 @@ const TabPage = () => {
             setDirection("right");
             setSlideIndex(0);
             setActiveIndex(0);
-          }}
-        >
+          }}>
           ข่าวสารและกิจกรรม
         </button>
         <button
@@ -183,8 +182,7 @@ const TabPage = () => {
             setActiveTab("article");
             setSlideIndex(0);
             setActiveIndex(0);
-          }}
-        >
+          }}>
           บทความ
         </button>
       </div>
@@ -194,14 +192,15 @@ const TabPage = () => {
         className="
             relative flex items-center justify-center min-h-[420px] sm:min-h-[440px]
             overflow-visible
-            [--arrow-shift:0]            /* มือถือ: ไม่ยื่นออกไป */
-            sm:[--arrow-shift:350%]      /* ≥sm: ยื่นออกข้าง 120% (ปรับเองได้) */
+            [--arrow-shift:0]            
+            sm:[--arrow-shift:350%]     
           "
+        /* มือถือ: ไม่ยื่นออกไป */
+        /* ≥sm: ยื่นออกข้าง 120% (ปรับเองได้) */
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         onTouchStart={() => setPaused(true)}
-        onTouchEnd={() => setPaused(false)}
-      >
+        onTouchEnd={() => setPaused(false)}>
         {/* Left Arrow */}
         <button
           className="
@@ -216,8 +215,7 @@ const TabPage = () => {
             setSlideIndex((i) => Math.max(0, i - 1));
           }}
           disabled={slideIndex === 0}
-          aria-label="ก่อนหน้า"
-        >
+          aria-label="ก่อนหน้า">
           <FaChevronLeft size={22} className="md:!hidden" />
           <FaChevronLeft size={30} className="hidden md:!block" />
         </button>
@@ -241,8 +239,7 @@ const TabPage = () => {
                   }}
                   onClick={() => setActiveIndex(idx)}
                   onMouseEnter={() => setHoverIndex(idx)}
-                  onMouseLeave={() => setHoverIndex(null)}
-                >
+                  onMouseLeave={() => setHoverIndex(null)}>
                   <CardItem
                     {...item}
                     active={isActive}
@@ -268,8 +265,7 @@ const TabPage = () => {
             setSlideIndex((i) => Math.min(maxIndex, i + 1));
           }}
           disabled={slideIndex === maxIndex}
-          aria-label="ถัดไป"
-        >
+          aria-label="ถัดไป">
           <FaChevronRight size={22} className="md:!hidden" />
           <FaChevronRight size={30} className="hidden md:!block" />
         </button>
@@ -287,8 +283,7 @@ const TabPage = () => {
                 setDirection(i > slideIndex ? "right" : "left");
                 setSlideIndex(i);
               }}
-              className="p-1"
-            >
+              className="p-1">
               <span
                 className={
                   slideIndex === i
