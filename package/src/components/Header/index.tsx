@@ -69,10 +69,9 @@ const Header = () => {
           ))}
         </nav>
 
-        {/* โลโก้กลาง */}
-        <div className="flex-shrink-0 flex justify-center px-2 md:px-4">
-          {/* ลดกว้างโลโก้เล็กน้อยบนจอแคบ แล้วค่อยขยาย ≥1600px */}
-          <Logo className="w-[160px] [@media(min-width:1600px)]:w-[205px]" />
+        {/* โลโก้ (ให้เต็มช่องเมื่อจอเล็ก) */}
+        <div className="overflow-hidden min-w-0  flex items-center flex-1 [@media(min-width:1600px)]:flex-none">
+          <Logo className="w-[clamp(120px,40vw,205px)]  h-auto  max-w-[calc(100vw-72px)]   /* กันโลโก้ไม่ให้ชนปุ่ม (ประมาณ 56–64px) */ " />
         </div>
 
         {/* ขวา (เดสก์ท็อป ≥1600) */}
