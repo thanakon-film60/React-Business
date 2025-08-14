@@ -9,16 +9,19 @@ export default function AboutPhilosophy() {
       {/* ส่วนบน */}
       <section className="relative w-full overflow-hidden min-h-[55svh] md:min-h-[60svh] lg:min-h-[70svh]">
         <Image
-          src="/images/aboutus/about-1.jpg"
+          src="/images/aboutus/vision_tpp.png"
           alt="Tree with kids"
           fill
           className="absolute inset-0 -z-10 object-cover object-center"
           priority
         />
         <div className="relative mx-auto max-w-screen-md px-4 sm:px-6 py-10 text-center text-green-800">
-          <h2 className="font-bold text-2xl sm:text-3xl mb-3">ปรัชญาองค์กร</h2>
-          <p className="mx-auto text-base sm:text-lg leading-relaxed break-words">
-            มุ่งหวังจะพัฒนาอย่างต่อเนื่องด้านคุณภาพ...
+          <h2 className="font-bold text-2xl sm:text-3xl mb-3">วิสัยทัศน์</h2>
+          <p className="mx-auto text-base sm:text-lg leading-relaxed break-words shadow-white-end ">
+            เป็นผู้นำด้านธุรกิจการพิมพ์และบรรจุภัณฑ์กระดาษ
+            มุ่งมั่นสร้างสรรค์นวัตกรรม
+            พร้อมส่งมอบผลิตภัณฑ์และบริการที่มีคุณภาพให้กับลูกค้า
+            เพื่อการเติบโตอย่างยั่งยืนของธุรกิจ
           </p>
         </div>
       </section>
