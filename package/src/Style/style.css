@@ -334,10 +334,38 @@ nav > .dropdown > span.btn:active {
 }
 
 .footer-img1 {
-  background-image: url("/images/footer/Footer 1.png");
+  background-image: url("/images/footer/Footer_1.png");
 }
 .footer-img2 {
-  background-image: url("/images/footer/Footer 2.png");
+  background-image: url("/images/footer/Footer_2.png");
+}
+
+/* ตั้งสีแบรนด์ครั้งเดียว */
+:root {
+  --brand-red: #c8102e;
+} /* เปลี่ยนเป็นรหัสแดงของคุณ */
+
+.footer {
+  position: relative;
+  color: #fff;
+  background-color: var(--brand-red); /* สี fallback */
+  isolation: isolate; /* กัน blend จากภายนอก */
+}
+.footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/images/footer/Footer_1.png") center/cover no-repeat;
+  opacity: 0.35; /* ความเข้มลาย */
+  pointer-events: none; /* ไม่บังการคลิก */
+  z-index: -1;
+}
+
+/* ห้าม section ข้างในไปใส่สีพื้นอีกชั้น */
+.footer *[class*="bg-"],
+.footer .overlay,
+.footer .mask {
+  background: transparent !important;
 }
 
 /* ----------------------------------------------------------------------------------------- */
@@ -531,7 +559,7 @@ body {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
   border-left: 1px solid rgba(0, 0, 0, 0.06);
 }
-
+/* --------------------------------------------------------------------------------------------------------------- */
 /* ==== Header (ขาวล้วน, จัดเรียงสวย) ==== */
 .drawer-header {
   position: sticky;
@@ -887,4 +915,90 @@ body {
   text-shadow: 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 50px #fff,
     0 0 60px #fff, 0 0 70px #fff, 0 0 80px #fff, 0 0 90px #fff, 0 0 100px #fff,
     0 0 110px #fff;
+}
+/* -------------------------------------------------------------------------------------------------------------- */
+/* === พื้นฐานจากรอบก่อน (คงไว้ได้) === */
+.drawer-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.drawer-nav > div > .drawer-item,
+.drawer-details > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1.25;
+  padding: 0.25rem 0;
+  margin: 0;
+  position: relative; /* สำหรับ pseudo bg */
+  isolation: isolate; /* ให้พื้นหลังอยู่หลังตัวอักษรแน่ ๆ */
+}
+
+/* ลูกศรหลังข้อความ (เมนูที่มี list ย่อย) */
+.drawer-details > summary::after {
+  content: "▼";
+  margin-left: 0.5rem;
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+.drawer-details[open] > summary::after {
+  content: "▲";
+}
+
+/* ลูกศรโปร่งใสสำหรับลิงก์ปกติ (จัดแนวให้กว้างเท่ากัน) */
+.drawer-nav > div > .drawer-item::after {
+  content: "▼";
+  opacity: 0; /* มองไม่เห็น แต่กันระยะไว้ */
+  margin-left: 0.5rem;
+  font-size: 0.9em;
+}
+
+/* === ไฮไลต์แบบ "เม็ดแคปซูล" หลังข้อความ โดยไม่ทำให้กว้างขึ้น === */
+.drawer-nav > div > .drawer-item::before,
+.drawer-details > summary::before {
+  content: "";
+  position: absolute;
+  /* ขยายพื้นหลังรอบข้อความเล็กน้อย แต่ไม่เพิ่มความกว้างจริงขององค์ประกอบ */
+  left: -10px;
+  right: -10px;
+  top: -6px;
+  bottom: -6px;
+  background: #eef5fb; /* ฟ้าอ่อนแบบในภาพ */
+  border-radius: 999px; /* มุมโค้งมาก ๆ */
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none; /* ไม่บังการคลิก */
+  z-index: -1; /* อยู่หลังตัวอักษร */
+}
+
+/* แสดงไฮไลต์เมื่อ 'ชี้เมาส์' หรือ 'โฟกัส' */
+.drawer-nav > div > .drawer-item:hover::before,
+.drawer-details > summary:hover::before,
+.drawer-nav > div > .drawer-item:focus-visible::before,
+.drawer-details > summary:focus-visible::before {
+  opacity: 1;
+  transform: none;
+}
+
+/* สีตัวอักษรตอนชี้ (โทนแดงเข้ม) */
+.drawer-nav > div > .drawer-item:hover,
+.drawer-details > summary:hover {
+  color: #b91c1c;
+}
+
+/* === จุดนำหน้ารายการย่อย (ใช้ของเดิมได้) === */
+.drawer-sub .drawer-item {
+  position: relative;
+  padding-left: 1.25rem;
+}
+.drawer-sub .drawer-item::before {
+  content: "●";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.6rem;
+  line-height: 1;
+  opacity: 0.8;
 }

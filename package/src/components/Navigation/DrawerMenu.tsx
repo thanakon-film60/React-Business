@@ -16,6 +16,8 @@ type DrawerMenuProps = {
 const DrawerMenu = forwardRef<HTMLDivElement, DrawerMenuProps>(
   ({ isOpen, onClose, items }, mobileMenuRef) => {
     const panelRef = useRef<HTMLDivElement>(null);
+
+    // sync ref ภายนอกกับ ref ภายใน
     const setRefs = (el: HTMLDivElement | null) => {
       panelRef.current = el;
       if (typeof mobileMenuRef === "function") {
@@ -27,6 +29,7 @@ const DrawerMenu = forwardRef<HTMLDivElement, DrawerMenuProps>(
       }
     };
 
+    // เมื่อปิด drawer: ปิด details ทั้งหมด + เลื่อนขึ้น + blur โฟกัส
     useEffect(() => {
       if (isOpen) return;
       const root = panelRef.current;
@@ -39,11 +42,33 @@ const DrawerMenu = forwardRef<HTMLDivElement, DrawerMenuProps>(
       const navEl = root.querySelector(".drawer-nav") as HTMLElement | null;
       if (navEl) navEl.scrollTo({ top: 0, behavior: "auto" });
 
-      // เอาโฟกัสออกจากปุ่ม/ลิงก์ที่ค้าง
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur();
       }
     }, [isOpen]);
+
+    // อะคอร์เดียน: เปิดอันใหม่แล้วหุบอันเก่า (ไม่มีการรีเซ็ตแอนิเมชัน)
+    useEffect(() => {
+      const root = panelRef.current;
+      if (!root) return;
+
+      const detailsEls = Array.from(
+        root.querySelectorAll<HTMLDetailsElement>(".drawer-details")
+      );
+
+      const onToggle = (ev: Event) => {
+        const current = ev.currentTarget as HTMLDetailsElement;
+        if (current.open) {
+          detailsEls.forEach((d) => {
+            if (d !== current && d.open) d.removeAttribute("open");
+          });
+        }
+      };
+
+      detailsEls.forEach((d) => d.addEventListener("toggle", onToggle));
+      return () =>
+        detailsEls.forEach((d) => d.removeEventListener("toggle", onToggle));
+    }, [isOpen, items]);
 
     return (
       <>
@@ -80,7 +105,7 @@ const DrawerMenu = forwardRef<HTMLDivElement, DrawerMenuProps>(
               </button>
             </div>
 
-            {/* Nav: เลื่อนเฉพาะตรงนี้ */}
+            {/* Nav */}
             <nav className="drawer-nav flex flex-col gap-2">
               {items.map((item, i) => (
                 <div
@@ -101,7 +126,7 @@ const DrawerMenu = forwardRef<HTMLDivElement, DrawerMenuProps>(
                         {item.label}
                       </summary>
 
-                      <div className="flex flex-col pl-3 mt-1">
+                      <div className="flex flex-col pl-3 mt-1 drawer-sub">
                         {item.submenu.map((sub, j) => (
                           <Link
                             key={j}
@@ -138,6 +163,7 @@ const DrawerMenu = forwardRef<HTMLDivElement, DrawerMenuProps>(
               ))}
             </nav>
 
+            {/* Footer: language switch */}
             <div
               className="drawer-lang flex items-center gap-6 drawer-item-anim"
               style={isOpen ? { animationDelay: "120ms" } : undefined}>
