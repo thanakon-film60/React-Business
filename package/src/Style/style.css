@@ -340,32 +340,11 @@ nav > .dropdown > span.btn:active {
   background-image: url("/images/footer/Footer_2.png");
 }
 
-/* ตั้งสีแบรนด์ครั้งเดียว */
 :root {
-  --brand-red: #c8102e;
-} /* เปลี่ยนเป็นรหัสแดงของคุณ */
-
-.footer {
-  position: relative;
-  color: #fff;
-  background-color: var(--brand-red); /* สี fallback */
-  isolation: isolate; /* กัน blend จากภายนอก */
-}
-.footer::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: url("/images/footer/Footer_1.png") center/cover no-repeat;
-  opacity: 0.35; /* ความเข้มลาย */
-  pointer-events: none; /* ไม่บังการคลิก */
-  z-index: -1;
-}
-
-/* ห้าม section ข้างในไปใส่สีพื้นอีกชั้น */
-.footer *[class*="bg-"],
-.footer .overlay,
-.footer .mask {
-  background: transparent !important;
+  --bs-danger-rgb: 200, 16, 46;
+} /* ให้ตรง #C8102E */
+.bg-danger {
+  background-color: rgb(var(--bs-danger-rgb)) !important;
 }
 
 /* ----------------------------------------------------------------------------------------- */
