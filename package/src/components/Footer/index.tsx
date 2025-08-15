@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react";
 
 const Footer = () => {
   return (
-    <footer className="bg-danger footer-img1 pt-4">
+    <footer className="footer-img1 pt-4">
       <div className="container">
         <div className="row gy-4 gx-4 text-white">
           {/* โลโก้ + ที่อยู่/ติดตามเรา */}
@@ -120,8 +120,7 @@ const Footer = () => {
             <li className="list-inline-item">
               <Link
                 href="#"
-                className="text-secondary text-decoration-underline"
-              >
+                className="text-secondary text-decoration-underline">
                 ข้อกำหนดและเงื่อนไข
               </Link>
             </li>
@@ -129,8 +128,7 @@ const Footer = () => {
             <li className="list-inline-item">
               <Link
                 href="#"
-                className="text-secondary text-decoration-underline"
-              >
+                className="text-secondary text-decoration-underline">
                 การคุ้มครองข้อมูลส่วนบุคคล
               </Link>
             </li>
@@ -138,8 +136,7 @@ const Footer = () => {
             <li className="list-inline-item">
               <Link
                 href="#"
-                className="text-secondary text-decoration-underline"
-              >
+                className="text-secondary text-decoration-underline">
                 นโยบายการใช้คุกกี้
               </Link>
             </li>
