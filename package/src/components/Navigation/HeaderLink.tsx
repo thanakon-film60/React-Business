@@ -73,8 +73,9 @@ const HeaderLink: React.FC<{
                     submenuOpen ? " animate__animated animate__fadeInDown" : ""
                   }`}
                   style={{
+                    ["--animate-duration" as any]: "160ms",
                     animationDelay: submenuOpen
-                      ? `${idx * 0.03 + 0.01}s`
+                      ? `${idx * 0.015 + 0.005}s`
                       : "0s",
                   }}
                   onClick={() => {
