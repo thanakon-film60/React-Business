@@ -19,20 +19,16 @@ export default function AboutPhilosophy() {
   // === “ค่านิยมขององค์กร” 4 หัวข้อ ===
   const values = [
     {
-      k: "T : Trust & Teamwork",
-      v: "ร่วมมือ เคารพ และไว้วางใจกัน ทำงานแบบทีม โปร่งใส ช่วยเหลือกันเพื่อเป้าหมายเดียวกัน",
+      k: "T : TEAMWORK",
+      v: "การทำงานเป็นทีมอย่างมีคุณภาพ เชื่อมั่นในคุณค่าของทีม สร้างพลังสู่อนาคต",
     },
     {
-      k: "V : Value Creation",
-      v: "มุ่งสร้างคุณค่าให้ลูกค้าและผู้มีส่วนได้ส่วนเสีย ผ่านคุณภาพ นวัตกรรม และการปรับปรุงอย่างต่อเนื่อง",
+      k: "P : PRODUCTIVE PERORMANCE",
+      v: "นิสัยแห่งความสำเร็จ คิดก่อนทำก่อน ปฎิบัติงานเชิงรุกด้วยความกระฉับกระเฉงและเป็นเลิศ",
     },
     {
-      k: "G : Cooperation & Excellence",
-      v: "ทำงานร่วมกันอย่างมืออาชีพ มุ่งมั่นสู่ความเป็นเลิศทั้งกระบวนการและผลลัพธ์",
-    },
-    {
-      k: "E : Ethics & Responsibility",
-      v: "ยึดมั่นจริยธรรม ธรรมาภิบาล รับผิดชอบต่อสังคมและสิ่งแวดล้อม",
+      k: "P : PUNCTUALITY & PERSONALDEVELOPMENT",
+      v: "ตรงต่อเวลา รักษาเวลา และรับฟังความคิดเห็นผู้อื่น พร้อมจะพัฒนาตนเองอยู่เสมอ",
     },
   ];
 
@@ -63,7 +59,7 @@ export default function AboutPhilosophy() {
       {/* ส่วนล่าง */}
       <section className="relative isolate w-full overflow-hidden">
         <Image
-          src="/images/aboutus/about-2.jpg"
+          src="/images/aboutus/Endeavor.png"
           alt="Factory and Shipping"
           fill
           className="absolute inset-0 -z-10 object-cover object-bottom"
@@ -84,9 +80,7 @@ export default function AboutPhilosophy() {
                     key={i}
                     className="h-full rounded-2xl bg-white/70 md:bg-white/40 lg:bg-white/20 backdrop-blur-sm p-5 shadow-sm">
                     <p className="leading-relaxed break-words">
-                      <span className="mr-2 custom-Charcoal-gray" aria-hidden>
-                        ●
-                      </span>
+                      <span className="mr-2 font-semibold">{i + 1}.</span>
                       {text}
                     </p>
                   </div>

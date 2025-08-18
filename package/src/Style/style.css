@@ -44,7 +44,7 @@ a {
 
 /* -------------------------------------------------- */
 .about-bg-image {
-  background-image: url("/images/team/About_3.png");
+  background-image: url("/images/team/ABOUT _BD.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -980,3 +980,94 @@ body {
   line-height: 1;
   opacity: 0.8;
 }
+
+/* ------------------------------------------------------------------------------------------------------------ */
+/* === Elegant Text Effects Pack === */
+
+/* A) เผยหัวข้อแบบคลิปรีวีล (นิยมมากในเว็บโปรโมต) */
+@keyframes clipReveal {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+  }
+}
+.fx-clip-reveal {
+  animation: clipReveal 0.7s ease both;
+  will-change: clip-path, transform, opacity;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fx-clip-reveal {
+    animation: none !important;
+  }
+}
+
+/* B) ขีดเส้นใต้กวาดจากซ้าย (accent ใต้หัวข้อ) */
+.fx-underline {
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--brand--100-quarterly-1),
+    var(--brand--100-secondary-2)
+  );
+  transform-origin: left center;
+  transform: scaleX(0);
+  border-radius: 2px;
+}
+@keyframes underlineIn {
+  to {
+    transform: scaleX(1);
+  }
+}
+.fx-underline-in {
+  animation: underlineIn 0.5s ease 0.15s both;
+}
+
+/* C) ฟุ้งเข้ามาอย่างสุภาพ (ใช้กับย่อหน้า/รูป) */
+@keyframes subtleInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fx-subtle-in-up {
+  animation: subtleInUp 0.6s ease-out both;
+  will-change: transform, opacity;
+}
+
+/* D) ลิงก์เลื่อนเข้าด้านขวา (เร็ว-สะอาดตา) */
+@keyframes linkInRight {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.fx-link-in-right {
+  animation: linkInRight 0.45s ease-out both;
+}
+
+/* เคารพ prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .fx-clip-reveal,
+  .fx-underline-in,
+  .fx-subtle-in-up,
+  .fx-link-in-right {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+/* ------------------------------------------------------------------------------------------- */
