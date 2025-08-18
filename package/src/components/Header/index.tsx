@@ -8,6 +8,7 @@ import HeaderLink from "../Navigation/HeaderLink";
 import { headerData } from "../Navigation/menuData";
 import { usePathname } from "next/navigation";
 import DrawerMenu from "../Navigation/DrawerMenu";
+import LanguageSwitch from "./LanguageSwitch";
 
 const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -91,26 +92,7 @@ const Header = () => {
           })}
 
           {/* สวิตช์ภาษา: ข้อความจะแสดงเฉพาะ ≥1600px (ควบคุมด้วย .lang-mini) */}
-          <div className="flex gap-4 items-center ml-4 lang-mini">
-            <Link href="/en" className="flex items-center gap-1 lang-link">
-              <Image
-                src="/images/icons/us.svg"
-                width={20}
-                height={14}
-                alt="English"
-              />
-              <span className="text-xs">English</span>
-            </Link>
-            <Link href="/th" className="flex items-center gap-1 lang-link">
-              <Image
-                src="/images/icons/th.svg"
-                width={20}
-                height={14}
-                alt="Thai"
-              />
-              <span className="text-xs">Thai</span>
-            </Link>
-          </div>
+          <LanguageSwitch className="ml-4 lang-mini" />
         </nav>
 
         {/* ปุ่ม 3 ขีด: แสดงเฉพาะ <1600px */}
