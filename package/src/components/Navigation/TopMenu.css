@@ -1,0 +1,112 @@
+/* ถ้า import tailwind ใน globals.css อยู่แล้ว ลบบรรทัดนี้ได้ */
+@import "tailwindcss";
+
+@layer components {
+  /* Backdrop / Panel */
+  .tmenu-backdrop {
+    @apply fixed inset-0 z-[9998] bg-black/50;
+  }
+  .tmenu-panel {
+    @apply w-screen bg-white border-b border-gray-200 shadow-2xl;
+  }
+
+  /* Header */
+  .tmenu-header {
+    @apply sticky top-0 z-10 flex items-center justify-between gap-2 px-4 py-4 border-b bg-white;
+  }
+  .tmenu-title {
+    @apply text-base font-normal text-black;
+  }
+  .tmenu-close {
+    @apply grid place-items-center rounded-xl p-2 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500;
+  }
+
+  /* ---------- เนื้อเมนู ---------- */
+  .tmenu-nav {
+    @apply overflow-y-auto px-0 py-3;
+  }
+
+  /* ลิงก์ (ไม่มีเมนูย่อย) — ขนาด/สี/ระยะ เท่ากับ summary */
+  .tmenu-item {
+    @apply flex items-center gap-2 pl-4 pr-10 py-3 rounded-none
+           text-base font-normal text-black border-b border-gray-200 hover:bg-gray-50
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500;
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+
+  /* แถวที่เป็น summary (มีเมนูย่อย) — ให้ระยะเท่ากัน และลบ marker เดิม */
+  .tmenu-details {
+    @apply border-b border-gray-200;
+  }
+  .tmenu-details > summary {
+    @apply relative flex items-center gap-2 pl-4 pr-10 py-3 rounded-none
+           text-base font-normal text-black cursor-pointer select-none hover:bg-gray-50
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500;
+    list-style: none;
+  }
+  .tmenu-details > summary::marker {
+    content: "";
+  }
+  .tmenu-details > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* ไอคอน v ชิดขอบขวาสุด */
+  .tmenu-details > summary .tmenu-chev {
+    @apply absolute right-3 top-1/2 -translate-y-1/2 text-black transition-transform duration-300;
+  }
+  .tmenu-details[open] > summary .tmenu-chev {
+    @apply rotate-180;
+  }
+
+  /* เมนูย่อย — สีดำและระยะเท่ากัน (ถ้าต้องการเท่ากับบรรทัดบน ให้ใช้ py-3) */
+  .tmenu-sub {
+    @apply grid transition-[grid-template-rows] duration-300 ease-out;
+    grid-template-rows: 0fr;
+  }
+  .tmenu-details[open] .tmenu-sub {
+    grid-template-rows: 1fr;
+  }
+  .tmenu-sub-inner {
+    @apply overflow-hidden;
+  }
+  .tmenu-sub a {
+    @apply block pl-8 pr-4 py-3 text-base font-normal text-black rounded-none
+           border-b border-gray-200 hover:bg-gray-50 no-underline;
+    color: #000 !important;
+  }
+
+  /* กัน Bootstrap/สไตล์อื่น ๆ ทำลิงก์เป็นสีน้ำเงิน */
+  .tmenu-panel a,
+  .tmenu-panel a:hover,
+  .tmenu-panel a:visited,
+  .tmenu-panel a:active,
+  .tmenu-panel a:focus {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+
+  /* Footer ภาษา (ให้โทนเดียวกัน) */
+  .tmenu-lang {
+    @apply border-t bg-white px-4 py-3;
+  }
+  .tmenu-lang a {
+    @apply rounded-md px-2 py-1.5 text-base font-normal text-black hover:bg-gray-50 no-underline;
+  }
+
+  /* Stagger animation */
+  .tmenu-anim {
+    animation: tmenuFade 0.35s ease-out both;
+  }
+  @keyframes tmenuFade {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
