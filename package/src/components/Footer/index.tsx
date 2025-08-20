@@ -43,7 +43,7 @@ const Footer = () => {
             <p>
               02-175-2201-8
               <br />
-              Contact@microleasingplc.com
+              marketingcenter@tpppack.com
             </p>
             <h6 className="text-white fw-bold mt-3">เวลาทำการ</h6>
             <p>
@@ -92,11 +92,6 @@ const Footer = () => {
               <li>
                 <Link href="#" className="text-white text-decoration-none">
                   Pakku Packaging
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-white text-decoration-none">
-                  สินค้าอื่นๆ
                 </Link>
               </li>
               <li>

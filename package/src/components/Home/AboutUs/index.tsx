@@ -100,7 +100,7 @@ const Aboutus = () => {
             <div className="w-full max-w-[clamp(300px,90vw,550px)]">
               {/* หัวข้อ: คลิปรีวีล + เส้นใต้กวาด */}
               <strong
-                className="block text-[clamp(1.125rem,4.6vw,1.75rem)] font-bold leading-tight text-neutral-900 dark:text-neutral-50 [text-wrap:balance] opacity-0"
+                className="block text-[clamp(1.125rem,4.6vw,1.75rem)] font-bold leading-tight custom-Charcoal-gray dark:text-neutral-50 [text-wrap:balance] opacity-0"
                 data-ani="fadeInUp faster delay-200ms">
                 <span>เกี่ยวกับ</span>&nbsp; ไทยบรรจุภัณฑ์และการพิมพ์
               </strong>
@@ -112,7 +112,7 @@ const Aboutus = () => {
 
               {/* ย่อหน้า: ฟุ้งขึ้นอย่างสุภาพ (ตั้งดีเลย์เล็กน้อย) */}
               <p
-                className="mt-4 text-[clamp(0.95rem,3.8vw,1rem)] leading-7 break-words text-neutral-700 dark:text-neutral-300 opacity-0"
+                className="mt-4 text-[clamp(0.95rem,3.8vw,1rem)] leading-7 break-words custom-Ash-gray dark:text-neutral-300 opacity-0"
                 data-ani="fx-subtle-in-up"
                 style={{ animationDelay: "120ms" }}>
                 <b className="text-red-700">

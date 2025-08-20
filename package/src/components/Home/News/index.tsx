@@ -145,14 +145,14 @@ const TabPage = () => {
   }, [maxIndex, activeTab]);
 
   // Auto slide
-  useEffect(() => {
-    if (paused || maxIndex === 0) return;
-    const id = setInterval(() => {
-      setDirection("right");
-      setSlideIndex((i) => (i >= maxIndex ? 0 : i + 1));
-    }, 3000);
-    return () => clearInterval(id);
-  }, [paused, maxIndex]);
+  // useEffect(() => {
+  //   if (paused || maxIndex === 0) return;
+  //   const id = setInterval(() => {
+  //     setDirection("right");
+  //     setSlideIndex((i) => (i >= maxIndex ? 0 : i + 1));
+  //   }, 3000);
+  //   return () => clearInterval(id);
+  // }, [paused, maxIndex]);
 
   return (
     <div className="w-full px-2 md:px-4 max-w-6xl mx-auto relative">
@@ -201,15 +201,17 @@ const TabPage = () => {
         onMouseLeave={() => setPaused(false)}
         onTouchStart={() => setPaused(true)}
         onTouchEnd={() => setPaused(false)}>
-        {/* Left Arrow */}
+        {/* Left Arrow — วงกลมพื้นขาว */}
         <button
           className="
-              absolute left-0 top-1/2 -translate-y-1/2
-              -translate-x-[var(--arrow-shift)]
-              z-10 bg-white/80 text-blue-600 hover:bg-blue-100
-              w-10 h-10 md:w-12 md:h-12 flex items-center justify-center
-              rounded-full shadow-lg border border-blue-200 disabled:opacity-40 transition
-            "
+    absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[var(--arrow-shift)] z-10
+    inline-flex items-center justify-center
+    w-11 h-11 md:w-12 md:h-12 aspect-square !rounded-full overflow-hidden
+    bg-white/95 text-blue-600 shadow-md ring-1 ring-blue-200
+    hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400
+    transition
+  "
           onClick={() => {
             setDirection("left");
             setSlideIndex((i) => Math.max(0, i - 1));
@@ -251,15 +253,17 @@ const TabPage = () => {
             })}
         </div>
 
-        {/* Right Arrow */}
+        {/* Right Arrow — วงกลมพื้นขาว */}
         <button
           className="
-              absolute right-0 top-1/2 -translate-y-1/2
-              translate-x-[var(--arrow-shift)]
-              z-10 bg-white/80 text-blue-600 hover:bg-blue-100
-              w-10 h-10 md:w-12 md:h-12 flex items-center justify-center
-              rounded-full shadow-lg border border-blue-200 disabled:opacity-40 transition
-            "
+    absolute right-0 top-1/2 -translate-y-1/2 translate-x-[var(--arrow-shift)] z-10
+    inline-flex items-center justify-center
+    w-11 h-11 md:w-12 md:h-12 aspect-square !rounded-full overflow-hidden
+    bg-white/95 text-blue-600 shadow-md ring-1 ring-blue-200
+    hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400
+    transition
+  "
           onClick={() => {
             setDirection("right");
             setSlideIndex((i) => Math.min(maxIndex, i + 1));
@@ -287,9 +291,10 @@ const TabPage = () => {
               <span
                 className={
                   slideIndex === i
-                    ? "block w-2.5 h-2.5 rounded-full bg-transparent ring-2 ring-white ring-offset-2 ring-offset-[#2b3040] transition"
-                    : "block w-2.5 h-2.5 rounded-full bg-gray-400/70 transition"
+                    ? "block h-2.5 w-5 !rounded-[6px] bg-white/90 ring-2 ring-white ring-offset-2 ring-offset-[#2b3040] transition"
+                    : "block h-2.5 w-2.5 !rounded-[3px] bg-gray-400/70 transition"
                 }
+                style={{ borderRadius: slideIndex === i ? 6 : 3 }}
               />
             </button>
           ))}
