@@ -1,10 +1,9 @@
-// src/app/about-philosophy.tsx
 import Image from "next/image";
 import QueryPart from "./_components/QueryClient";
 import { Suspense } from "react";
 
 export default function AboutPhilosophy() {
-  // === กลุ่ม “พันธกิจ” 4 หัวข้อ ===
+  // === กลุ่ม “พันธกิจ” 8 หัวข้อ ===
   const missions: string[] = [
     "ดำเนินธุรกิจให้เติบโตอย่างยั่งยืน สร้างผลกำไรและผลตอบแทนที่ดี ด้วยหลักธรรมาภิบาล",
     "ผลิตสินค้าให้มีคุณภาพได้มาตรฐาน ส่งมอบสินค้าถูกต้องตรงเวลา พัฒนาระบบบริหารคุณภาพและบริการอย่างต่อเนื่อง เพื่อความพึงพอใจและไว้วางใจของลูกค้า",
@@ -16,7 +15,7 @@ export default function AboutPhilosophy() {
     "สร้างพันธมิตรคู่ค้าทางธุรกิจบนพื้นฐาน ความร่วมมือที่ดีเติบโตร่วมกันอย่างยั่งยืน พร้อมมีส่วนร่วมในการสนับสนุนดูแลสังคม และสิ่งแวดล้อม",
   ];
 
-  // === “ค่านิยมขององค์กร” 4 หัวข้อ ===
+  // === “ค่านิยมขององค์กร” 3 หัวข้อ ===
   const values = [
     {
       k: "T : TEAMWORK",
@@ -44,10 +43,18 @@ export default function AboutPhilosophy() {
           priority
         />
         <div className="relative mx-auto max-w-screen-md px-4 sm:px-6 py-10 text-center text-green-800">
-          <h2 className="font-bold text-2xl sm:text-3xl mb-3 fs-3 text-end text-black">
+          <h2 className="font-bold text-2xl sm:text-3xl mb-3 fs-3 text-end text-black fx-clip-reveal">
             วิสัยทัศน์
+            {/* เส้นใต้กวาดเข้าแบบชิดขวา */}
+            <span
+              aria-hidden
+              className="block fx-underline fx-underline-in mt-2 w-24 ml-auto"
+            />
           </h2>
-          <p className="mx-auto text-base sm:text-lg leading-relaxed break-words shadow-white-end custom-Charcoal-gray">
+
+          <p
+            className="mx-auto text-base sm:text-lg leading-relaxed break-words shadow-white-end custom-Charcoal-gray fx-subtle-in-up"
+            style={{ animationDelay: "120ms" }}>
             เป็นผู้นำด้านธุรกิจการพิมพ์และบรรจุภัณฑ์กระดาษ
             มุ่งมั่นสร้างสรรค์นวัตกรรม
             พร้อมส่งมอบผลิตภัณฑ์และบริการที่มีคุณภาพให้กับลูกค้า
@@ -69,16 +76,22 @@ export default function AboutPhilosophy() {
 
         <div className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-10 xl:px-14 py-10 sm:py-14">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 text-green-900">
-            {/* พันธกิจ (8 กล่อง ไม่มีหัวข้อย่อย) */}
+            {/* พันธกิจ (8 กล่อง) */}
             <div className="space-y-6 md:col-span-2">
-              <h3 className="font-bold text-lg sm:text-xl mb-1 text-black">
+              <h3 className="font-bold text-lg sm:text-xl mb-1 text-black fx-clip-reveal">
                 พันธกิจ
+                <span
+                  aria-hidden
+                  className="block fx-underline fx-underline-in mt-2 w-20"
+                />
               </h3>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 custom-Charcoal-gray">
                 {missions.map((text, i) => (
                   <div
                     key={i}
-                    className="h-full rounded-2xl bg-white/70 md:bg-white/40 lg:bg-white/20 backdrop-blur-sm p-5 shadow-sm">
+                    className="h-full rounded-2xl bg-white/70 md:bg-white/40 lg:bg-white/20 backdrop-blur-sm p-5 shadow-sm fx-subtle-in-up"
+                    style={{ animationDelay: `${80 + i * 60}ms` }}>
                     <p className="leading-relaxed break-words">
                       <span className="mr-2 font-semibold">{i + 1}.</span>
                       {text}
@@ -88,18 +101,32 @@ export default function AboutPhilosophy() {
               </div>
             </div>
 
-            {/* ค่านิยมขององค์กร (4 หัวข้อ) */}
+            {/* ค่านิยมขององค์กร */}
             <div className="space-y-6">
-              <h3 className="font-bold text-lg sm:text-xl mb-1 text-black">
+              <h3 className="font-bold text-lg sm:text-xl mb-1 text-black fx-clip-reveal">
                 ค่านิยมขององค์กร
+                <span
+                  aria-hidden
+                  className="block fx-underline fx-underline-in mt-2 w-24"
+                />
               </h3>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 custom-Charcoal-gray">
                 {values.map((val, i) => (
                   <div
                     key={i}
-                    className="rounded-2xl bg-white/70 md:bg-white/40 lg:bg-white/20 backdrop-blur-sm p-4 shadow-sm">
-                    <div className="font-bold">{val.k}</div>
-                    <p className="mt-1 leading-relaxed break-words">{val.v}</p>
+                    className="rounded-2xl bg-white/70 md:bg-white/40 lg:bg-white/20 backdrop-blur-sm p-4 shadow-sm fx-subtle-in-up"
+                    style={{ animationDelay: `${80 + i * 80}ms` }}>
+                    <div
+                      className="font-bold fx-link-in-right"
+                      style={{ animationDelay: `${160 + i * 80}ms` }}>
+                      {val.k}
+                    </div>
+                    <p
+                      className="mt-1 leading-relaxed break-words fx-subtle-in-up"
+                      style={{ animationDelay: `${220 + i * 80}ms` }}>
+                      {val.v}
+                    </p>
                   </div>
                 ))}
               </div>

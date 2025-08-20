@@ -6,7 +6,7 @@ export const headerData: HeaderItem[] = [
   {
     label: "เกี่ยวกับเรา",
     submenu: [
-      { label: "ปรัชญา วิสัยทัศน์ และพันธกิจ", href: "/about-philosophy" },
+      { label: "วิสัยทัศน์ และพันธกิจ", href: "/about-philosophy" },
       { label: "ประวัติองค์กร", href: "/about-history" },
       { label: "คณะกรรมการ / ผู้บริหาร", href: "/about-executives" },
       { label: "บริษัทในเครือ", href: "/about-subsidiaries" },
