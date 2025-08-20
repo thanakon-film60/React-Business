@@ -1,7 +1,12 @@
 import Image from "next/image";
 import QueryPart from "./_components/QueryClient";
 import { Suspense } from "react";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "วิสัยทัศน์และพันธกิจ | TPP",
+  description: "หน้าแสดงวิสัยทัศน์และพันธกิจ",
+};
 export default function AboutPhilosophy() {
   // === กลุ่ม “พันธกิจ” 8 หัวข้อ ===
   const missions: string[] = [
@@ -54,7 +59,8 @@ export default function AboutPhilosophy() {
 
           <p
             className="mx-auto text-base sm:text-lg leading-relaxed break-words shadow-white-end custom-Charcoal-gray fx-subtle-in-up"
-            style={{ animationDelay: "120ms" }}>
+            style={{ animationDelay: "120ms" }}
+          >
             เป็นผู้นำด้านธุรกิจการพิมพ์และบรรจุภัณฑ์กระดาษ
             มุ่งมั่นสร้างสรรค์นวัตกรรม
             พร้อมส่งมอบผลิตภัณฑ์และบริการที่มีคุณภาพให้กับลูกค้า
@@ -91,7 +97,8 @@ export default function AboutPhilosophy() {
                   <div
                     key={i}
                     className="h-full rounded-2xl bg-white/70 md:bg-white/40 lg:bg-white/20 backdrop-blur-sm p-5 shadow-sm fx-subtle-in-up"
-                    style={{ animationDelay: `${80 + i * 60}ms` }}>
+                    style={{ animationDelay: `${80 + i * 60}ms` }}
+                  >
                     <p className="leading-relaxed break-words">
                       <span className="mr-2 font-semibold">{i + 1}.</span>
                       {text}
@@ -116,15 +123,18 @@ export default function AboutPhilosophy() {
                   <div
                     key={i}
                     className="rounded-2xl bg-white/70 md:bg-white/40 lg:bg-white/20 backdrop-blur-sm p-4 shadow-sm fx-subtle-in-up"
-                    style={{ animationDelay: `${80 + i * 80}ms` }}>
+                    style={{ animationDelay: `${80 + i * 80}ms` }}
+                  >
                     <div
                       className="font-bold fx-link-in-right"
-                      style={{ animationDelay: `${160 + i * 80}ms` }}>
+                      style={{ animationDelay: `${160 + i * 80}ms` }}
+                    >
                       {val.k}
                     </div>
                     <p
                       className="mt-1 leading-relaxed break-words fx-subtle-in-up"
-                      style={{ animationDelay: `${220 + i * 80}ms` }}>
+                      style={{ animationDelay: `${220 + i * 80}ms` }}
+                    >
                       {val.v}
                     </p>
                   </div>

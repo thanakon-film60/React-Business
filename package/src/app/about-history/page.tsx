@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "ประวัติองค์กร | Your Company",
+  title: "ประวัติองค์กร | TPP",
   description: "หน้าแสดงประวัติองค์กรและพัฒนาการที่สำคัญในรูปแบบไทม์ไลน์",
 };
 
@@ -20,22 +20,10 @@ const milestonesLeft: Milestone[] = [
     year: "พ.ศ. 2561",
     description: "-เครื่องปะหน้าต่าง -เครื่องแกะกล่องกระดาษ",
   },
-  {
-    year: "พ.ศ. 2559",
-    description: "-เครื่องพิมพ์ 8 สี -เครื่องปะอัตโนมัติ",
-  },
-  {
-    year: "พ.ศ. 2555",
-    description: "เครื่องทำลอนลูกฟูก ลอน B และ E",
-  },
-  {
-    year: "พ.ศ. 2551",
-    description: "เครื่องพิมพ์ 6 สี",
-  },
-  {
-    year: "พ.ศ. 2537",
-    description: "แปลสภาพเป็นบริษัทมหาชน",
-  },
+  { year: "พ.ศ. 2559", description: "-เครื่องพิมพ์ 8 สี -เครื่องปะอัตโนมัติ" },
+  { year: "พ.ศ. 2555", description: "เครื่องทำลอนลูกฟูก ลอน B และ E" },
+  { year: "พ.ศ. 2551", description: "เครื่องพิมพ์ 6 สี" },
+  { year: "พ.ศ. 2537", description: "แปลสภาพเป็นบริษัทมหาชน" },
   {
     year: "พ.ศ. 2526",
     description: "ก่อตั้งบริษัทด้วยทุนจดทะเบียน 20 ล้านบาท",
@@ -43,27 +31,18 @@ const milestonesLeft: Milestone[] = [
 ];
 
 const milestonesRight: Milestone[] = [
-  {
-    year: "พ.ศ. 2562",
-    description: "เครื่องปะอัตโนมัติ",
-  },
+  { year: "พ.ศ. 2562", description: "เครื่องปะอัตโนมัติ" },
   {
     year: "พ.ศ. 2560",
     description:
       "-เครื่องปะกึ่งอัตโนมัติ -เครื่องปะหน้าต่าง -เครื่องปั้มกล่อง -เครื่องตัดกล่องตัวอย่าง",
   },
-  {
-    year: "พ.ศ. 2556",
-    description: "เครื่อง Computer to Plate (CTP)",
-  },
+  { year: "พ.ศ. 2556", description: "เครื่อง Computer to Plate (CTP)" },
   {
     year: "พ.ศ. 2554",
     description: "กรรมการผู้จัดการคนปัจจุบันเข้ารับตำแหน่ง",
   },
-  {
-    year: "พ.ศ. 2550",
-    description: "เครื่องพิมพ์ 6 สี",
-  },
+  { year: "พ.ศ. 2550", description: "เครื่องพิมพ์ 6 สี" },
   {
     year: "พ.ศ. 2533",
     description:
@@ -91,41 +70,42 @@ export default function HistoryPage() {
 }
 
 // ===== Sections =====
+// ★ NEW: พื้นหลังเต็มจอ + กล่องข้อความยืดตามเนื้อหา (Responsive)
 function Hero() {
   return (
-    <section className="relative w-full">
-      {/* Top montage / hero */}
-      <div className="relative h-[240px] sm:h-[320px] md:h-[420px] lg:h-[520px]">
+    <section className="relative w-full min-h-[60vh] md:min-h-[70vh] lg:min-h-screen isolate">
+      {/* พื้นหลังครอบเต็มส่วน hero (ตามความสูงจริงของ section) */}
+      <div className="absolute inset-0 -z-10">
         <Image
           src="/images/history/bg-history-1.png"
           alt="ประวัติองค์กร"
           fill
           priority
+          sizes="100vw"
           className="object-cover"
         />
         {/* ไล่สีช่วยให้อ่านง่าย */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-white/60 to-white" />
+        <div className="absolute inset-0 bg-white/20" />
+        <div className="absolute inset-x-0 top-0 h-24 md:h-40 bg-gradient-to-b from-white/70 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-40 md:h-60 bg-gradient-to-t from-white to-transparent" />
+      </div>
 
-        {/* === กล่องข้อความที่วางทับบนรูป === */}
-        <div className="absolute inset-0 z-10 flex items-end md:items-center">
-          {/* เพิ่ม flex + justify-end ที่แถวนี้ */}
-          <div className="container mx-auto px-4 pb-6 md:pb-10 flex justify-start">
-            <div className="max-w-4xl rounded-2xl bg-white/85 backdrop-blur shadow-lg border border-neutral-200 p-4 md:p-6">
-              <h4 className="text-base md:text-2xl font-bold mb-2">
-                ประวัติและความเป็นมา
-              </h4>
-              <p className="whitespace-pre-line text-sm md:text-base leading-7 text-neutral-800">
-                {historyOverlayText}
-              </p>
-            </div>
-          </div>
+      {/* กล่องข้อความ (อยู่ใน flow ปกติ) */}
+      <div className="container mx-auto px-4 py-8 md:py-12 lg:py-16 flex items-center justify-start">
+        <div className="w-full max-w-5xl lg:max-w-6xl rounded-2xl bg-white/85 backdrop-blur shadow-lg border border-neutral-200 p-4 md:p-6 lg:p-8">
+          <h4 className="text-lg md:text-2xl font-bold mb-3 md:mb-4">
+            ประวัติและความเป็นมา
+          </h4>
+          <p className="whitespace-pre-line text-sm md:text-base lg:text-lg leading-7 md:leading-8 text-neutral-800">
+            {historyOverlayText}
+          </p>
         </div>
       </div>
     </section>
   );
 }
 
-// ===== แทนที่ทั้งฟังก์ชัน TimelineSection เดิมด้วยอันนี้ =====
+// ===== Timeline =====
 function TimelineSection({
   leftItems,
   rightItems,
@@ -240,33 +220,30 @@ function TimelineSection({
   return (
     <section className="relative bg-neutral-50 py-12 md:py-16">
       <div className="container mx-auto px-4">
-        {/* หัวข้ออยู่ด้านบน (แก้คลาสด้านบนแล้ว) */}
-        <h4 className="relative md:bottom-[90px] z-10 text-center text-2xl md:text-3xl font-bold text-green-800 mb-6 md:mb-0">
+        {/* หัวข้อ */}
+        <h4 className="relative -top-[70px] text-center text-2xl md:text-3xl font-bold text-green-800 mb-8">
           พัฒนาการที่สำคัญ
         </h4>
-        {/* ========== มือถือ: ไทม์ไลน์เส้นซ้าย + จุด + เส้นเชื่อม (เป๊ะกับเส้น) ========== */}
+
+        {/* ========== มือถือ: ไทม์ไลน์ซ้าย + จุด + เส้นเชื่อม ========== */}
         <div className="md:hidden relative pl-8">
-          {/* เส้นหลักทางซ้าย (กำหนดตำแหน่งเดียวกับจุด) */}
           <div
             className="absolute top-0 bottom-0 w-px bg-green-300"
-            style={{ left: 18 }} /* px */
+            style={{ left: 18 }}
           />
           <ol className="space-y-6">
             {yearsAsc.flatMap((yr) =>
               (grouped[yr] || []).map((ev, idx) => (
                 <li key={`${yr}-${idx}`} className="relative">
-                  {/* จุดกลางเส้น (ศูนย์กลางตรงเส้นเป๊ะ) */}
                   <span
                     aria-hidden
-                    className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2
-                           w-3 h-3 rounded-full bg-green-600 ring-4 ring-white shadow"
+                    className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-green-600 ring-4 ring-white shadow"
                     style={{ left: 18 }}
                   />
-                  {/* เส้นเชื่อมเข้าการ์ด */}
                   <span
                     aria-hidden
                     className="absolute top-1/2 -translate-y-1/2 h-px bg-green-400"
-                    style={{ left: 26, width: 24 }} /* 18 + 8, ยาว 24px */
+                    style={{ left: 26, width: 24 }}
                   />
                   <div className="pl-6">
                     <TimelineCard {...ev} align="left" />
@@ -280,37 +257,33 @@ function TimelineSection({
         {/* ========== เดสก์ท็อป: เส้นกลาง + การ์ดสลับซ้าย/ขวา ========== */}
         <div
           className="relative hidden md:block mt-6 md:mt-8"
-          style={{ height: totalHeight }}>
-          {/* เส้นกลาง */}
+          style={{ height: totalHeight }}
+        >
           <div className="absolute left-1/2 top-0 -translate-x-1/2 h-full w-1 bg-green-300" />
-
           {placements.map(
             ({ yr, left, right, leftTops, rightTops, dotTop }) => (
               <div key={yr}>
-                {/* จุดใหญ่บนเส้นกลาง */}
                 <span
                   aria-hidden
                   className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-600 ring-4 ring-white shadow"
                   style={{ top: dotTop, width: 22, height: 22 }}
                 />
-
-                {/* การ์ดซ้าย */}
                 {left.map((ev, i) => (
                   <div
                     key={`L${yr}-${i}`}
                     className="absolute right-[calc(50%+28px)] w-[44%] -translate-y-1/2"
-                    style={{ top: leftTops[i] }}>
+                    style={{ top: leftTops[i] }}
+                  >
                     <div className="absolute right-[-28px] top-1/2 -translate-y-1/2 w-7 h-px bg-green-400" />
                     <TimelineCard {...ev} align="left" />
                   </div>
                 ))}
-
-                {/* การ์ดขวา */}
                 {right.map((ev, i) => (
                   <div
                     key={`R${yr}-${i}`}
                     className="absolute left-[calc(50%+28px)] w-[44%] -translate-y-1/2"
-                    style={{ top: rightTops[i] }}>
+                    style={{ top: rightTops[i] }}
+                  >
                     <div className="absolute left-[-28px] top-1/2 -translate-y-1/2 w-7 h-px bg-green-400" />
                     <TimelineCard {...ev} align="right" />
                   </div>
@@ -324,7 +297,7 @@ function TimelineSection({
   );
 }
 
-// ===== เพิ่มคอมโพเนนต์การ์ด (ของเดิมใช้ต่อได้ ไม่ต้องแก้) =====
+// ===== การ์ด =====
 function TimelineCard({
   year,
   title,
@@ -335,7 +308,8 @@ function TimelineCard({
     <article
       className={`rounded-2xl bg-white border border-neutral-200 p-5 md:p-6 shadow-sm min-h-[120px] ${
         align === "left" ? "md:text-right" : ""
-      }`}>
+      }`}
+    >
       <div className="text-[24px] font-semibold tracking-wider text-green-700">
         {year}
       </div>
