@@ -257,24 +257,22 @@ function TimelineSection({
         {/* ========== เดสก์ท็อป: เส้นกลาง + การ์ดสลับซ้าย/ขวา ========== */}
         <div
           className="relative hidden md:block mt-6 md:mt-8"
-          style={{ height: totalHeight }}
-        >
-          <div className="absolute left-1/2 top-0 -translate-x-1/2 h-full w-1 bg-green-300" />
+          style={{ height: totalHeight }}>
+          <div className="absolute left-1/2 top-0 -translate-x-1/2 h-full w-1 bg-red-300" />
           {placements.map(
             ({ yr, left, right, leftTops, rightTops, dotTop }) => (
               <div key={yr}>
                 <span
                   aria-hidden
-                  className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-600 ring-4 ring-white shadow"
+                  className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-600 ring-4 ring-white shadow"
                   style={{ top: dotTop, width: 22, height: 22 }}
                 />
                 {left.map((ev, i) => (
                   <div
                     key={`L${yr}-${i}`}
                     className="absolute right-[calc(50%+28px)] w-[44%] -translate-y-1/2"
-                    style={{ top: leftTops[i] }}
-                  >
-                    <div className="absolute right-[-28px] top-1/2 -translate-y-1/2 w-7 h-px bg-green-400" />
+                    style={{ top: leftTops[i] }}>
+                    <div className="absolute right-[-28px] top-1/2 -translate-y-1/2 w-7 h-px bg-red-400" />
                     <TimelineCard {...ev} align="left" />
                   </div>
                 ))}
@@ -282,9 +280,8 @@ function TimelineSection({
                   <div
                     key={`R${yr}-${i}`}
                     className="absolute left-[calc(50%+28px)] w-[44%] -translate-y-1/2"
-                    style={{ top: rightTops[i] }}
-                  >
-                    <div className="absolute left-[-28px] top-1/2 -translate-y-1/2 w-7 h-px bg-green-400" />
+                    style={{ top: rightTops[i] }}>
+                    <div className="absolute left-[-28px] top-1/2 -translate-y-1/2 w-7 h-px bg-red-400" />
                     <TimelineCard {...ev} align="right" />
                   </div>
                 ))}
@@ -308,9 +305,8 @@ function TimelineCard({
     <article
       className={`rounded-2xl bg-white border border-neutral-200 p-5 md:p-6 shadow-sm min-h-[120px] ${
         align === "left" ? "md:text-right" : ""
-      }`}
-    >
-      <div className="text-[24px] font-semibold tracking-wider text-green-700">
+      }`}>
+      <div className="text-[24px] font-semibold tracking-wider custom-red">
         {year}
       </div>
       {title && (
