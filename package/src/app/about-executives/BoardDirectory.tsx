@@ -8,13 +8,13 @@ import { useMemo, useState } from "react";
 // ======= ปรับแต่งได้ =======
 const HERO_TITLE = "คณะกรรมการ / ผู้บริหาร";
 const HERO_DESC =
-  "คณะกรรมการและผู้บริหารของบริษัทฯ มีบทบาทสำคัญในการกำหนดนโยบายและกำกับดูแลให้การดำเนินงาน โปร่งใส และมีประสิทธิภาพ เพื่อประโยชน์สูงสุดต่อนักลงทุน ลูกค้า และสังคม";
+  "คณะกรรมการและผู้บริหาร กำหนดวิสัยทัศน์และกลยุทธ์เชิงธุรกิจ เพื่อเสริมสร้างความแข็งแกร่งและความยั่งยืนขององค์กร";
 const HERO_BG_URL = "/images/joinus/bg-board.jpg";
 
 // หมวดในแถบแท็บ
 const TABS = [
   { id: "board", label: "คณะกรรมการ" },
-  { id: "subcommittee", label: "คณะกรรมการชุดย่อย" },
+  // { id: "subcommittee", label: "คณะกรรมการชุดย่อย" },
   { id: "executive", label: "ผู้บริหาร" },
 ] as const;
 
@@ -32,92 +32,102 @@ const MEMBERS: Member[] = [
   // === ตัวอย่างชุด "คณะกรรมการ" (12 คน) ===
   {
     id: "m01",
-    name: "ดร.สุทธิ์ชัย อมรภักดี",
+    name: "นายธีระพงษ์ อศัวินวิจิตร",
     role: "ประธานกรรมการ",
-    image: "/images/board/m01.jpg",
+    image: "/images/board/User_shadow.png",
     category: "board",
   },
   {
     id: "m02",
-    name: "นายพงศ์ศักดิ์ รัชศพล",
+    name: "นายฉัตรชัย เอียสกุล",
     role: "รองประธานกรรมการ",
-    image: "/images/board/m02.jpg",
-    category: "board",
-  },
-  {
-    id: "m03",
-    name: "นายปัญจวิชญ์ ตระกูลจูน",
-    role: undefined,
-    image: "/images/board/m03.jpg",
-    category: "board",
-  },
-  {
-    id: "m04",
-    name: "นางสาวกานดาภรณ์ นานสกุลโชติ",
-    image: "/images/board/m04.jpg",
+    image: "/images/board/User_shadow.png",
     category: "board",
   },
   {
     id: "m05",
-    name: "ศ.ดร. กนก วัฒนสุนทร",
-    image: "/images/board/m05.jpg",
+    name: "นายอดลุย์  วินัยแพทย ์",
+    role: "กรรมการ",
+    image: "/images/board/User_shadow.png",
     category: "board",
   },
   {
+    id: "m03",
+    name: "ดร.วรัญ แต ้ไพสิฐพงษ",
+    role: "ประธานกรรมการสรรหา และกำหนดค่าตอบแทน",
+    image: "/images/board/User_shadow.png",
+    category: "board",
+  },
+  {
+    id: "m04",
+    name: "นายสุนทร พจน์ธนมาศ",
+    role: "กรรมการอิสระ ประธานกรรมการตรวจสอบ",
+    image: "/images/board/User_shadow.png",
+    category: "board",
+  },
+
+  {
     id: "m06",
-    name: "นางอรณีศ์กานดา วัชรญาณศรี",
-    image: "/images/board/m06.jpg",
+    name: "นายเจริญรตน์ หาญเบญจพงศ์",
+    role: "กรรมการอิสระ กรรมการตรวจสอบ",
+    image: "/images/board/User_shadow.png",
     category: "board",
   },
   {
     id: "m07",
-    name: "นายพิชัย วิทยฐานกรณ์",
-    image: "/images/board/m07.jpg",
+    name: "นายสุพจน์ พฤกษานานนท์",
+    role: "กรรมการ",
+    image: "/images/board/User_shadow.png",
     category: "board",
   },
   {
     id: "m08",
-    name: "นายอธิวัชร์ วิทยฐานกรณ์",
-    image: "/images/board/m08.jpg",
+    name: "นายจักกพงศ์ ณ บางช้าง",
+    role: "กรรมการอิสระ กรรมการตรวจสอบ",
+    image: "/images/board/User_shadow.png",
     category: "board",
   },
   {
     id: "m09",
-    name: "นายชลธี อินทร์ศักดิ์ชัย",
-    image: "/images/board/m09.jpg",
+    name: "นายพงศธัช อัศวินวิจิตร",
+    role: "กรรมการ และ กรรมการผู้จัดการ",
+    image: "/images/board/User_shadow.png",
     category: "board",
   },
   {
     id: "m10",
-    name: "นายจารุวุฒิ วงศ์พิทักษ์กุล",
-    image: "/images/board/m10.jpg",
+    name: "นายอดุม นิลภารักษ์",
+    role: "กรรมการ",
+    image: "/images/board/User_shadow.png",
     category: "board",
   },
   {
     id: "m11",
-    name: "นายวราวุฒิ เอี่ยมศุภธรรม",
-    image: "/images/board/m11.jpg",
+    name: "ดร.ณัฐสิทธิ์  เจียรวัฒน์ชัย",
+    role: "กรรมการสรรหาและกำหนด  ",
+    image: "/images/board/User_shadow.png",
     category: "board",
   },
   {
     id: "m12",
-    name: "นายอดุล วิทยานิพนธ์",
-    image: "/images/board/m12.jpg",
+    name: "พ.อ.กิตติเมธ เมืองอ่ำ",
+    role: "กรรมการอิสระ",
+    image: "/images/board/User_shadow.png",
     category: "board",
   },
 
   {
     id: "s01",
-    name: "นางกัลยาพร จันทร์สว่าง",
-    role: "คณะกรรมการตรวจสอบ",
-    image: "/images/subcommittee/s01.jpg",
-    category: "subcommittee",
+    name: "นายพงศธัช อัศวินวิจิตร",
+    role: "กรรมการ และ กรรมการผู้จัดการ",
+    image: "/images/subcommittee/User_shadow2.png",
+    category: "executive",
   },
   {
     id: "e01",
-    name: "นายเดชากร จิตมั่นคง",
-    role: "ประธานเจ้าหน้าที่บริหาร",
-    image: "/images/executive/e01.jpg",
+    name: "นางวิไล วรรณมหินทร์",
+    role: "ผู้จัดการทั่วไป สายงานบริหารและกำกับกิจการ ",
+    image: "/images/subcommittee/User_shadow_f.png",
     category: "executive",
   },
 ];
@@ -139,8 +149,7 @@ export default function Page() {
           <h2 className="sr-only">เปลี่ยนหมวด</h2>
           <nav
             aria-label="แถบหมวด"
-            className="sticky top-0 z-30 -mx-3 px-3 sm:static sm:mx-0 sm:px-0 bg-white/80 supports-[backdrop-filter]:bg-white/60 backdrop-blur border-b border-emerald-100"
-          >
+            className="sticky top-0 z-30 -mx-3 px-3 sm:static sm:mx-0 sm:px-0 bg-white/80 supports-[backdrop-filter]:bg-white/60 backdrop-blur border-b border-emerald-100">
             <div className="inline-flex min-w-full sm:min-w-0 items-center gap-1 sm:gap-2 whitespace-nowrap py-2">
               <div className="inline-flex rounded-xl bg-emerald-50 p-1 ring-1 ring-emerald-200 w-full max-w-full overflow-x-auto">
                 {TABS.map((t) => {
@@ -156,8 +165,7 @@ export default function Page() {
                         isActive
                           ? "bg-white text-emerald-700 shadow-sm ring-1 ring-emerald-300"
                           : "text-gray-600 hover:text-emerald-700",
-                      ].join(" ")}
-                    >
+                      ].join(" ")}>
                       {t.label}
                     </button>
                   );
@@ -171,13 +179,11 @@ export default function Page() {
           <ul
             role="list"
             aria-live="polite"
-            className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6"
-          >
+            className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
             {visibleMembers.map((m) => (
               <li
                 key={m.id}
-                className="group overflow-hidden rounded-2xl bg-white ring-1 ring-gray-200 transition hover:shadow-md"
-              >
+                className="group overflow-hidden rounded-2xl bg-white ring-1 ring-gray-200 transition hover:shadow-md">
                 <div className="relative bg-white">
                   <div className="relative w-full pt-[125%] bg-white">
                     {m.image ? (
