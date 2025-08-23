@@ -14,12 +14,12 @@ body {
   font-family: "Kanit", Tahoma, Arial, sans-serif;
 }
 
-h1 {
+/* h1 {
   font-size: 16px;
 }
 h2 {
   font-size: 14px;
-}
+} */
 
 .no-decoration {
   text-decoration: none !important;
@@ -1078,3 +1078,9 @@ body {
   background-repeat: no-repeat;
   min-height: auto;
 } */
+/* --------------------------------------------------------------------------------------------- */
+/* ข้อคสามแบบบังคับ */
+.my-heading {
+  font-size: 2rem;
+  font-weight: bold;
+}

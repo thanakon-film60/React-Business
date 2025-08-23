@@ -9,10 +9,10 @@ export default function OmanAirStyleLayout() {
           <div className="order-1 space-y-5 lg:order-1">
             {/* Card: Company group */}
             <article className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/10">
-              <h3 className="text-[18px] font-extrabold text-neutral-900">
+              <h3 className="my-heading font-extrabold text-neutral-900">
                 บริษัทในเครือ
               </h3>
-              <div className="mt-2 text-[13px] leading-6 text-neutral-700">
+              <div className="mt-2 text-[16px] leading-6 text-neutral-700">
                 <p>
                   บริษัท ทีพีพี วินเตอร์เชิ่ลแมน จำกัด
                   <br />
@@ -34,11 +34,11 @@ export default function OmanAirStyleLayout() {
 
             {/* Card: Contact us */}
             <article className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/10">
-              <h3 className="text-[18px] font-extrabold text-neutral-900">
+              <h3 className="my-heading font-extrabold text-neutral-900">
                 กรุณาติดต่อเราได้ที่
               </h3>
               <div className="mt-2 grid gap-4 md:grid-cols-2">
-                <div className="text-[13px] leading-6 text-neutral-700">
+                <div className="text-[16px] leading-6 text-neutral-700">
                   <p>
                     www.omanair.com : Oman Air-Thai
                     <br />
@@ -62,7 +62,7 @@ export default function OmanAirStyleLayout() {
                 {/* รูปเครื่องบิน 1/2 */}
                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl ring-1 ring-black/10">
                   <img
-                    src="/images/plane.jpg"
+                    src="/images/subsidiaries/Oman_Cargo_plane.png"
                     alt="Airplane"
                     className="h-full w-full object-cover"
                   />
@@ -80,11 +80,13 @@ export default function OmanAirStyleLayout() {
             </div>
 
             {/* Map artwork placeholder */}
-            <img
-              src="/images/subsidiaries/Oman_Cargo_map.png"
-              alt="Hero image"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
+            <div className="overflow-hidden rounded-2xl">
+              <img
+                src="/images/subsidiaries/Oman_Cargo_mapPx.png"
+                alt="Hero image"
+                className="block w-full h-auto"
+              />
+            </div>
           </div>
         </div>
       </section>
