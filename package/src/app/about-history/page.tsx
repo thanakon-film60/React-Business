@@ -98,7 +98,7 @@ function Hero() {
       <div className="container mx-auto px-4 py-8 md:py-12 lg:py-16 flex items-center justify-start">
         <Reveal y={20}>
           <div className="w-full max-w-5xl lg:max-w-6xl rounded-2xl bg-white/85 backdrop-blur shadow-lg border border-neutral-200 p-4 md:p-6 lg:p-8">
-            <h4 className="text-lg md:text-2xl font-bold mb-3 md:mb-4">
+            <h4 className="my-heading md:text-2xl mb-3 md:mb-4">
               ประวัติและความเป็นมา
             </h4>
             <p className="whitespace-pre-line text-sm md:text-base lg:text-lg leading-7 md:leading-8 text-neutral-800">

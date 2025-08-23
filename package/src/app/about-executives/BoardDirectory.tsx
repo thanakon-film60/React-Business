@@ -225,10 +225,9 @@ export default function Page() {
 function Hero() {
   return (
     <section className="relative w-full">
-      {/* พื้นหลังเต็มจอ */}
       <div className="relative w-full overflow-hidden">
-        {/* สูงแบบ responsive: มือถือ/แท็บเล็ต/เดสก์ท็อป */}
-        <div className="relative h-[36vh] sm:h-[44vh] lg:h-[56vh] xl:h-[62vh] 2xl:h-[640px]">
+        {/* ความสูงภาพพื้นหลัง */}
+        <div className="relative h-[40vh] sm:h-[50vh] lg:h-[60vh] xl:h-[640px]">
           <Image
             src={HERO_BG_URL}
             alt="background"
@@ -237,16 +236,23 @@ function Hero() {
             sizes="100vw"
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px]" />
-          <div className="absolute inset-0 flex items-center">
-            {/* เนื้อหาอยู่ใน container ปกติ */}
+
+          {/* ทำให้พื้นหลังฝั่งซ้ายสว่าง อ่านง่าย และไล่จางไปด้านขวา */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/60 to-transparent backdrop-blur-[1px]" />
+
+          {/* วางคอนเทนต์ยึดมุมซ้ายบน */}
+          <div className="absolute inset-0 flex items-start justify-start">
             <div className="mx-auto w-full max-w-7xl px-3 sm:px-6 lg:px-8">
-              <h1 className="text-lg sm:text-2xl md:text-3xl font-bold tracking-tight text-emerald-700">
-                {HERO_TITLE}
-              </h1>
-              <p className="mt-2 sm:mt-3 max-w-3xl text-[13px] sm:text-base leading-6 text-gray-700">
-                {HERO_DESC}
-              </p>
+              {/* ระยะห่างจากด้านบน */}
+              <div className="pt-8 sm:pt-12 lg:pt-20 xl:pt-24">
+                <h1 className="my-heading sm:text-[24px] md:text-[28px] font-extrabold leading-[1.2] tracking-tight text-emerald-700">
+                  {HERO_TITLE}
+                </h1>
+
+                <p className="mt-3 sm:mt-4 max-w-[760px] text-sm sm:text-base md:text-lg leading-relaxed text-gray-700">
+                  {HERO_DESC}
+                </p>
+              </div>
             </div>
           </div>
         </div>
