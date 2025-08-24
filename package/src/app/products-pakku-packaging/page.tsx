@@ -18,17 +18,17 @@ import {
 const slides = [
   {
     id: 1,
-    src: "/images/pakku-packaging/pakku-packaging.png",
+    src: "/images/pakku-packaging/packaging__1.png",
     alt: "Hero – Pakku Packaging 1",
   },
   {
     id: 2,
-    src: "/images/pakku-packaging/pakku-packaging2.png",
+    src: "/images/pakku-packaging/packaging__2.png",
     alt: "Hero – Pakku Packaging 2",
   },
   {
     id: 3,
-    src: "/images/pakku-packaging/pakku-packaging3.png",
+    src: "/images/pakku-packaging/packaging__3.png",
     alt: "Hero – Pakku Packaging 3",
   },
 ];
@@ -92,7 +92,6 @@ const products = Array.from({ length: 9 }).map((_, i) => ({
   img: "https://images.unsplash.com/photo-1556909114-96b7c8c01728?q=80&w=800&auto=format&fit=crop",
 }));
 
-// ===== UI building blocks =====
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <h3 className="text-lg font-semibold tracking-tight text-slate-800 flex items-center gap-2">
@@ -115,7 +114,8 @@ function SidebarSection({
     <div className="border-b border-slate-200 pb-3">
       <button
         className="w-full flex items-center justify-between py-3"
-        onClick={() => setOpen((v) => !v)}>
+        onClick={() => setOpen((v) => !v)}
+      >
         <SectionTitle>
           <span className="inline-flex items-center gap-2">
             {icon}
@@ -134,7 +134,8 @@ function SidebarSection({
             <li key={idx}>
               <a
                 href="#"
-                className="group flex items-start gap-2 rounded-md px-2 py-1.5 hover:bg-slate-50">
+                className="group flex items-start gap-2 rounded-md px-2 py-1.5 hover:bg-slate-50"
+              >
                 <span className="mt-1 inline-block h-1.5 w-1.5 rounded-full bg-slate-400 group-hover:bg-emerald-500" />
                 <span className="group-hover:text-emerald-600">{it}</span>
               </a>
@@ -150,7 +151,8 @@ function FeatureTile({ t }: { t: (typeof features)[number] }) {
   return (
     <a
       href="#"
-      className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
+      className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
+    >
       <div className="aspect-[4/3] w-full overflow-hidden">
         <img
           src={t.img}
@@ -172,7 +174,8 @@ function ProductCard({ p }: { p: (typeof products)[number] }) {
   return (
     <a
       href="#"
-      className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
+      className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
+    >
       <div className="aspect-square w-full overflow-hidden bg-white">
         <img
           src={p.img}
@@ -195,7 +198,8 @@ function Breadcrumb() {
   return (
     <nav
       className="flex items-center gap-2 text-sm text-slate-500"
-      aria-label="breadcrumb">
+      aria-label="breadcrumb"
+    >
       <a className="hover:text-emerald-700" href="#">
         หน้าแรก
       </a>
@@ -209,12 +213,10 @@ function Breadcrumb() {
   );
 }
 
-// ===== Main Page Component =====
 export default function PakkuCatalogPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
-  // simple auto-slide (optional)
   useEffect(() => {
     const id = setInterval(
       () => setIndex((i) => (i + 1) % slides.length),
@@ -225,44 +227,37 @@ export default function PakkuCatalogPage() {
 
   return (
     <div className="min-h-screen bg-neutral-50 text-slate-900">
-      {/* Header */}
+      <section className="relative isolate w-screen left-1/2 -ml-[50vw]">
+        <div className="relative h-[min(72vh,750px)]">
+          {slides.map((s, i) => (
+            <img
+              key={s.id}
+              src={s.src}
+              alt={s.alt}
+              className={`absolute inset-0 block h-full w-full object-cover transition-opacity duration-700 ${
+                i === index ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          ))}
 
-      {/* Hero slider */}
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-6 md:py-8">
-          <div className="relative overflow-hidden rounded-2xl">
-            {slides.map((s, i) => (
-              <img
-                key={s.id}
-                src={s.src}
-                alt={s.alt}
-                className={`aspect-[21/9] w-full object-cover transition-opacity duration-700 ${
-                  i === index ? "opacity-100" : "opacity-0 absolute inset-0"
-                }`}
-              />
-            ))}
-            {/* Dots */}
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-white/70 px-2 py-1">
-              <div className="flex items-center gap-1.5">
-                {slides.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setIndex(i)}
-                    className={`h-1.5 rounded-full transition-all ${
-                      i === index ? "w-5 bg-emerald-600" : "w-2.5 bg-slate-300"
-                    }`}
-                    aria-label={`สไลด์ที่ ${i + 1}`}
-                  />
-                ))}
-              </div>
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-white/70 px-2 py-1">
+            <div className="flex items-center gap-1.5">
+              {slides.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setIndex(i)}
+                  className={`h-1.5 rounded-full transition-all ${
+                    i === index ? "w-5 bg-emerald-600" : "w-2.5 bg-slate-300"
+                  }`}
+                  aria-label={`สไลด์ที่ ${i + 1}`}
+                />
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Main content area */}
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-6 md:grid-cols-[280px_1fr]">
-        {/* Sidebar (desktop) */}
         <aside className="hidden md:block">
           <div className="sticky top-[88px] rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -281,16 +276,13 @@ export default function PakkuCatalogPage() {
           </div>
         </aside>
 
-        {/* Main column */}
         <main>
-          {/* Feature tiles */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f) => (
               <FeatureTile key={f.title} t={f} />
             ))}
           </div>
 
-          {/* Breadcrumb + heading */}
           <div className="mt-8 flex items-center justify-between gap-4">
             <Breadcrumb />
             <div className="hidden text-sm text-slate-500 md:block">
@@ -298,7 +290,6 @@ export default function PakkuCatalogPage() {
             </div>
           </div>
 
-          {/* Product grid */}
           <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3">
             {products.map((p) => (
               <ProductCard key={p.id} p={p} />
@@ -307,7 +298,6 @@ export default function PakkuCatalogPage() {
         </main>
       </div>
 
-      {/* Mobile sidebar drawer */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal>
           <div
@@ -319,7 +309,8 @@ export default function PakkuCatalogPage() {
               <SectionTitle>แถบหมวดสินค้า</SectionTitle>
               <button
                 className="rounded-lg p-2 hover:bg-slate-100"
-                onClick={() => setSidebarOpen(false)}>
+                onClick={() => setSidebarOpen(false)}
+              >
                 <X className="h-5 w-5" />
               </button>
             </div>
