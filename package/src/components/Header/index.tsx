@@ -1,4 +1,4 @@
-//components\Header\index.tsx
+// components/Header/index.tsx
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
@@ -13,6 +13,7 @@ import LanguageSwitch from "./LanguageSwitch";
 const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [submenuOpenId, setSubmenuOpenId] = useState<number | null>(null);
+  const [scrolled, setScrolled] = useState(false); // ⭐ เพิ่ม state สำหรับเงา
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const path = usePathname();
 
@@ -20,6 +21,14 @@ const Header = () => {
     setSubmenuOpenId(null);
     setNavbarOpen(false);
   }, [path]);
+
+  // ⭐ เงาเมื่อสกรอลล์
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 2);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
@@ -56,7 +65,16 @@ const Header = () => {
   const menu2 = headerData.slice(4);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 bg-white/90 backdrop-blur border-b border-black/10">
+    <header
+      data-site-header
+      className={[
+        "fixed top-0 left-0 right-0 z-40",
+        "bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/80",
+        !scrolled
+          ? "shadow-[0_1px_0_rgba(0,0,0,0.06)]"
+          : "shadow-[0_12px_28px_-16px_rgba(0,0,0,0.28)] md:shadow-[0_18px_48px_-22px_rgba(0,0,0,0.32)]",
+        "transition-shadow duration-300",
+      ].join(" ")}>
       <div className="w-full max-w-screen-2xl mx-auto flex items-center h-16 md:h-20 [@media(min-width:1600px)]:h-[100px] px-3 md:px-4">
         <nav className="desktop-1600 flex-1 justify-end gap-2 min-w-0 whitespace-nowrap items-center">
           {menu1.map((item, i) => (
@@ -70,8 +88,8 @@ const Header = () => {
           ))}
         </nav>
 
-        <div className="overflow-hidden min-w-0  flex items-center flex-1 [@media(min-width:1600px)]:flex-none">
-          <Logo className="w-[clamp(120px,40vw,205px)]  h-auto  max-w-[calc(100vw-72px)]   /* กันโลโก้ไม่ให้ชนปุ่ม (ประมาณ 56–64px) */ " />
+        <div className="overflow-hidden min-w-0 flex items-center flex-1 [@media(min-width:1600px)]:flex-none">
+          <Logo className="w-[clamp(120px,40vw,205px)] h-auto max-w-[calc(100vw-72px)]" />
         </div>
 
         <nav className="desktop-1600 flex-1 justify-start gap-3 min-w-0 items-center whitespace-nowrap">

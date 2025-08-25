@@ -14,9 +14,9 @@ export default function ClientApp() {
       className="
         relative isolate
         min-w-0 max-w-[100vw]
-        overflow-x-hidden   /* แทน overflow-x-clip */">
+        overflow-x-hidden ">
+      /* แทน overflow-x-clip *
       <Hero setIsLoading={setIsLoading} />
-
       <div className="h-8 sm:h-10" aria-hidden />
       {/* <div className="mb-1 sm:mb-1">
         <Aboutus />
