@@ -26,56 +26,63 @@ const data = [
 
 export default function InvestorRelations() {
   return (
-    <section
-      className="
-        relative z-10 isolate
-        bg-cover bg-center dark:bg-darkmode
-        overflow-visible py-10
-      "
-    >
-      <div className="mx-auto w-full max-w-[1100px] px-4">
+    <section className="relative z-10 isolate bg-cover bg-center dark:bg-darkmode overflow-hidden py-10">
+      <div className="mx-auto w-full max-w-[1400px] px-4">
         <h2 className="tpp-section-title"> นักลงทุนสัมพันธ์</h2>
         <br />
         <br />
-        <div className="grid min-w-0 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        {/* คงที่ 320x420 และจัดให้การ์ดชิดกัน */}
+        <div
+          className="
+            grid justify-center gap-3
+            grid-cols-[repeat(auto-fit,minmax(320px,320px))]
+          ">
           {data.map((item, i) => (
             <div
               key={i}
-              className="group relative w-full h-[250px] shadow-lg rounded-[16px] overflow-hidden flex items-end cursor-pointer"
-            >
-              {/* Static Image */}
-              <img
-                src={item.staticImg}
-                alt={item.title}
-                className={`absolute inset-0 w-full h-full object-cover
-                  transition-opacity duration-300
-                  ${item.animatedImg ? "group-hover:opacity-0" : ""}
-                `}
-              />
-              {/* Animated Image (show only if animatedImg exists) */}
+              className="
+                group relative w-[320px] h-[420px]
+                shadow-lg rounded-[16px] overflow-hidden cursor-pointer
+              ">
               {item.animatedImg && (
                 <img
                   src={item.animatedImg}
                   alt={item.title}
-                  className="w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover z-0"
+                  loading="lazy"
                 />
               )}
-              {/* Title */}
+
+              <img
+                src={item.staticImg}
+                alt={item.title}
+                className={`absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-300 ${
+                  item.animatedImg ? "md:group-hover:opacity-0" : ""
+                }`}
+              />
+
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/50 to-transparent z-20" />
+
               <p
-                className="absolute bottom-0 left-0 m-2 text-white text-xl md:text-2xl lg:text-3xl font-extrabold drop-shadow-lg"
+                className="
+                  absolute bottom-0 left-0 m-3
+                  text-white text-2xl md:text-3xl
+                  font-extrabold drop-shadow-lg z-30
+                "
                 style={{
                   textShadow: `
                     2px 2px 6px rgba(0,0,0,0.8),
                     0px 0px 12px #fff,
                     0px 4px 16px rgba(0,0,0,0.8)
                   `,
-                }}
-              >
+                }}>
                 {item.title}
               </p>
             </div>
           ))}
         </div>
+
         <div className="flex justify-center mt-6">
           <button className="ir-btn ir-btn-glow">ดูทั้งหมด</button>
         </div>
