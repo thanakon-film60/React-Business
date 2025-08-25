@@ -96,11 +96,11 @@ const Aboutus = () => {
 
       <div className="relative mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="grid min-w-0 grid-cols-12 items-center min-h-[60svh] py-12 sm:py-16 lg:py-20">
-          <div className="col-span-12 md:col-span-7 lg:col-span-6 xl:col-span-5 min-w-0">
-            <div className="w-full max-w-[clamp(300px,90vw,550px)]">
+          <div className="col-span-12 md:col-start-1 md:col-end-8 lg:col-start-1 lg:col-end-7 xl:col-start-1 xl:col-end-7 min-w-0">
+            <div className="w-full max-w-[clamp(300px,90vw,550px)] md:max-w-none">
               {/* หัวข้อ: คลิปรีวีล + เส้นใต้กวาด */}
               <strong
-                className="block text-[clamp(1.125rem,4.6vw,1.75rem)] font-bold leading-tight custom-Charcoal-gray dark:text-neutral-50 [text-wrap:balance] opacity-0"
+                className="block text-[clamp(1.4375rem,4.6vw,2.0625rem)] font-bold leading-tight custom-Charcoal-gray dark:text-neutral-50 [text-wrap:balance] opacity-0"
                 data-ani="fadeInUp faster delay-200ms">
                 <span>เกี่ยวกับ</span>&nbsp; ไทยบรรจุภัณฑ์และการพิมพ์
               </strong>
@@ -110,9 +110,8 @@ const Aboutus = () => {
                 data-ani="fx-underline-in"
               />
 
-              {/* ย่อหน้า: ฟุ้งขึ้นอย่างสุภาพ (ตั้งดีเลย์เล็กน้อย) */}
               <p
-                className="mt-4 text-[clamp(0.95rem,3.8vw,1rem)] leading-7 break-words custom-Ash-gray dark:text-neutral-300 opacity-0"
+                className="mt-4 text-[clamp(1.1375rem,3.8vw,1.1875rem)] leading-7 break-words custom-Ash-gray dark:text-neutral-300 opacity-0"
                 data-ani="fx-subtle-in-up"
                 style={{ animationDelay: "120ms" }}>
                 <b className="text-red-700">
@@ -131,7 +130,7 @@ const Aboutus = () => {
               {/* ลิงก์: เลื่อนเข้าขวา (ดีเลย์ต่อเนื่อง) */}
               <Link
                 href="#"
-                className="mt-4 inline-flex items-center gap-2 text-primary font-semibold hover:underline text-[clamp(0.95rem,3.4vw,1rem)] opacity-0"
+                className="mt-4 inline-flex items-center gap-2 text-primary font-semibold hover:underline text-[clamp(1.1375rem,3.8vw,1.1875rem)] opacity-0"
                 data-ani="fx-link-in-right"
                 style={{ animationDelay: "220ms" }}>
                 อ่านต่อ{" "}
@@ -141,7 +140,7 @@ const Aboutus = () => {
           </div>
 
           {/* ช่องว่างขวา: แสดงเฉพาะ md+ */}
-          <div className="hidden md:block md:col-span-5 lg:col-span-6 xl:col-span-7" />
+          <div className="hidden md:block md:col-span-5 lg:col-span-6 xl:col-span-6" />
         </div>
       </div>
     </section>

@@ -1097,3 +1097,21 @@ body {
   font-size: 2rem;
   font-weight: bold;
 }
+/* --------------------------------------------------------------------------------------------------- */
+/* === About (Philosophy) backgrounds === */
+.about-vision-bg {
+  background-image: url("/images/aboutus/vision_tpp.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+:root {
+  --endeavor-y: -12px;
+}
+.about-endeavor-bg {
+  background-image: url("/images/aboutus/Endeavor_1.png");
+  background-size: cover;
+  background-position: 50% calc(100% + var(--endeavor-y));
+  background-repeat: no-repeat;
+}

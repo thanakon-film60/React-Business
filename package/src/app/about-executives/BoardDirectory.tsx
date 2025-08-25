@@ -32,7 +32,7 @@ const MEMBERS: Member[] = [
   // === ตัวอย่างชุด "คณะกรรมการ" (12 คน) ===
   {
     id: "m01",
-    name: "นายธีระพงษ์ อศัวินวิจิตร",
+    name: "นายธีระพงษ์ อัศวินวิจิตร",
     role: "ประธานกรรมการ",
     image: "/images/board/User_shadow.png",
     category: "board",
@@ -46,14 +46,14 @@ const MEMBERS: Member[] = [
   },
   {
     id: "m05",
-    name: "นายอดลุย์  วินัยแพทย ์",
+    name: "นายอดุลย์  วินัยแพทย์",
     role: "กรรมการ",
     image: "/images/board/User_shadow.png",
     category: "board",
   },
   {
     id: "m03",
-    name: "ดร.วรัญ แต ้ไพสิฐพงษ",
+    name: "ดร.วรัญ แต้ไพสิฐพงษ์",
     role: "ประธานกรรมการสรรหา และกำหนดค่าตอบแทน",
     image: "/images/board/User_shadow.png",
     category: "board",
@@ -68,7 +68,7 @@ const MEMBERS: Member[] = [
 
   {
     id: "m06",
-    name: "นายเจริญรตน์ หาญเบญจพงศ์",
+    name: "นายเจริญรัตน์ หาญเบญจพงศ์",
     role: "กรรมการอิสระ กรรมการตรวจสอบ",
     image: "/images/board/User_shadow.png",
     category: "board",
@@ -91,20 +91,20 @@ const MEMBERS: Member[] = [
     id: "m09",
     name: "นายพงศธัช อัศวินวิจิตร",
     role: "กรรมการ และ กรรมการผู้จัดการ",
-    image: "/images/board/User_shadow.png",
+    image: "/images/subcommittee/User_shadow2.png",
     category: "board",
   },
   {
     id: "m10",
-    name: "นายอดุม นิลภารักษ์",
+    name: "นายอุดม นิลภารักษ์",
     role: "กรรมการ",
     image: "/images/board/User_shadow.png",
     category: "board",
   },
   {
     id: "m11",
-    name: "ดร.ณัฐสิทธิ์  เจียรวัฒน์ชัย",
-    role: "กรรมการสรรหาและกำหนด  ",
+    name: "ดร.ณัฐสิทธิ์ เจียรวัฒน์ชัย",
+    role: "กรรมการสรรหาและกำหนด",
     image: "/images/board/User_shadow.png",
     category: "board",
   },
@@ -119,7 +119,7 @@ const MEMBERS: Member[] = [
   {
     id: "s01",
     name: "นายพงศธัช อัศวินวิจิตร",
-    role: "กรรมการ และ กรรมการผู้จัดการ",
+    role: "กรรมการผู้จัดการ, กรรมการ",
     image: "/images/subcommittee/User_shadow2.png",
     category: "executive",
   },

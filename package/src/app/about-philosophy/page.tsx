@@ -72,9 +72,20 @@ export default function AboutPhilosophy() {
       <section className="relative isolate w-full overflow-hidden">
         <Image
           src="/images/aboutus/Endeavor.png"
-          alt="Factory and Shipping"
+          alt="Factory and Shipping – base"
           fill
-          className="absolute inset-0 -z-10 object-cover object-bottom"
+          priority
+          sizes="100vw"
+          className="absolute inset-0 -z-20 object-cover object-bottom"
+        />
+        <Image
+          src="/images/aboutus/All_TPP.png"
+          alt="Factory and Shipping – right anchored"
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 -z-10 object-cover select-none pointer-events-none"
+          style={{ objectPosition: "right bottom" }} // <- บังคับชิด END+ล่าง
         />
         {/* ช่วยให้อ่านง่ายบนมือถือ */}
         <div className="absolute inset-0 -z-10 bg-white/75 md:bg-white/40 lg:bg-transparent" />
