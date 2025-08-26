@@ -5,6 +5,7 @@ import Aboutus from "@/components/Home/AboutUs";
 import Dedicated from "@/components/Home/Detail";
 import Insta from "@/components/Home/News";
 import InvestorRelations from "@/components/InvestorRelations";
+import GoGreenHero from "@/app/go-green/page";
 
 export default function ClientApp() {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,15 +15,16 @@ export default function ClientApp() {
       className="
         relative isolate
         min-w-0 max-w-[100vw]
-        overflow-x-hidden ">
-      /* แทน overflow-x-clip *
+        overflow-x-hidden">
       <Hero setIsLoading={setIsLoading} />
-      <div className="h-8 sm:h-10" aria-hidden />
-      {/* <div className="mb-1 sm:mb-1">
+
+      <div className="h-[2px]" aria-hidden />
+
+      <div className="flex flex-col gap-[2px] [&>*]:!my-0">
         <Aboutus />
-      </div> */}
-      <Aboutus />
-      <section className="min-w-0 max-w-[100vw] overflow-x-hidden pb-0 -mb-10">
+        <GoGreenHero />
+      </div>
+      <section className="min-w-0 max-w-[100vw] overflow-x-hidden pb-0">
         <Dedicated />
       </section>
       <div className="-mt-8">
