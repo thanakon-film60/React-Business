@@ -1098,7 +1098,7 @@ body {
   font-weight: bold;
 }
 /* --------------------------------------------------------------------------------------------------- */
-/* === About (Philosophy) backgrounds === */
+/* === About (Philosophy) backgrounds ===
 .about-vision-bg {
   background-image: url("/images/aboutus/vision_tpp.png");
   background-size: cover;
@@ -1114,4 +1114,42 @@ body {
   background-size: cover;
   background-position: 50% calc(100% + var(--endeavor-y));
   background-repeat: no-repeat;
+} */
+
+/* ---------------------------------------------------------------------------------------------------------- */
+/* พื้นหลัง HERO ฝั่งขวา – ใช้ภาพเป็น background */
+.oman-hero-bg {
+  background-image: url("/images/subsidiaries/Oman_Cargo_mapPx.png");
+  background-size: contain; /* ถ้าอยากเห็นภาพครบไม่ครอป เปลี่ยนเป็น contain */
+  background-position: center; /* ปรับเป็น right bottom ได้ถ้าอยากชิดมุมขวาล่าง */
+  background-repeat: no-repeat;
+}
+
+/* ให้มีความสูงขั้นต่ำเวลาหน้าจอเตี้ย ไม่ให้กล่องฟีบ */
+@media (max-width: 767px) {
+  .oman-hero-bg {
+    min-height: 280px;
+  }
+}
+@media (min-width: 768px) {
+  .oman-hero-bg {
+    min-height: 420px;
+  }
+}
+/* ------------------------------------------------------------------------------------------------------------------------ */
+/* Smooth easing เฉพาะใน InvestorRelations */
+[data-iri] .animate__animated {
+  animation-timing-function: cubic-bezier(
+    0.22,
+    0.61,
+    0.36,
+    1
+  ); /* ease-out ที่นุ่ม */
+  will-change: transform, opacity;
+}
+/* ------------------------------------------------------------------------------------------------------------------------ */
+/* Smooth easing เฉพาะคอมโพเนนต์ Dedicated */
+[data-ded] .animate__animated {
+  animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform, opacity;
 }

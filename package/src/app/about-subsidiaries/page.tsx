@@ -1,11 +1,57 @@
+"use client";
+import { useEffect, useRef } from "react";
+
 export default function OmanAirStyleLayout() {
+  const panelRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const el = panelRef.current;
+    if (!el) return;
+
+    const baseDPR = window.devicePixelRatio || 1;
+
+    const update = () => {
+      // 1) พยายามใช้ VisualViewport ก่อน (รองรับ pinch/zoom ได้ดี)
+      const vv = (window as any).visualViewport as VisualViewport | undefined;
+      let pageScale = 1;
+
+      if (vv && typeof vv.scale === "number" && vv.scale > 0) {
+        pageScale = vv.scale; // >1 = ซูมเข้า, <1 = ซูมออก
+      } else {
+        // 2) fallback: เทียบ DPR ปัจจุบันกับค่าเริ่มต้น
+        pageScale = (window.devicePixelRatio || 1) / baseDPR;
+      }
+
+      const inv = 1 / pageScale; // inverse zoom
+      el.style.setProperty("--bg-inv", String(inv));
+    };
+
+    update();
+
+    // ฟังเหตุการณ์ที่อาจเปลี่ยน scale
+    window.addEventListener("resize", update);
+    window.addEventListener("orientationchange", update);
+
+    const vv = (window as any).visualViewport as VisualViewport | undefined;
+    if (vv) {
+      vv.addEventListener("resize", update);
+      vv.addEventListener("scroll", update); // บางเบราว์เซอร์อัปเดต scale ตอนเลื่อน
+    }
+
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("orientationchange", update);
+      if (vv) {
+        vv.removeEventListener("resize", update);
+        vv.removeEventListener("scroll", update);
+      }
+    };
+  }, []);
   return (
     <main className="min-h-dvh w-full overflow-x-hidden bg-neutral-100 p-0">
       {/* Artboard */}
       <section className="h-full w-full bg-white p-6 md:p-8">
-        {/* ------- Split layout: left narrow column, right hero ------- */}
         <div className="grid h-full items-stretch gap-6 lg:grid-cols-2">
-          {/* LEFT COLUMN */}
           <div className="order-1 space-y-5 lg:order-1">
             {/* Card: Company group */}
             <article className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/10">
@@ -76,22 +122,7 @@ export default function OmanAirStyleLayout() {
           </div>
 
           {/* RIGHT HERO PANEL */}
-          <div className="order-2 relative h-full overflow-hidden rounded-2xl bg-black/10 p-0 ring-1 ring-black/10 lg:order-2">
-            {/* Top-right logos */}
-            <div className="pointer-events-none absolute right-6 top-6 z-10 flex items-center gap-4">
-              {/* <div className="h-10 w-28 rounded bg-white/95 ring-1 ring-black/10" />
-              <div className="h-10 w-24 rounded bg-white/95 ring-1 ring-black/10" /> */}
-            </div>
-
-            {/* Map artwork placeholder */}
-            <div className="overflow-hidden rounded-2xl">
-              <img
-                src="/images/subsidiaries/Oman_Cargo_mapPx.png"
-                alt="Hero image"
-                className="block w-full h-auto"
-              />
-            </div>
-          </div>
+          <div className="order-2 relative h-full overflow-hidden rounded-2xl bg-white p-0 lg:order-2 oman-hero-bg ring-0 shadow-none border-0" />
         </div>
       </section>
     </main>
