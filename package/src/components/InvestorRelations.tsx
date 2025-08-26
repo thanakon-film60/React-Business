@@ -2,44 +2,40 @@
 import React, { useEffect, useRef } from "react";
 import "animate.css";
 
-// ====== Data ======
-const cards = [
+const data = [
   {
-    staticImg: "/images/hero/Products-screen-1-img.png",
-    animatedImg: "/images/hero/Products-screen-1.gif",
-    title: "การพัฒนาและการออกแบบ",
+    title: "ข้อมูลทางการเงิน",
+    staticImg: "/images/Header/IR-screen-1-img.png",
+    animatedImg: "/images/Header/IR-screen-1.gif",
   },
   {
-    staticImg: "/images/hero/Products-screen-2-img.png",
-    animatedImg: "/images/hero/Products-screen-2.gif",
-    title: "เตรียมพิมพ์",
+    title: "ข้อมูลราคาหลักทรัพย์",
+    staticImg: "/images/Header/IR-screen-2-img.png",
+    animatedImg: "/images/Header/IR-screen-2.gif",
   },
   {
-    staticImg: "/images/hero/Products-screen-3-img.png",
-    animatedImg: "/images/hero/Products-screen-3.gif",
-    title: "การพิมพ์",
+    title: "ข้อมูลผู้ถือหุ้น",
+    staticImg: "/images/Header/IR-screen-3-img.png",
+    animatedImg: "/images/Header/IR-screen-3.gif",
   },
   {
-    staticImg: "/images/hero/Products-screen-4-img.png",
-    animatedImg: "/images/hero/Products-screen-4.gif",
-    title: "หลังพิมพ์",
+    title: "รายงานประจำปี",
+    staticImg: "/images/Header/IR-screen-4-img.png",
+    animatedImg: "/images/Header/IR-screen-4.gif",
   },
 ];
 
-// ====== Component ======
-export default function Dedicated() {
+export default function InvestorRelations() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const root = sectionRef.current;
     if (!root) return;
 
-    // --- เติม prefix animate__ อัตโนมัติ ---
     const normalizeAni = (ani: string) => {
       const tokens = ani.trim().split(/\s+/).filter(Boolean);
       const out: string[] = [];
       let usesAnimate = false;
-
       tokens.forEach((t) => {
         if (t.startsWith("animate__")) {
           out.push(t);
@@ -63,10 +59,8 @@ export default function Dedicated() {
           out.push(t);
         }
       });
-
-      if (usesAnimate && !out.includes("animate__animated")) {
+      if (usesAnimate && !out.includes("animate__animated"))
         out.push("animate__animated");
-      }
       return out;
     };
 
@@ -101,7 +95,7 @@ export default function Dedicated() {
           }
         });
       },
-      // เริ่มก่อนถึง viewport เล็กน้อย ให้แอนิเมชันจบพอดีกับจังหวะเลื่อน
+      // เริ่มก่อนถึงขอบล่างนิดหน่อย ให้การเคลื่อนไหวจบพอดีตอนผู้ใช้เลื่อนมาเห็น
       { threshold: 0.15, rootMargin: "0px 0px -8% 0px" }
     );
 
@@ -113,48 +107,37 @@ export default function Dedicated() {
     return () => io.disconnect();
   }, []);
 
-  // ——— ปรับความนุ่มและความช้าแบบรวม ———
+  // ——— ปรับให้ช้าและนุ่มขึ้น ———
   const motionVars = {
-    ["--animate-duration" as any]: "0.7s", // ใส่ "slow" => ~1.4s
+    ["--animate-duration" as any]: "0.7s", // พื้นฐาน 0.7s; เมื่อใส่ "slow" จะ ~1.4s
     ["--animate-delay" as any]: "0s",
   } as React.CSSProperties;
 
-  // สเต็ปหน่วงให้ค่อย ๆ ทยอยโผล่
-  const baseDelay = 150; // เดิม 40
-  const step = 120; // เดิม 60
+  const baseDelay = 150; // เดิม 40 → ช้าลง
+  const step = 120; // เดิม 60 → เว้นระยะการ์ดให้หายใจ
 
   return (
     <section
       ref={sectionRef}
-      data-ded
-      className="relative bg-cover bg-center dark:bg-darkmode overflow-hidden py-10"
+      data-iri
+      className="relative z-10 isolate bg-cover bg-center dark:bg-darkmode overflow-hidden py-10"
       style={motionVars}>
-      <div className="awe-parallax awe-static" />
-      <div className="overlay-color-1" />
-
       <div className="mx-auto w-full max-w-[1400px] px-4">
-        {/* หัวข้อ: ช้าลงและนุ่ม */}
         <h2 className="tpp-section-title opacity-0" data-ani="fadeInUp slow">
-          สินค้าและบริการของเรา
+          นักลงทุนสัมพันธ์
         </h2>
 
         <div className="mt-6 md:mt-8" />
 
-        {/* การ์ด: เคลื่อนช้า เนียน และสเต็ปชัด */}
-        <div
-          className="
-            grid justify-center
-            gap-2 md:gap-3
-            grid-cols-[repeat(auto-fit,minmax(320px,320px))]
-          ">
-          {cards.map((item, i) => (
+        <div className="grid justify-center gap-3 grid-cols-[repeat(auto-fit,minmax(320px,320px))]">
+          {data.map((item, i) => (
             <div
               key={i}
               className="
                 group relative w-[320px] h-[420px]
                 shadow-lg rounded-[16px] overflow-hidden cursor-pointer
                 will-change-[transform,opacity] opacity-0
-                transition-transform duration-500 ease-[cubic-bezier(.22,.61,.36,1)]
+                transition-transform duration-500
               "
               data-ani="fadeInUp slow"
               style={{ animationDelay: `${baseDelay + i * step}ms` }}>
@@ -169,12 +152,10 @@ export default function Dedicated() {
 
               <img
                 src={item.staticImg}
-                alt={`${item.title} (static)`}
-                className={`
-                  absolute inset-0 w-full h-full object-cover z-10
-                  transition-opacity duration-500 ease-[cubic-bezier(.22,.61,.36,1)]
-                  ${item.animatedImg ? "md:group-hover:opacity-0" : ""}
-                `}
+                alt={item.title}
+                className={`absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-500 ${
+                  item.animatedImg ? "md:group-hover:opacity-0" : ""
+                }`}
               />
 
               <div
@@ -184,11 +165,7 @@ export default function Dedicated() {
               />
 
               <p
-                className="
-                  absolute bottom-0 left-0 m-3
-                  text-white text-xl md:text-2xl
-                  font-extrabold drop-shadow-lg z-30 opacity-0
-                "
+                className="absolute bottom-0 left-0 m-3 text-white text-2xl md:text-3xl font-extrabold drop-shadow-lg z-30 opacity-0"
                 data-ani="fadeInUp slow"
                 style={{
                   animationDelay: `${baseDelay + i * step + 80}ms`,
@@ -201,10 +178,18 @@ export default function Dedicated() {
                 {item.title}
               </p>
 
-              {/* ยกขึ้นเล็กน้อยตอนโฮเวอร์ */}
-              <div className="absolute inset-0 transition-transform duration-500 ease-[cubic-bezier(.22,.61,.36,1)] group-hover:-translate-y-0.5" />
+              <div className="absolute inset-0 transition-transform duration-500 group-hover:-translate-y-0.5" />
             </div>
           ))}
+        </div>
+
+        <div className="flex justify-center mt-6">
+          <button
+            className="ir-btn ir-btn-glow opacity-0"
+            data-ani="fadeInUp slow"
+            style={{ animationDelay: "240ms" }}>
+            ดูทั้งหมด
+          </button>
         </div>
       </div>
     </section>
