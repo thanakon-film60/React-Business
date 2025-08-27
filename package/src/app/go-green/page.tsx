@@ -74,7 +74,7 @@ export default function GoGreenSection({
   imageSrc = "/images/go-green/go_green_home_page_3.png",
   imageAlt = "Go Green",
   title = "Sustainability at TPP",
-  subtitle = ``,
+  subtitle = `" ขับเคลื่อนการเติบโตอย่างยั่งยืน เพื่อธุรกิจ สังคม และโลกใบนี้ "`,
   features = SAMPLE_FEATURES,
   imageFit = "cover", // "cover" | "contain"
 }: {
@@ -106,12 +106,14 @@ export default function GoGreenSection({
         relative left-1/2 -ml-[50vw] w-screen -mr-[50vw]
         isolate bg-neutral-100 !py-0 !my-0
       "
-      style={{ minHeight: "calc(100svh - 128px)" }}>
+      style={{ minHeight: "calc(100svh - 128px)" }}
+    >
       <div className="grid h-full grid-cols-1 md:grid-cols-2">
         {/* Left: full-bleed image */}
         <motion.div
           variants={imageZoomIn}
-          className="relative h-full min-h-[560px] overflow-hidden will-change-transform">
+          className="relative h-full min-h-[560px] overflow-hidden will-change-transform"
+        >
           <div className="absolute inset-0">
             <Image
               src={imageSrc}
@@ -133,7 +135,8 @@ export default function GoGreenSection({
         {/* Right: heading + feature cards */}
         <motion.div
           variants={slideRight}
-          className="relative flex h-full flex-col bg-neutral-200/70 p-8 md:p-12 xl:p-16">
+          className="relative flex h-full flex-col bg-neutral-200/70 p-8 md:p-12 xl:p-16"
+        >
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
@@ -142,20 +145,21 @@ export default function GoGreenSection({
               ease: [0.22, 1, 0.36, 1],
               delay: 0.12,
             }}
-            className="inline-block text-white text-center p-0 shadow-none ring-0">
+            className="inline-block text-white text-center p-0 shadow-none ring-0"
+          >
             <h4
               className="fs-42 font-extrabold leading-tight text-black text-center"
-              style={{ textShadow: "0 1px 6px rgba(0,0,0,0.25)" }}>
-              " ขับเคลื่อนการเติบโตอย่างยั่งยืน เพื่อธุรกิจ สังคม และโลกใบนี้ "
-            </h4>
-            <p className="mt-2 text-base md:text-lg/relaxed opacity-95">
+              style={{ textShadow: "0 1px 6px rgba(0,0,0,0.25)" }}
+            >
               {subtitle}
-            </p>
+            </h4>
+            <p className="mt-2 text-base md:text-lg/relaxed opacity-95"></p>
           </motion.div>
 
           <motion.div
             variants={gridStagger}
-            className="mt-8 md:mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            className="mt-8 md:mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          >
             {features.map((f, i) => (
               <motion.article
                 key={`${f.title}-${i}`}
@@ -166,7 +170,8 @@ export default function GoGreenSection({
                 tabIndex={0}
                 role="group"
                 aria-label={f.title}
-                className="rounded-2xl bg-white p-6 md:p-7 text-center shadow ring-1 ring-black/5 outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/60">
+                className="rounded-2xl bg-white p-6 md:p-7 text-center shadow ring-1 ring-black/5 outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/60"
+              >
                 <div className="relative mx-auto mb-4 h-16 w-16 md:h-20 md:w-20 will-change-transform">
                   <motion.div
                     initial={{ y: 0 }}
@@ -176,7 +181,8 @@ export default function GoGreenSection({
                       duration: 4,
                       ease: "easeInOut",
                     }}
-                    className="absolute inset-0">
+                    className="absolute inset-0"
+                  >
                     <Image
                       src={f.icon}
                       alt={f.title}
@@ -192,7 +198,8 @@ export default function GoGreenSection({
                 {f.lines?.map((t, idx) => (
                   <div
                     key={idx}
-                    className="text-sm md:text-base leading-snug text-gray-600">
+                    className="text-sm md:text-base leading-snug text-gray-600"
+                  >
                     {t}
                   </div>
                 ))}
