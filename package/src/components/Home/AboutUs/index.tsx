@@ -91,6 +91,7 @@ const Aboutus = () => {
   return (
     <section
       ref={sectionRef}
+      data-ani="fx-kenburns-in fx-kenburns-drift"
       className="about-bg-image relative bg-cover bg-center md:overflow-hidden dark:bg-neutral-900">
       <div className="absolute inset-0 md:hidden pointer-events-none bg-gradient-to-r from-white/70 to-white/0 dark:from-black/50 dark:to-transparent" />
 
@@ -129,7 +130,7 @@ const Aboutus = () => {
 
               {/* ลิงก์: เลื่อนเข้าขวา (ดีเลย์ต่อเนื่อง) */}
               <Link
-                href="#"
+                href="/about-history"
                 className="mt-4 inline-flex items-center gap-2 text-primary font-semibold hover:underline text-[clamp(1.1375rem,3.8vw,1.1875rem)] opacity-0"
                 data-ani="fx-link-in-right"
                 style={{ animationDelay: "220ms" }}>
