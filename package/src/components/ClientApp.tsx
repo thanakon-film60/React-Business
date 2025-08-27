@@ -18,9 +18,9 @@ export default function ClientApp() {
         overflow-x-hidden">
       <Hero setIsLoading={setIsLoading} />
 
-      <div className="h-[2px]" aria-hidden />
+      <div className="h-[96px]" aria-hidden />
 
-      <div className="flex flex-col gap-[2px] [&>*]:!my-0">
+      <div className="flex flex-col gap-[1in] [&>*]:!my-0">
         <Aboutus />
         <GoGreenHero />
       </div>

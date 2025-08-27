@@ -71,7 +71,7 @@ export default function AboutPhilosophy() {
       {/* ส่วนล่าง */}
       <section className="relative isolate w-full overflow-hidden">
         <Image
-          src="/images/aboutus/Endeavor_2.png"
+          src="/images/aboutus/Endeavor_3.png"
           alt="Factory and Shipping – base"
           fill
           priority
