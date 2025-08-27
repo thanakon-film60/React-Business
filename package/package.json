@@ -51,5 +51,11 @@
   },
   "engines": {
     "node": ">=18.17.0"
+  },
+  "eslintConfig": {
+    "extends": "next/core-web-vitals",
+    "rules": {
+      "react/no-unescaped-entities": "off"
+    }
   }
 }
