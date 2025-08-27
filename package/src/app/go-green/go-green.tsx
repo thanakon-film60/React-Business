@@ -117,7 +117,7 @@ export default function GoGreenSection({
           <div className="absolute inset-0">
             <Image
               src={imageSrc}
-              alt={imageAlt}
+              alt=""
               fill
               priority
               sizes="100vw"
