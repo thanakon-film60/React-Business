@@ -50,6 +50,80 @@ a {
   background-repeat: no-repeat;
   min-height: 400px; /* กำหนดความสูงขั้นต่ำ */
 }
+/* ------------------------------------------------------------------ */
+/* โครตจะเอฟเฟ็ค */
+/* ให้ section เป็น context ของ pseudo-element */
+.about-bg-image {
+  position: relative;
+  /* ปรับเริ่มต้น (ปรับได้ตามใจ) */
+  --kb-scale-start: 1.06; /* ซูมเข้าก่อนค่อยคลาย */
+  --kb-translate-y: 12px; /* ขยับขึ้นเล็กน้อย */
+}
+
+/* สร้างเลเยอร์พื้นหลังสำหรับเล่นแอนิเมชัน */
+.about-bg-image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1; /* อยู่หลังคอนเทนต์ */
+  will-change: transform, opacity;
+
+  /* สืบทอดค่าพื้นหลังจากตัวจริง */
+  background: inherit; /* รวม image/position/repeat/size ถ้าตั้งที่พาเรนต์ */
+  background-image: inherit;
+  background-position: inherit;
+  background-repeat: inherit;
+  background-size: inherit;
+
+  /* สภาพก่อนเริ่ม */
+  opacity: 0;
+  transform: scale(var(--kb-scale-start)) translateY(var(--kb-translate-y));
+  filter: blur(0.25px); /* เบลอจิ๋ว ๆ ให้ดูนุ่ม (ปรับ/ลบได้) */
+}
+
+/* เมื่อ IO ใส่คลาสนี้ (จาก data-ani) ให้เล่นเอฟเฟกต์เข้า */
+.about-bg-image.fx-kenburns-in::before {
+  animation: kb-in 1200ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* (ทางเลือก) หลังเฟดเข้าแล้ว ค่อยลอยช้า ๆ ต่ออีกนิดให้มีชีวิต */
+.about-bg-image.fx-kenburns-in.fx-kenburns-drift::before {
+  animation: kb-in 1200ms cubic-bezier(0.22, 1, 0.36, 1) forwards,
+    kb-drift 18s ease-in-out 1200ms infinite alternate;
+}
+
+/* คีย์เฟรม */
+@keyframes kb-in {
+  0% {
+    opacity: 0;
+    transform: scale(var(--kb-scale-start)) translateY(var(--kb-translate-y));
+    filter: blur(0.25px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes kb-drift {
+  0% {
+    transform: scale(1) translateY(0px);
+  }
+  100% {
+    transform: scale(1.02) translateY(-6px);
+  }
+}
+
+/* เข้าถึงได้สำหรับผู้ใช้ลดแอนิเมชัน */
+@media (prefers-reduced-motion: reduce) {
+  .about-bg-image::before {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}
 
 /* ------------------------------------------------------------------ */
 
@@ -1152,4 +1226,9 @@ body {
 [data-ded] .animate__animated {
   animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
   will-change: transform, opacity;
+}
+/* ------------------------------------------------------------------------------------------------------------------------- */
+/* ขนาดบังคับ */
+.fs-42 {
+  font-size: 42px !important;
 }
