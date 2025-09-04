@@ -3,7 +3,7 @@
 import Image from "next/image";
 import React from "react";
 import { motion, useReducedMotion, Variants } from "framer-motion";
-import { SAMPLE_FEATURES, type Feature } from "./data";
+import { SAMPLE_FEATURES, type Feature } from "./data"; // ปล่อย path นี้ไว้เหมือนเดิม
 
 // ===== Animation helpers =====
 function useAnims() {
@@ -168,7 +168,7 @@ export default function GoGreenSection({
               whileInView="visible"
               viewport={{ once: false, amount: 0.2 }}
               className="mt-4 sm:mt-6 md:mt-8 grid gap-3 sm:gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
-              {features.map((f, i) => (
+              {features.map((f: Feature, i: number) => (
                 <motion.article
                   key={`${f.title}-${i}`}
                   variants={cardUp}
@@ -198,10 +198,12 @@ export default function GoGreenSection({
                       />
                     </motion.div>
                   </div>
+
                   <div className="text-sm sm:text-base md:text-xl font-extrabold text-gray-800 group-focus:text-cyan-700">
                     {f.title}
                   </div>
-                  {f.lines?.map((t, idx) => (
+
+                  {f.lines?.map((t: string, idx: number) => (
                     <div
                       key={idx}
                       className="text-xs sm:text-sm md:text-base leading-snug text-gray-600">
