@@ -1,48 +1,38 @@
+// package/src/components/LoadingContext.tsx
 "use client";
+
 import React, {
   createContext,
   useContext,
   useMemo,
-  useRef,
   useState,
+  useCallback,
   ReactNode,
 } from "react";
 
-type Ctx = {
-  isLoading: boolean;
-  showLoading: () => void;
-  hideLoading: () => void;
-  withLoading: <T>(promise: Promise<T>) => Promise<T>;
+type LoadingCtx = {
+  loading: boolean;
+  setLoading: (v: boolean) => void;
+  withLoading<T>(p: Promise<T>): Promise<T>;
 };
 
-const LoadingContext = createContext<Ctx | undefined>(undefined);
+const LoadingContext = createContext<LoadingCtx | undefined>(undefined);
 
 export function LoadingProvider({ children }: { children: ReactNode }) {
-  const [isLoading, setIsLoading] = useState(false);
-  const counterRef = useRef(0); // กันเคสเรียกซ้อนหลายครั้ง
+  const [loading, setLoading] = useState(false);
 
-  const showLoading = () => {
-    counterRef.current += 1;
-    if (!isLoading) setIsLoading(true);
-  };
-
-  const hideLoading = () => {
-    counterRef.current = Math.max(0, counterRef.current - 1);
-    if (counterRef.current === 0) setIsLoading(false);
-  };
-
-  const withLoading = async <T,>(promise: Promise<T>) => {
-    showLoading();
+  const withLoading = useCallback(async <T,>(p: Promise<T>): Promise<T> => {
     try {
-      return await promise;
+      setLoading(true);
+      return await p;
     } finally {
-      hideLoading();
+      setLoading(false);
     }
-  };
+  }, []);
 
   const value = useMemo(
-    () => ({ isLoading, showLoading, hideLoading, withLoading }),
-    [isLoading]
+    () => ({ loading, setLoading, withLoading }),
+    [loading, withLoading]
   );
 
   return (
@@ -52,6 +42,6 @@ export function LoadingProvider({ children }: { children: ReactNode }) {
 
 export function useLoading() {
   const ctx = useContext(LoadingContext);
-  if (!ctx) throw new Error("useLoading must be used within LoadingProvider");
+  if (!ctx) throw new Error("useLoading must be used within <LoadingProvider>");
   return ctx;
 }
