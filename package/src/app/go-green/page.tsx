@@ -1,10 +1,19 @@
+// src/app/go-green/page.tsx
+import type { Metadata } from "next";
 import GoGreenSection from "./GoGreenSection";
 
-type PageProps = {
-  params: Record<string, string>;
-  searchParams?: Record<string, string | string[] | undefined>;
+export const metadata: Metadata = {
+  title: "Go Green",
+  description: "Sustainability at TPP",
 };
 
-export default function Page(_props: PageProps) {
-  return <GoGreenSection />;
+export default function Page() {
+  return (
+    <GoGreenSection
+      title="Sustainability at TPP"
+      imageFit="cover"
+      textFirstOnMobile={false}
+      imagePosition="left"
+    />
+  );
 }
