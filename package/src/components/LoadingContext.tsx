@@ -8,6 +8,7 @@ import React, {
 
 type LoadingCtx = {
   loading: boolean;
+  isLoading: boolean;
   showLoading: () => void;
   hideLoading: () => void;
   withLoading: <T>(fn: () => Promise<T>) => Promise<T>;
@@ -30,7 +31,13 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ loading, showLoading, hideLoading, withLoading }),
+    () => ({
+      loading,
+      isLoading: loading,
+      showLoading,
+      hideLoading,
+      withLoading,
+    }),
     [loading, showLoading, hideLoading, withLoading]
   );
 
