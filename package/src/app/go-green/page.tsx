@@ -1,4 +1,3 @@
-// src/app/go-green/page.tsx
 import type { Metadata } from "next";
 import GoGreenSection from "./GoGreenSection";
 
