@@ -27,7 +27,7 @@ export const SAMPLE_FEATURES: Feature[] = [
   {
     icon: "/images/go-green/icons/truck_1.png",
     title: "Green Transport",
-    lines: ["ลดการปล่อย", "ก๊าซคาร์บอนไดออกไซด์และมลภาวะสู่สิ่งแวดล้อม"],
+    lines: ["ลดการปล่อย", "ก๊าซคาร์บอนไดออกไซด์และมลภาวะ", "สู่สิ่งแวดล้อม"],
   },
   {
     icon: "/images/go-green/icons/property-document_14001_1.png",
