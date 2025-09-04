@@ -1,19 +1,19 @@
 "use client";
-import { useLoading } from "@/components/LoadingContext";
+import React from "react";
+import { useLoading } from "./LoadingContext";
 
 export default function LoadingOverlay() {
-  const { isLoading } = useLoading();
+  const { loading: isLoading } = useLoading();
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 transition-opacity
-        ${
-          isLoading
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}>
-      <div className="rounded-xl bg-white px-5 py-4 shadow">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-black/20 border-t-black mx-auto" />
-        <div className="mt-2 text-sm">Loading…</div>
+      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 transition-opacity ${
+        isLoading
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
+      }`}>
+      <div className="inline-flex items-center gap-3 rounded-xl bg-white/90 px-4 py-3 shadow-lg ring-1 ring-black/5">
+        <span className="size-3 animate-ping rounded-full bg-cyan-500" />
+        <span className="text-sm font-medium text-gray-700">Loading…</span>
       </div>
     </div>
   );

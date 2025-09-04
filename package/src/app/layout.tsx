@@ -1,3 +1,4 @@
+// package/src/app/layout.tsx
 import "./globals.css";
 import localFont from "next/font/local";
 import Header from "@/components/Header";
@@ -11,11 +12,12 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "../app/globals.css";
 import DevMiniToolbar from "@/components/DevMiniToolbar";
 
-import { LoadingProvider } from "@/components/LoadingContext";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import NavProgress from "@/components/NavProgress";
 import HomeBackground from "@/components/HomeBackground";
 import { Suspense } from "react";
+
+import Providers from "./providers"; // << ใช้ Providers ที่แยกเป็น client file แล้ว
 
 export const metadata: Metadata = {
   title: "THAI PACKAGING & PRINTING PCL",
@@ -37,7 +39,7 @@ export default function RootLayout({
     <html lang="th" suppressHydrationWarning>
       <body
         className={`about-bg-image-background min-h-dvh overflow-x-hidden antialiased ${font.className}`}>
-        <LoadingProvider>
+        <Providers>
           <Suspense fallback={null}>
             <HomeBackground />
           </Suspense>
@@ -75,7 +77,7 @@ export default function RootLayout({
           <Suspense fallback={null}>
             <ScrollToTop />
           </Suspense>
-        </LoadingProvider>
+        </Providers>
       </body>
     </html>
   );
