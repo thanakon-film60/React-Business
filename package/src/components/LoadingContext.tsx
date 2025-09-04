@@ -1,47 +1,44 @@
-// package/src/components/LoadingContext.tsx
-"use client";
-
 import React, {
   createContext,
   useContext,
   useMemo,
   useState,
   useCallback,
-  ReactNode,
 } from "react";
 
 type LoadingCtx = {
   loading: boolean;
-  setLoading: (v: boolean) => void;
-  withLoading<T>(p: Promise<T>): Promise<T>;
+  showLoading: () => void;
+  hideLoading: () => void;
+  withLoading: <T>(fn: () => Promise<T>) => Promise<T>;
 };
 
-const LoadingContext = createContext<LoadingCtx | undefined>(undefined);
+const Ctx = createContext<LoadingCtx | null>(null);
 
-export function LoadingProvider({ children }: { children: ReactNode }) {
+export function LoadingProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(false);
 
-  const withLoading = useCallback(async <T,>(p: Promise<T>): Promise<T> => {
+  const showLoading = useCallback(() => setLoading(true), []);
+  const hideLoading = useCallback(() => setLoading(false), []);
+  const withLoading = useCallback(async <T,>(fn: () => Promise<T>) => {
+    setLoading(true);
     try {
-      setLoading(true);
-      return await p;
+      return await fn();
     } finally {
       setLoading(false);
     }
   }, []);
 
   const value = useMemo(
-    () => ({ loading, setLoading, withLoading }),
-    [loading, withLoading]
+    () => ({ loading, showLoading, hideLoading, withLoading }),
+    [loading, showLoading, hideLoading, withLoading]
   );
 
-  return (
-    <LoadingContext.Provider value={value}>{children}</LoadingContext.Provider>
-  );
+  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
 export function useLoading() {
-  const ctx = useContext(LoadingContext);
-  if (!ctx) throw new Error("useLoading must be used within <LoadingProvider>");
+  const ctx = useContext(Ctx);
+  if (!ctx) throw new Error("useLoading must be used within LoadingProvider");
   return ctx;
 }
