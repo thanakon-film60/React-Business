@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://tpp-thanakon.store/sitemap.xml
