@@ -71,7 +71,7 @@ function useAnims() {
 export default function GoGreenSection({
   imageSrc = "/images/go-green/go_green_home_page_3.png",
   imageAlt = "Go Green",
-  title = "Sustainability at TPP",
+  title = " ขับเคลื่อนการเติมโตอย่างยั่งยืน เพื่อธุรกิจ สังคม และ โลกใบนี้",
   subtitle = ``,
   features = SAMPLE_FEATURES,
   imageFit = "cover", // "cover" | "contain"
