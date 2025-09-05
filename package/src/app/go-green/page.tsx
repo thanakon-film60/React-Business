@@ -1,9 +1,12 @@
-import GoGreenSection from "@/app/go-green/go-green";
+import GoGreenSection from "./GoGreenSection";
 
 export default function Page() {
   return (
-    <div>
-      <GoGreenSection />
-    </div>
+    <GoGreenSection
+      title={`" ขับเคลื่อนการเติบโตอย่างยั่งยืน เพื่อธุรกิจ สังคม และโลกใบนี้ "`}
+      imageFit="cover"
+      textFirstOnMobile={false}
+      imagePosition="left"
+    />
   );
 }

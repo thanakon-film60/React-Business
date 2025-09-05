@@ -1,57 +1,51 @@
-"use client";
 import React, {
   createContext,
   useContext,
   useMemo,
-  useRef,
   useState,
-  ReactNode,
+  useCallback,
 } from "react";
 
-type Ctx = {
+type LoadingCtx = {
+  loading: boolean;
   isLoading: boolean;
   showLoading: () => void;
   hideLoading: () => void;
-  withLoading: <T>(promise: Promise<T>) => Promise<T>;
+  withLoading: <T>(fn: () => Promise<T>) => Promise<T>;
 };
 
-const LoadingContext = createContext<Ctx | undefined>(undefined);
+const Ctx = createContext<LoadingCtx | null>(null);
 
-export function LoadingProvider({ children }: { children: ReactNode }) {
-  const [isLoading, setIsLoading] = useState(false);
-  const counterRef = useRef(0); // กันเคสเรียกซ้อนหลายครั้ง
+export function LoadingProvider({ children }: { children: React.ReactNode }) {
+  const [loading, setLoading] = useState(false);
 
-  const showLoading = () => {
-    counterRef.current += 1;
-    if (!isLoading) setIsLoading(true);
-  };
-
-  const hideLoading = () => {
-    counterRef.current = Math.max(0, counterRef.current - 1);
-    if (counterRef.current === 0) setIsLoading(false);
-  };
-
-  const withLoading = async <T,>(promise: Promise<T>) => {
-    showLoading();
+  const showLoading = useCallback(() => setLoading(true), []);
+  const hideLoading = useCallback(() => setLoading(false), []);
+  const withLoading = useCallback(async <T,>(fn: () => Promise<T>) => {
+    setLoading(true);
     try {
-      return await promise;
+      return await fn();
     } finally {
-      hideLoading();
+      setLoading(false);
     }
-  };
+  }, []);
 
   const value = useMemo(
-    () => ({ isLoading, showLoading, hideLoading, withLoading }),
-    [isLoading]
+    () => ({
+      loading,
+      isLoading: loading,
+      showLoading,
+      hideLoading,
+      withLoading,
+    }),
+    [loading, showLoading, hideLoading, withLoading]
   );
 
-  return (
-    <LoadingContext.Provider value={value}>{children}</LoadingContext.Provider>
-  );
+  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
 export function useLoading() {
-  const ctx = useContext(LoadingContext);
+  const ctx = useContext(Ctx);
   if (!ctx) throw new Error("useLoading must be used within LoadingProvider");
   return ctx;
 }

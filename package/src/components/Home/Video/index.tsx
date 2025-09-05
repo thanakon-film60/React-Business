@@ -51,8 +51,8 @@ export default function Hero({ setIsLoading }: HeroProps) {
         aria-hidden="true"
         tabIndex={-1}
         disablePictureInPicture>
-        <source src="/images/video/fixed-banner-video.webm" type="video/webm" />
-        <source src="/images/video/fixed-banner-video.mp4" type="video/mp4" />
+        <source src="/images/video/tpp-thanakon.webm" type="video/webm" />
+        <source src="/images/video/tpp-thanakon.mp4" type="video/mp4" />
       </video>
 
       <img
