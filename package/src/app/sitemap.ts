@@ -9,19 +9,39 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
   const pages = [
-    "/",
-    "/about",
-    "/vision-mission",
-    "/history",
-    "/go-green",
-    "/investor-relations",
-    "/board",
-    "/executives",
-    "/subsidiaries",
-    "/subsidiaries/oman-air-cargo",
-    "/products",
-    "/products/pakku",
-    "/contact",
+    "/", // หน้าหลัก
+
+    // เกี่ยวกับเรา
+    "/about-philosophy",
+    "/about-history",
+    "/about-executives",
+    "/about-subsidiaries",
+
+    // สินค้าและบริการ
+    "/products-pakku-packaging",
+    "/our-services",
+    "/our-customers",
+
+    // โรงงานและมาตรฐาน
+    "/factory-technology",
+    "/quality-control",
+    "/quality-certification",
+    "/awards-achievements",
+
+    // คอนเทนต์
+    "/news-events",
+    "/articles",
+
+    // นักลงทุนสัมพันธ์
+    "/investor-financials",
+    "/investor-governance",
+    "/investor-shareholders",
+    "/investor-downloads",
+    "/investor-contact",
+
+    // ติดต่อเรา
+    "/careers",
+    "/contact-inquiry",
   ];
 
   return pages.map((p) => ({
