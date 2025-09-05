@@ -1,30 +1,33 @@
-// app/sitemap.ts
+// src/app/sitemap.ts
 import type { MetadataRoute } from "next";
+
+export const dynamic = "force-static";
+export const revalidate = 3600;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://tpp-thanakon.store";
   const now = new Date();
 
   const pages = [
-    "/", // Home
-    "/about", // About Us
-    "/vision-mission", // Vision & Mission
-    "/history", // Timeline / History
-    "/go-green", // Sustainability (Go Green)
-    "/investor-relations", // Investor Relations (hub)
-    "/board", // Board of Directors
-    "/executives", // Executive Team
-    "/subsidiaries", // Subsidiaries (hub)
-    "/subsidiaries/oman-air-cargo", // Oman Air Cargo (TH representation)
-    "/products", // Products (hub)
-    "/products/pakku", // Pakku Packaging catalog
-    "/contact", // Contact
+    "/",
+    "/about",
+    "/vision-mission",
+    "/history",
+    "/go-green",
+    "/investor-relations",
+    "/board",
+    "/executives",
+    "/subsidiaries",
+    "/subsidiaries/oman-air-cargo",
+    "/products",
+    "/products/pakku",
+    "/contact",
   ];
 
-  return pages.map((path) => ({
-    url: `${base}${path}`,
+  return pages.map((p) => ({
+    url: `${base}${p}`,
     lastModified: now,
     changeFrequency: "weekly",
-    priority: path === "/" ? 1 : 0.7,
+    priority: p === "/" ? 1 : 0.7,
   }));
 }
