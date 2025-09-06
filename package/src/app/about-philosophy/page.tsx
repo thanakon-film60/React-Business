@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "วิสัยทัศน์และพันธกิจ | TPP",
+  title: "วิสัยทัศน์และพันธกิจ",
   description: "หน้าแสดงวิสัยทัศน์และพันธกิจ",
 };
 export default function AboutPhilosophy() {
