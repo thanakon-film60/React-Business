@@ -47,11 +47,10 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          # appleboy/ssh-action ดีฟอลต์ port = 22 ถ้าไม่ตั้งค่า สามารถลบบรรทัดนี้ได้
+          
           port: ${{ secrets.SSH_PORT }}
           script: |
             set -eo pipefail
-
             APP_DIR="/var/www/React-Business"
             cd "$APP_DIR"
 
