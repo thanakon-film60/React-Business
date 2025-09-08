@@ -63,39 +63,73 @@ const Aboutus = () => {
       return;
     }
 
-    // Enhanced intersection observer with staggered animations
+    // Track trigger state
+    let currentlyTriggered = false;
+
+    // Function to trigger all animations
+    const triggerAllAnimations = () => {
+      els.forEach((elem) => {
+        const elemClasses = normalizeAni(elem.dataset.ani || "");
+        const elemStagger = parseInt(elem.dataset.stagger || "0");
+
+        setTimeout(() => {
+          elem.classList.remove(...elemClasses);
+          void elem.offsetWidth; // Force reflow
+          elem.classList.add(...elemClasses);
+          elem.classList.remove("opacity-0");
+          elem.style.transform = "none";
+        }, elemStagger);
+      });
+    };
+
+    // Function to reset all animations
+    const resetAllAnimations = () => {
+      els.forEach((elem) => {
+        const elemClasses = normalizeAni(elem.dataset.ani || "");
+        elem.classList.remove(...elemClasses);
+        elem.classList.add("opacity-0");
+        elem.style.transform = "";
+      });
+    };
+
+    // Enhanced intersection observer with 50% threshold
     const io = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry, index) => {
+        entries.forEach((entry) => {
           const el = entry.target as HTMLElement;
-          const classes = normalizeAni(el.dataset.ani || "");
+          const isTrigger = el.dataset.trigger === "true";
 
-          if (entry.isIntersecting) {
-            // Add stagger delay for sequential elements
-            const staggerDelay = parseInt(el.dataset.stagger || "0");
-
-            setTimeout(() => {
-              el.classList.remove(...classes);
-              void el.offsetWidth; // Force reflow
-              el.classList.add(...classes);
-              el.classList.remove("opacity-0");
-              el.style.transform = "none";
-            }, staggerDelay);
-
-            setIsVisible(true);
-          } else {
-            el.classList.remove(...classes);
-            el.classList.add("opacity-0");
+          if (isTrigger) {
+            // Check if element is 50% visible
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+              if (!currentlyTriggered) {
+                currentlyTriggered = true;
+                triggerAllAnimations();
+                setIsVisible(true);
+              }
+            } else {
+              // When trigger element is out of view, reset everything
+              if (currentlyTriggered) {
+                currentlyTriggered = false;
+                resetAllAnimations();
+                setIsVisible(false);
+              }
+            }
           }
         });
       },
       {
-        threshold: [0.1, 0.3, 0.5],
-        rootMargin: "0px 0px -50px 0px",
+        threshold: [0, 0.25, 0.5, 0.75, 1], // Multiple thresholds including 50%
+        rootMargin: "0px",
       }
     );
 
-    els.forEach((el) => io.observe(el));
+    // Only observe the trigger element
+    const triggerElement = root.querySelector('[data-trigger="true"]');
+    if (triggerElement) {
+      io.observe(triggerElement);
+    }
+
     return () => io.disconnect();
   }, []);
 
@@ -215,8 +249,7 @@ const Aboutus = () => {
       ref={sectionRef}
       style={sectionStyles}
       data-ani="fx-kenburns-in fx-kenburns-drift"
-      className="about-section-responsive relative overflow-hidden dark:bg-neutral-900"
-    >
+      className="about-section-responsive relative overflow-hidden dark:bg-neutral-900">
       {/* Enhanced gradient overlays for better text readability */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent dark:from-black/80 dark:via-black/60 dark:to-transparent md:from-white/85 md:via-white/50 lg:from-white/75 lg:via-transparent" />
@@ -242,8 +275,7 @@ const Aboutus = () => {
               <div
                 className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-100 dark:bg-red-900/30 rounded-full mb-4 opacity-0"
                 data-ani="bounceIn"
-                data-stagger="0"
-              >
+                data-stagger="0">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
@@ -253,29 +285,30 @@ const Aboutus = () => {
                 </span>
               </div>
 
-              {/* Main heading with split text animation */}
-              <h1 className="opacity-0" data-ani="fadeInUp" data-stagger="100">
+              {/* Main heading with trigger - THIS IS THE TRIGGER ELEMENT */}
+              <h1
+                className="opacity-0"
+                data-ani="fadeInUp"
+                data-stagger="0"
+                data-trigger="true">
                 <span className="block text-[clamp(1.25rem,3.5vw,1.75rem)] sm:text-[clamp(1.5rem,4vw,2rem)] lg:text-[clamp(1.75rem,4.5vw,2.5rem)] font-bold leading-tight custom-Charcoal-gray dark:text-neutral-50">
                   <span
-                    className="inline-block"
+                    className="inline-block opacity-0"
                     data-ani="rotateIn"
-                    data-stagger="150"
-                  >
+                    data-stagger="50">
                     เกี่ยวกับ
                   </span>
                   <span
-                    className="inline-block ml-2 text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-800 dark:from-red-400 dark:to-red-600"
+                    className="inline-block ml-2 text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 opacity-0"
                     data-ani="flipInX"
-                    data-stagger="200"
-                  >
+                    data-stagger="100">
                     ไทยบรรจุภัณฑ์
                   </span>
                 </span>
                 <span
-                  className="block text-[clamp(1.25rem,3.5vw,1.75rem)] sm:text-[clamp(1.5rem,4vw,2rem)] lg:text-[clamp(1.75rem,4.5vw,2.5rem)] font-bold custom-Charcoal-gray dark:text-neutral-50"
+                  className="block text-[clamp(1.25rem,3.5vw,1.75rem)] sm:text-[clamp(1.5rem,4vw,2rem)] lg:text-[clamp(1.75rem,4.5vw,2.5rem)] font-bold custom-Charcoal-gray dark:text-neutral-50 opacity-0"
                   data-ani="fadeInUp"
-                  data-stagger="250"
-                >
+                  data-stagger="150">
                   และการพิมพ์
                 </span>
               </h1>
@@ -284,8 +317,7 @@ const Aboutus = () => {
               <div
                 className="relative mt-3 mb-6 opacity-0"
                 data-ani="fx-underline-in"
-                data-stagger="300"
-              >
+                data-stagger="200">
                 <span className="block h-1 w-24 bg-gradient-to-r from-red-500 to-red-700 rounded-full" />
                 <span className="block h-1 w-16 bg-gradient-to-r from-red-300 to-red-500 rounded-full mt-2 ml-8 animate-pulse" />
               </div>
@@ -294,8 +326,7 @@ const Aboutus = () => {
               <div
                 className="space-y-4 opacity-0"
                 data-ani="fadeInUp"
-                data-stagger="400"
-              >
+                data-stagger="250">
                 <p className="text-[clamp(0.95rem,2.5vw,1.125rem)] sm:text-[clamp(1rem,3vw,1.1875rem)] leading-relaxed text-gray-700 dark:text-neutral-300">
                   <strong className="text-red-700 dark:text-red-400 font-bold text-[1.1em]">
                     TPP หรือ บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)
@@ -324,16 +355,14 @@ const Aboutus = () => {
               <div
                 className="flex flex-wrap gap-2 mt-6 mb-6 opacity-0"
                 data-ani="fadeInUp"
-                data-stagger="500"
-              >
+                data-stagger="350">
                 {["ISO 9001:2015", "GMP/HACCP", "Eco-Friendly"].map(
                   (badge, i) => (
                     <span
                       key={badge}
                       className="inline-flex items-center px-3 py-1.5 text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full opacity-0"
                       data-ani="bounceIn"
-                      data-stagger={`${600 + i * 100}`}
-                    >
+                      data-stagger={`${400 + i * 50}`}>
                       <Icon
                         icon="tabler:certificate"
                         className="mr-1.5"
@@ -351,8 +380,7 @@ const Aboutus = () => {
                 href="/about-history"
                 className="group inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-105 text-[clamp(0.95rem,2.5vw,1.125rem)] opacity-0"
                 data-ani="lightSpeedInLeft"
-                data-stagger="800"
-              >
+                data-stagger="550">
                 <span>อ่านประวัติของเรา</span>
                 <Icon
                   icon="tabler:arrow-right"
@@ -366,8 +394,7 @@ const Aboutus = () => {
               <div
                 className="grid grid-cols-3 gap-4 mt-8 md:hidden opacity-0"
                 data-ani="fadeInUp"
-                data-stagger="900"
-              >
+                data-stagger="600">
                 {[
                   { num: "40+", label: "ปีประสบการณ์" },
                   { num: "1000+", label: "ลูกค้า" },
