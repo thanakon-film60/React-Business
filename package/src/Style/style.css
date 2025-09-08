@@ -568,23 +568,6 @@ nav > .dropdown > span.btn:active {
 
 /* -------------------------------------GPT 5---------------------------------------------------- */
 /* ==== Breakpoint Controller: 1600px ==== */
-/* mobile-first: <1600px */
-.desktop-1600 {
-  display: none !important;
-}
-.mobile-1600 {
-  display: flex !important;
-}
-
-/* ≥1600px = โชว์เดสก์ท็อป, ซ่อนมือถือ */
-@media (min-width: 1600px) {
-  .desktop-1600 {
-    display: flex !important;
-  }
-  .mobile-1600 {
-    display: none !important;
-  }
-}
 
 /* ให้เอกสารสูงเต็ม เพื่อ fallback กรณีบางเบราว์เซอร์ */
 html,
