@@ -15,23 +15,16 @@ export default function ClientApp() {
       className="
         relative isolate
         min-w-0 max-w-[100vw]
-        overflow-x-hidden"
-    >
+        overflow-x-hidden">
       <Hero setIsLoading={setIsLoading} />
 
-      <div className="h-[96px]" aria-hidden />
-
-      <div className="flex flex-col gap-[1in] [&>*]:!my-0">
+      <div className="flex flex-col gap-[1in]">
         <Aboutus />
         <GoGreenHero />
-      </div>
-      <section className="min-w-0 max-w-[100vw] overflow-x-hidden pb-0">
         <Dedicated />
-      </section>
-      <div className="-mt-8">
         <InvestorRelations />
+        <Insta />
       </div>
-      <Insta />
     </main>
   );
 }

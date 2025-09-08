@@ -9,7 +9,6 @@ const data = [
     staticImg: "/images/Header/IR-screen-1-img.png",
     animatedImg: "/images/Header/IR-screen-1.gif",
     gradient: "from-purple-600 to-blue-600",
-    icon: "📊",
   },
   {
     title: "ข้อมูลราคาหลักทรัพย์",
@@ -17,7 +16,6 @@ const data = [
     staticImg: "/images/Header/IR-screen-2-img.png",
     animatedImg: "/images/Header/IR-screen-2.gif",
     gradient: "from-blue-600 to-cyan-600",
-    icon: "📈",
   },
   {
     title: "ข้อมูลผู้ถือหุ้น",
@@ -25,7 +23,6 @@ const data = [
     staticImg: "/images/Header/IR-screen-3-img.png",
     animatedImg: "/images/Header/IR-screen-3.gif",
     gradient: "from-cyan-600 to-teal-600",
-    icon: "👥",
   },
   {
     title: "รายงานประจำปี",
@@ -33,7 +30,6 @@ const data = [
     staticImg: "/images/Header/IR-screen-4-img.png",
     animatedImg: "/images/Header/IR-screen-4.gif",
     gradient: "from-teal-600 to-green-600",
-    icon: "📑",
   },
 ];
 
@@ -137,8 +133,7 @@ export default function InvestorRelations() {
       style={{
         ...motionVars,
         background: "linear-gradient(135deg, #ffffff00 0%, #ffffff00 100%)",
-      }}
-    >
+      }}>
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-1/2 -right-1/2 w-[150%] h-[150%] rounded-full bg-white/5 blur-3xl animate-pulse" />
@@ -176,17 +171,9 @@ export default function InvestorRelations() {
               color: "transparent",
               WebkitTextFillColor: "transparent",
               textShadow: "0 10px 30px rgba(0,0,0,0.3)",
-            }}
-          >
+            }}>
             นักลงทุนสัมพันธ์
           </h2>
-          <p
-            className="text-lg md:text-xl text-black/80 opacity-0"
-            data-ani="fadeInUp"
-            style={{ animationDelay: "200ms" }}
-          >
-            Investor Relations Portal
-          </p>
 
           {/* Decorative Line */}
           <div
@@ -205,8 +192,7 @@ export default function InvestorRelations() {
               data-ani="fadeInUp"
               style={{ animationDelay: `${baseDelay + i * step}ms` }}
               onMouseEnter={() => setHoveredIndex(i)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
+              onMouseLeave={() => setHoveredIndex(null)}>
               <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl transform transition-all duration-700 hover:scale-105 hover:-translate-y-2">
                 {/* Gradient Overlay */}
                 <div
@@ -237,19 +223,13 @@ export default function InvestorRelations() {
                 {/* Content Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-20" />
 
-                {/* Icon */}
-                <div className="absolute top-4 right-4 w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 z-30">
-                  <span className="text-2xl">{item.icon}</span>
-                </div>
-
                 {/* Text Content */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 z-30">
                   <p
                     className="text-white/70 text-sm mb-2 transform transition-all duration-500 translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100"
                     style={{
                       animationDelay: `${baseDelay + i * step + 100}ms`,
-                    }}
-                  >
+                    }}>
                     {item.subtitle}
                   </p>
                   <h3
@@ -257,8 +237,7 @@ export default function InvestorRelations() {
                     style={{
                       textShadow:
                         "0 4px 20px rgba(0,0,0,0.5), 0 0 40px rgba(255,255,255,0.1)",
-                    }}
-                  >
+                    }}>
                     {item.title}
                   </h3>
 
@@ -269,8 +248,7 @@ export default function InvestorRelations() {
                       className="w-4 h-4"
                       fill="none"
                       stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                      viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -283,8 +261,7 @@ export default function InvestorRelations() {
 
                 {/* Hover Glow Effect */}
                 <div
-                  className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-40`}
-                >
+                  className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-40`}>
                   <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/10 to-white/20" />
                 </div>
               </div>
@@ -300,8 +277,7 @@ export default function InvestorRelations() {
           <button
             className="relative px-10 py-4 bg-white/60 backdrop-blur-md text-gray-900 font-bold rounded-full border-2 border-gray-300/50 transform transition-all duration-500 hover:scale-105 hover:bg-white/80 hover:border-gray-400/60 hover:shadow-xl opacity-0 group overflow-hidden"
             data-ani="fadeInUp"
-            style={{ animationDelay: "600ms" }}
-          >
+            style={{ animationDelay: "600ms" }}>
             {/* Button Shine Effect */}
             <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent" />
 
@@ -314,8 +290,7 @@ export default function InvestorRelations() {
                 className="w-5 h-5 ml-3 transform transition-transform group-hover:translate-x-2"
                 fill="none"
                 stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+                viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"

@@ -8,36 +8,28 @@ const cards = [
     staticImg: "/images/hero/Products-screen-1-img.png",
     animatedImg: "/images/hero/Products-screen-1.gif",
     title: "การพัฒนาและการออกแบบ",
-    subtitle: "Development & Design",
     gradient: "from-blue-600 to-cyan-600",
-    icon: "🎨",
     description: "นวัตกรรมการออกแบบที่ทันสมัย",
   },
   {
     staticImg: "/images/hero/Products-screen-2-img.png",
     animatedImg: "/images/hero/Products-screen-2.gif",
     title: "เตรียมพิมพ์",
-    subtitle: "Pre-Press",
     gradient: "from-cyan-600 to-teal-600",
-    icon: "📐",
     description: "เตรียมความพร้อมอย่างมืออาชีพ",
   },
   {
     staticImg: "/images/hero/Products-screen-3-img.png",
     animatedImg: "/images/hero/Products-screen-3.gif",
     title: "การพิมพ์",
-    subtitle: "Printing",
     gradient: "from-teal-600 to-green-600",
-    icon: "🖨️",
     description: "คุณภาพการพิมพ์ระดับพรีเมียม",
   },
   {
     staticImg: "/images/hero/Products-screen-4-img.png",
     animatedImg: "/images/hero/Products-screen-4.gif",
     title: "หลังพิมพ์",
-    subtitle: "Post-Press",
     gradient: "from-green-600 to-emerald-600",
-    icon: "✨",
     description: "งานสำเร็จที่สมบูรณ์แบบ",
   },
 ];
@@ -141,8 +133,7 @@ export default function ProductsAndServices() {
       ref={sectionRef}
       data-products
       className="relative z-10 isolate overflow-hidden py-16 md:py-24 bg-white/5 backdrop-blur-sm"
-      style={motionVars}
-    >
+      style={motionVars}>
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-1/2 -right-1/2 w-[150%] h-[150%] rounded-full bg-gradient-to-br from-blue-100/20 to-purple-100/20 blur-3xl animate-pulse" />
@@ -176,17 +167,9 @@ export default function ProductsAndServices() {
             data-ani="fadeInDown"
             style={{
               textShadow: "0 2px 10px rgba(0,0,0,0.1)",
-            }}
-          >
+            }}>
             สินค้าและบริการของเรา
           </h2>
-          <p
-            className="text-lg md:text-xl text-gray-700 opacity-0"
-            data-ani="fadeInUp"
-            style={{ animationDelay: "200ms" }}
-          >
-            Our Products & Services
-          </p>
 
           {/* Decorative Line */}
           <div
@@ -205,8 +188,7 @@ export default function ProductsAndServices() {
               data-ani="fadeInUp"
               style={{ animationDelay: `${baseDelay + i * step}ms` }}
               onMouseEnter={() => setHoveredIndex(i)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
+              onMouseLeave={() => setHoveredIndex(null)}>
               <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-xl backdrop-blur-sm bg-white/10 transform transition-all duration-700 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
                 {/* Gradient Overlay */}
                 <div
@@ -237,21 +219,11 @@ export default function ProductsAndServices() {
                 {/* Content Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-20" />
 
-                {/* Icon Badge */}
-                <div className="absolute top-4 right-4 w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 group-hover:bg-white/20 z-30">
-                  <span className="text-3xl">{item.icon}</span>
-                </div>
-
                 {/* Text Content */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 z-30">
                   {/* Description - appears on hover */}
                   <p className="text-white/90 text-sm mb-3 transform transition-all duration-500 translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100">
                     {item.description}
-                  </p>
-
-                  {/* Subtitle */}
-                  <p className="text-white/70 text-sm mb-2 transform transition-all duration-500">
-                    {item.subtitle}
                   </p>
 
                   {/* Main Title */}
@@ -260,8 +232,7 @@ export default function ProductsAndServices() {
                     style={{
                       textShadow:
                         "0 4px 20px rgba(0,0,0,0.5), 0 0 40px rgba(255,255,255,0.1)",
-                    }}
-                  >
+                    }}>
                     {item.title}
                   </h3>
 
@@ -272,8 +243,7 @@ export default function ProductsAndServices() {
                       className="w-4 h-4"
                       fill="none"
                       stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                      viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -293,8 +263,7 @@ export default function ProductsAndServices() {
                 <div
                   className={`absolute inset-0 rounded-2xl transition-all duration-1000 ${
                     hoveredIndex === i ? "animate-pulse" : ""
-                  }`}
-                >
+                  }`}>
                   <div className="absolute inset-0 rounded-2xl border-2 border-white/20 opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
                 </div>
               </div>
@@ -310,8 +279,7 @@ export default function ProductsAndServices() {
           <button
             className="relative px-10 py-4 bg-white/60 backdrop-blur-md text-gray-900 font-bold rounded-full border-2 border-gray-300/50 transform transition-all duration-500 hover:scale-105 hover:bg-white/80 hover:border-gray-400/60 hover:shadow-xl opacity-0 group overflow-hidden"
             data-ani="fadeInUp"
-            style={{ animationDelay: "600ms" }}
-          >
+            style={{ animationDelay: "600ms" }}>
             {/* Button Shine Effect */}
             <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent" />
 
@@ -324,8 +292,7 @@ export default function ProductsAndServices() {
                 className="w-5 h-5 ml-3 transform transition-transform group-hover:translate-x-2"
                 fill="none"
                 stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+                viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -339,16 +306,14 @@ export default function ProductsAndServices() {
           <button
             className="relative px-10 py-4 bg-transparent text-gray-900 font-bold rounded-full border-2 border-gray-400/50 transform transition-all duration-500 hover:scale-105 hover:bg-white/40 hover:border-gray-500/60 opacity-0 group"
             data-ani="fadeInUp"
-            style={{ animationDelay: "700ms" }}
-          >
+            style={{ animationDelay: "700ms" }}>
             <span className="relative flex items-center text-lg">
               ติดต่อเรา
               <svg
                 className="w-5 h-5 ml-3 transform transition-transform group-hover:rotate-45"
                 fill="none"
                 stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+                viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
