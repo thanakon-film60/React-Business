@@ -1,18 +1,19 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import Link from "next/link";
+import { Icon } from "@iconify/react";
+import { useEffect, useRef } from "react";
+// ถ้าอยากใช้ animate.css ร่วมด้วยก็ import ได้: import "animate.css";
+import "animate.css";
 
-interface AboutUsProps {
-  // Add any props here if needed
-}
-
-const AboutUs: React.FC<AboutUsProps> = () => {
+const Aboutus = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const root = sectionRef.current;
     if (!root) return;
 
-    const normalizeAni = (ani: string): string[] => {
+    // เติม prefix ให้ animate.css อัตโนมัติ และปล่อย fx-* ตามเดิม
+    const normalizeAni = (ani: string) => {
       const tokens = ani.trim().split(/\s+/).filter(Boolean);
       const out: string[] = [];
       let usesAnimate = false;
@@ -21,8 +22,10 @@ const AboutUs: React.FC<AboutUsProps> = () => {
         if (t.startsWith("animate__")) {
           out.push(t);
           usesAnimate = true;
+        } else if (t.startsWith("fx-")) {
+          out.push(t); // ของเก่า
         } else if (
-          /^(fadeIn|fadeInUp|fadeInDown|fadeInLeft|fadeInRight|zoomIn|slideInUp|slideInDown)$/i.test(
+          /^(fadeIn|fadeInUp|fadeInDown|fadeInLeft|fadeInRight|zoomIn|slideInUp|slideInDown|backInDown|backInUp)$/i.test(
             t
           )
         ) {
@@ -35,7 +38,7 @@ const AboutUs: React.FC<AboutUsProps> = () => {
           out.push(`animate__${t}`);
           usesAnimate = true;
         } else {
-          out.push(t);
+          out.push(t); // ปล่อยอื่น ๆ ตามเดิม
         }
       });
 
@@ -52,10 +55,10 @@ const AboutUs: React.FC<AboutUsProps> = () => {
 
     if (prefersReduced || !("IntersectionObserver" in window)) {
       els.forEach((el) => {
-        const aniValue = el.dataset.ani || "";
-        const classes = normalizeAni(aniValue);
+        const classes = normalizeAni(el.dataset.ani || "");
         el.classList.add(...classes);
         el.classList.remove("opacity-0");
+        el.style.transform = "none";
       });
       return;
     }
@@ -64,10 +67,11 @@ const AboutUs: React.FC<AboutUsProps> = () => {
       (entries) => {
         entries.forEach((entry) => {
           const el = entry.target as HTMLElement;
-          const aniValue = el.dataset.ani || "";
-          const classes = normalizeAni(aniValue);
+          const classes = normalizeAni(el.dataset.ani || "");
           if (entry.isIntersecting) {
+            // รีสตาร์ทแอนิเมชันให้ชัวร์
             el.classList.remove(...classes);
+            // force reflow (บางเบราว์เซอร์จำเป็นเพื่อเล่นใหม่)
             void el.offsetWidth;
             el.classList.add(...classes);
             el.classList.remove("opacity-0");
@@ -77,7 +81,7 @@ const AboutUs: React.FC<AboutUsProps> = () => {
           }
         });
       },
-      { threshold: 0.15, rootMargin: "0px 0px -5% 0px" }
+      { threshold: 0.35, rootMargin: "0px 0px -10% 0px" }
     );
 
     els.forEach((el) => io.observe(el));
@@ -85,181 +89,63 @@ const AboutUs: React.FC<AboutUsProps> = () => {
   }, []);
 
   return (
-    <>
-      <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
+    <section
+      ref={sectionRef}
+      data-ani="fx-kenburns-in fx-kenburns-drift"
+      className="about-bg-image relative bg-cover bg-center md:overflow-hidden dark:bg-neutral-900">
+      <div className="absolute inset-0 md:hidden pointer-events-none bg-gradient-to-r from-white/70 to-white/0 dark:from-black/50 dark:to-transparent" />
 
-        @keyframes fadeInRight {
-          from {
-            opacity: 0;
-            transform: translateX(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
+      <div className="relative mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
+        <div className="grid min-w-0 grid-cols-12 items-center min-h-[60svh] py-12 sm:py-16 lg:py-20">
+          <div className="col-span-12 md:col-start-1 md:col-end-8 lg:col-start-1 lg:col-end-7 xl:col-start-1 xl:col-end-7 min-w-0">
+            <div className="w-full max-w-[clamp(300px,90vw,550px)] md:max-w-none">
+              {/* หัวข้อ: คลิปรีวีล + เส้นใต้กวาด */}
+              <strong
+                className="block text-[clamp(1.4375rem,4.6vw,2.0625rem)] font-bold leading-tight custom-Charcoal-gray dark:text-neutral-50 [text-wrap:balance] opacity-0"
+                data-ani="fadeInUp faster delay-200ms">
+                <span>เกี่ยวกับ</span>&nbsp; ไทยบรรจุภัณฑ์และการพิมพ์
+              </strong>
+              <span
+                aria-hidden
+                className="fx-underline mt-2 block opacity-0"
+                data-ani="fx-underline-in"
+              />
 
-        .animate__fadeInUp {
-          animation: fadeInUp 0.5s ease-out forwards;
-        }
+              <p
+                className="mt-4 text-[clamp(1.1375rem,3.8vw,1.1875rem)] leading-7 break-words custom-Ash-gray dark:text-neutral-300 opacity-0"
+                data-ani="fx-subtle-in-up"
+                style={{ animationDelay: "120ms" }}>
+                <b className="text-red-700">
+                  TPP หรือ บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)
+                </b>
+                &nbsp; ผู้นำด้านการผลิตและออกแบบบรรจุภัณฑ์กระดาษลูกฟูก
+                และกล่องกระดาษแข็ง พร้อมงานพิมพ์ออฟเซ็ทคุณภาพสูง
+                ด้วยประสบการณ์ยาวนานกว่า 40 ปี
+                เรามุ่งมั่นพัฒนานวัตกรรมบรรจุภัณฑ์และเทคโนโลยีการผลิตที่ทันสมัย
+                เพื่อตอบโจทย์ลูกค้าในอุตสาหกรรมต่างๆ เช่น อาหาร, เครื่องดื่ม,
+                และยานยนต์ โดยยึดมั่นในมาตรฐานสากล ISO 9001:2015 และ GMP/HACCP
+                พร้อมทั้งให้ความสำคัญกับ บรรจุภัณฑ์ที่เป็นมิตรกับสิ่งแวดล้อม
+                เพื่อการเติบโตอย่างยั่งยืน
+              </p>
 
-        .animate__fadeInRight {
-          animation: fadeInRight 0.5s ease-out forwards;
-        }
-
-        .animate__faster {
-          animation-duration: 0.4s;
-        }
-
-        .animate__slower {
-          animation-duration: 0.6s;
-        }
-
-        /* Reduced delays for faster sequence */
-        .animate__delay-50ms {
-          animation-delay: 0.05s;
-        }
-
-        .animate__delay-100ms {
-          animation-delay: 0.1s;
-        }
-
-        .animate__delay-150ms {
-          animation-delay: 0.15s;
-        }
-
-        .animate__delay-200ms {
-          animation-delay: 0.2s;
-        }
-
-        .animate__delay-250ms {
-          animation-delay: 0.25s;
-        }
-      `}</style>
-
-      <section ref={sectionRef} className="relative overflow-hidden bg-gray-50">
-        {/* Background Image Container */}
-        <div className="relative w-full">
-          {/* Image that fills the container */}
-          <img
-            src="/images/team/ABOUT_BD_fix.png"
-            alt="TPP Background"
-            className="w-full h-full object-cover"
-            style={{ minHeight: "527px" }}
-          />
-
-          {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-white/40 md:from-white/90 md:via-white/60 md:to-transparent lg:from-transparent lg:via-transparent lg:to-transparent" />
-
-          {/* Content positioned absolutely over the image */}
-          <div className="absolute inset-0 flex items-center px-4 sm:px-6 lg:px-8">
-            <div className="w-full max-w-[1800px] mx-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Left Content - Text */}
-                <div className="w-full max-w-2xl">
-                  {/* Main Title - Triggers immediately */}
-                  <h1
-                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 md:mb-6 opacity-0"
-                    data-ani="fadeInUp faster">
-                    เกี่ยวกับ ไทยบรรจุภัณฑ์และการพิมพ์
-                  </h1>
-
-                  {/* Company Name - Very short delay */}
-                  <div
-                    className="mb-4 md:mb-6 opacity-0"
-                    data-ani="fadeInUp faster delay-50ms">
-                    <span className="text-red-600 font-bold text-lg sm:text-xl md:text-2xl inline-block">
-                      TPP หรือ บริษัท ไทยบรรจุภัณฑ์และการพิมพ์ จำกัด (มหาชน)
-                    </span>
-                  </div>
-
-                  {/* Description - Quick succession */}
-                  <div className="space-y-3 md:space-y-4">
-                    <p
-                      className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed opacity-0"
-                      data-ani="fadeInUp faster delay-100ms">
-                      ผู้นำด้านการผลิต และออกแบบบรรจุภัณฑ์กระดาษลูกฟูก
-                      และกล่องกระดาษแข็ง พร้อมงานพิมพ์ออฟเซ็ทคุณภาพสูง
-                      ด้วยประสบการณ์ยาวนานกว่า 40 ปี เรามุ่งมั่นพัฒนานวัตกรรม
-                    </p>
-
-                    <p
-                      className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed opacity-0"
-                      data-ani="fadeInUp faster delay-150ms">
-                      <span className="text-blue-600 font-semibold">
-                        บรรจุภัณฑ์
-                      </span>
-                      และเทคโนโลยีการผลิตที่ทันสมัย
-                      เพื่อตอบโจทย์ลูกค้าในอุตสาหกรรมต่างๆ เช่น อาหาร,
-                      เครื่องดื่ม, และยานยนต์ โดยยึดมั่นในมาตรฐานสากล ISO
-                      9001:2015 และ GMP/HACCP พร้อมทั้งให้ความสำคัญกับ{" "}
-                      <span className="text-green-600 font-semibold">
-                        บรรจุภัณฑ์ที่เป็นมิตรกับสิ่งแวดล้อม
-                      </span>{" "}
-                      เพื่อการเติบโตอย่างยั่งยืน
-                    </p>
-                  </div>
-
-                  {/* Read More Button */}
-                  <button
-                    className="mt-6 md:mt-8 inline-flex items-center gap-2 text-blue-600 font-semibold hover:text-blue-700 transition-colors text-sm sm:text-base md:text-lg opacity-0 group"
-                    data-ani="fadeInUp faster delay-200ms"
-                    onClick={() => (window.location.href = "/about-history")}>
-                    อ่านต่อ
-                    <svg
-                      className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
-                </div>
-
-                {/* Right side - Empty for showing background */}
-                <div className="hidden lg:block"></div>
-              </div>
+              {/* ลิงก์: เลื่อนเข้าขวา (ดีเลย์ต่อเนื่อง) */}
+              <Link
+                href="/about-history"
+                className="mt-4 inline-flex items-center gap-2 text-primary font-semibold hover:underline text-[clamp(1.1375rem,3.8vw,1.1875rem)] opacity-0"
+                data-ani="fx-link-in-right"
+                style={{ animationDelay: "220ms" }}>
+                อ่านต่อ{" "}
+                <Icon icon="tabler:chevron-right" width={20} height={20} />
+              </Link>
             </div>
           </div>
-        </div>
 
-        {/* Mobile version - Remove duplicate content */}
-        <style>{`
-          @media (max-width: 1023px) {
-            .absolute.inset-0 { display: flex !important; }
-          }
-          
-          /* Extra small devices (phones, less than 360px) */
-          @media (max-width: 359px) {
-            .text-xs { font-size: 0.7rem; }
-            .text-base { font-size: 0.875rem; }
-          }
-          
-          /* Custom breakpoint for xs */
-          @media (min-width: 360px) {
-            .xs\\:text-sm { font-size: 0.875rem; }
-            .xs\\:text-lg { font-size: 1.125rem; }
-            .xs\\:text-2xl { font-size: 1.5rem; }
-          }
-        `}</style>
-      </section>
-    </>
+          {/* ช่องว่างขวา: แสดงเฉพาะ md+ */}
+          <div className="hidden md:block md:col-span-5 lg:col-span-6 xl:col-span-6" />
+        </div>
+      </div>
+    </section>
   );
 };
 
-export default AboutUs;
+export default Aboutus;

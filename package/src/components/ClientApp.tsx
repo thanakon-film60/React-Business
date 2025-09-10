@@ -5,7 +5,7 @@ import Aboutus from "@/components/Home/AboutUs";
 import Dedicated from "@/components/Home/Detail";
 import Insta from "@/components/Home/News";
 import InvestorRelations from "@/components/InvestorRelations";
-import GoGreenHero from "@/app/go-green/go-green";
+import GoGreenHero from "@/app/go-green/page";
 
 export default function ClientApp() {
   const [isLoading, setIsLoading] = useState(true);
@@ -18,13 +18,19 @@ export default function ClientApp() {
         overflow-x-hidden">
       <Hero setIsLoading={setIsLoading} />
 
-      <div className="flex flex-col gap-[1in]">
+      <div className="h-[96px]" aria-hidden />
+
+      <div className="flex flex-col gap-[1in] [&>*]:!my-0">
         <Aboutus />
         <GoGreenHero />
-        <Dedicated />
-        <InvestorRelations />
-        <Insta />
       </div>
+      <section className="min-w-0 max-w-[100vw] overflow-x-hidden pb-0">
+        <Dedicated />
+      </section>
+      <div className="-mt-8">
+        <InvestorRelations />
+      </div>
+      <Insta />
     </main>
   );
 }
