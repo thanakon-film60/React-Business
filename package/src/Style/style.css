@@ -825,7 +825,7 @@ body {
 }
 /* ----------------------------------------------------------------------------------------------------------- */
 /* === Mobile-first: ไม่บังคับสูงเต็มจอ === */
-.hero-video {
+.Video-video {
   position: relative;
   overflow: hidden;
   min-height: 0 !important;
@@ -833,8 +833,8 @@ body {
 }
 
 /* พื้นหลังวิดีโอ/รูป */
-.hero-video > .bg-media,
-.hero-video > .bg-fallback {
+.Video-video > .bg-media,
+.Video-video > .bg-fallback {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -845,20 +845,20 @@ body {
 }
 
 /* ลด motion */
-.hero-video > .bg-fallback {
+.Video-video > .bg-fallback {
   display: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-video > video.bg-media {
+  .Video-video > video.bg-media {
     display: none;
   }
-  .hero-video > img.bg-fallback {
+  .Video-video > img.bg-fallback {
     display: block;
   }
 }
 
 /* ไล่โทน */
-.hero-video::after {
+.Video-video::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -873,7 +873,7 @@ body {
 
 /* กันรอยบากล่าง */
 @supports (padding: max(0px)) {
-  .hero-video {
+  .Video-video {
     padding-bottom: max(0px, env(safe-area-inset-bottom));
   }
 }
@@ -884,7 +884,7 @@ body {
 } /* ถ้า header “fixed/overlay” ให้ใส่ความสูงจริง เช่น 88px */
 
 @media (min-width: 768px) {
-  .hero-video {
+  .Video-video {
     /* เอาอัตราส่วนออก และบังคับให้เต็มจอ */
     aspect-ratio: auto !important;
     min-height: calc(100dvh - var(--header-h)) !important;
@@ -892,7 +892,7 @@ body {
 
   /* fallback เผื่อเบราว์เซอร์ไม่รองรับ dvh */
   @supports not (height: 100dvh) {
-    .hero-video {
+    .Video-video {
       min-height: calc(100vh - var(--header-h)) !important;
     }
   }
@@ -1174,8 +1174,8 @@ body {
 } */
 
 /* ---------------------------------------------------------------------------------------------------------- */
-/* พื้นหลัง HERO ฝั่งขวา – ใช้ภาพเป็น background */
-.oman-hero-bg {
+/* พื้นหลัง Video ฝั่งขวา – ใช้ภาพเป็น background */
+.oman-Video-bg {
   background-image: url("/images/subsidiaries/Oman_Cargo_mapPx.png");
   background-size: contain; /* ถ้าอยากเห็นภาพครบไม่ครอป เปลี่ยนเป็น contain */
   background-position: center; /* ปรับเป็น right bottom ได้ถ้าอยากชิดมุมขวาล่าง */
@@ -1184,12 +1184,12 @@ body {
 
 /* ให้มีความสูงขั้นต่ำเวลาหน้าจอเตี้ย ไม่ให้กล่องฟีบ */
 @media (max-width: 767px) {
-  .oman-hero-bg {
+  .oman-Video-bg {
     min-height: 280px;
   }
 }
 @media (min-width: 768px) {
-  .oman-hero-bg {
+  .oman-Video-bg {
     min-height: 420px;
   }
 }

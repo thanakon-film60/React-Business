@@ -4,10 +4,10 @@ import Image from "next/image";
 import { useMemo, useState, useEffect } from "react";
 
 // ======= ปรับแต่งได้ =======
-const HERO_TITLE = "คณะกรรมการ / ผู้บริหาร";
-const HERO_DESC =
+const Video_TITLE = "คณะกรรมการ / ผู้บริหาร";
+const Video_DESC =
   "คณะกรรมการและผู้บริหาร กำหนดวิสัยทัศน์และกลยุทธ์เชิงธุรกิจ เพื่อเสริมสร้างความแข็งแกร่งและความยั่งยืนขององค์กร";
-const HERO_BG_URL = "/images/joinus/bg-board.jpg";
+const Video_BG_URL = "/images/joinus/bg-board.jpg";
 
 // หมวดในแถบแท็บ
 const TABS = [
@@ -264,11 +264,11 @@ export default function Page() {
           animation: shimmer 2s linear infinite;
         }
 
-        .hero-image-parallax {
+        .Video-image-parallax {
           transition: transform 0.8s ease-out;
         }
 
-        .hero-image-parallax:hover {
+        .Video-image-parallax:hover {
           transform: scale(1.05);
         }
 
@@ -319,15 +319,15 @@ export default function Page() {
           animation-delay: calc(var(--index) * 0.05s);
         }
 
-        .hero-content {
+        .Video-content {
           opacity: 0;
         }
 
-        .hero-content.mounted {
+        .Video-content.mounted {
           animation: fadeInLeft 1s ease-out forwards;
         }
 
-        .hero-bg-overlay {
+        .Video-bg-overlay {
           opacity: 0;
           animation: fadeIn 1.2s ease-out 0.2s forwards;
         }
@@ -361,7 +361,7 @@ export default function Page() {
         }
       `}</style>
 
-      <Hero mounted={mounted} />
+      <Video mounted={mounted} />
 
       <main className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 pb-16">
         <div className="mt-2 sm:mt-6">
@@ -468,15 +468,15 @@ export default function Page() {
   );
 }
 
-function Hero({ mounted }: { mounted: boolean }) {
+function Video({ mounted }: { mounted: boolean }) {
   return (
     <section className="relative w-full overflow-hidden">
       <div className="relative w-full">
         {/* ความสูงภาพพื้นหลัง */}
         <div className="relative h-[40vh] sm:h-[50vh] lg:h-[60vh] xl:h-[640px]">
-          <div className="hero-image-parallax absolute inset-0">
+          <div className="Video-image-parallax absolute inset-0">
             <Image
-              src={HERO_BG_URL}
+              src={Video_BG_URL}
               alt="background"
               fill
               priority
@@ -486,7 +486,7 @@ function Hero({ mounted }: { mounted: boolean }) {
           </div>
 
           {/* Animated gradient overlay */}
-          <div className="hero-bg-overlay absolute inset-0 bg-gradient-to-r from-white/85 via-white/60 to-transparent backdrop-blur-[1px]" />
+          <div className="Video-bg-overlay absolute inset-0 bg-gradient-to-r from-white/85 via-white/60 to-transparent backdrop-blur-[1px]" />
 
           {/* Animated pattern overlay */}
           <div
@@ -502,11 +502,11 @@ function Hero({ mounted }: { mounted: boolean }) {
             <div className="mx-auto w-full max-w-7xl px-3 sm:px-6 lg:px-8">
               {/* ระยะห่างจากด้านบน */}
               <div
-                className={`pt-8 sm:pt-12 lg:pt-20 xl:pt-24 hero-content ${
+                className={`pt-8 sm:pt-12 lg:pt-20 xl:pt-24 Video-content ${
                   mounted ? "mounted" : ""
                 }`}>
                 <h1 className="my-heading sm:text-[24px] md:text-[28px] font-extrabold leading-[1.2] tracking-tight text-emerald-700 relative inline-block">
-                  <span className="relative z-10">{HERO_TITLE}</span>
+                  <span className="relative z-10">{Video_TITLE}</span>
                   {/* Underline animation */}
                   <span
                     className="absolute -bottom-2 left-0 h-1 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full"
@@ -524,7 +524,7 @@ function Hero({ mounted }: { mounted: boolean }) {
                     transform: mounted ? "translateY(0)" : "translateY(20px)",
                     transition: "all 0.8s ease-out 0.8s",
                   }}>
-                  {HERO_DESC}
+                  {Video_DESC}
                 </p>
               </div>
             </div>

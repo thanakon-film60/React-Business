@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Hero from "@/components/Home/Video";
+import Video from "@/components/Home/Video";
 import Aboutus from "@/components/Home/AboutUs";
 import Dedicated from "@/components/Home/Detail";
 import Insta from "@/components/Home/News";
