@@ -1,301 +1,371 @@
 "use client";
 
-import Image from "next/image";
-import React from "react";
-import "animate.css"; // แนะนำให้นำไป import รวมที่ layout.tsx ได้เช่นกัน
+import React, { useEffect, useMemo, useState } from "react";
 
-// ===============
-// AnimateOnView: เพิ่มคลาส animate.css เมื่อเข้าหน้าจอ
-// ===============
-function AnimateOnView({
-  children,
-  effect = "animate__fadeInUp",
-  delay = 0,
-  once = true,
-  className = "",
-}: {
-  children: React.ReactNode;
-  effect?: string;
-  delay?: number;
-  once?: boolean;
-  className?: string;
-}) {
-  const ref = React.useRef<HTMLDivElement | null>(null);
-  const [visible, setVisible] = React.useState(false);
+// ---------- Types ----------
+type CertLayout = "card" | "banner";
+interface CertItem {
+  id: string;
+  title: string;
+  subtitle?: string;
+  tags: string[];
+  year?: string;
+  primary: string;
+  secondary?: string;
+  captionLines?: string[];
+  href?: string;
+  primaryBox?: [number, number];
+  secondaryBox?: [number, number];
+  layout?: CertLayout;
+}
 
+// ---------- Data (examples) ----------
+const CERTS: CertItem[] = [
+  {
+    id: "iso9001",
+    title: "ISO 9001 : 2015",
+    subtitle: "Quality Management System (QMS)",
+    tags: ["ISO", "Quality"],
+    year: "2015",
+    primary: "images/certifications/iso9001.jpg",
+    secondary: "images/certifications/iso9001-ukas.png",
+    captionLines: ["QMS :", "Quality Management System", "9001 : 2015"],
+    primaryBox: [549, 783],
+    secondaryBox: [414, 240],
+  },
+  {
+    id: "iso14001",
+    title: "ISO 14001 : 2015",
+    subtitle: "Environmental Management System (EMS)",
+    tags: ["ISO", "Environment"],
+    year: "2015",
+    primary: "images/certifications/iso14001.jpg",
+    secondary: "images/certifications/iso14001-ukas.png",
+    captionLines: ["EMS :", "Environmental Management System", "14001 : 2015"],
+    primaryBox: [549, 783],
+    secondaryBox: [414, 240],
+  },
+  {
+    id: "ghp",
+    title: "GHP : Good Hygiene Practice",
+    tags: ["Food Safety"],
+    primary: "images/certifications/ghp.jpg",
+    secondary: "images/certifications/ghp-badge.png",
+    captionLines: ["GHP :", "Good Hygiene Practice"],
+    primaryBox: [549, 783],
+    secondaryBox: [414, 240],
+  },
+  {
+    id: "haccp",
+    title: "HACCP : Hazard Analysis Critical Control Point",
+    tags: ["Food Safety"],
+    primary: "images/certifications/haccp.jpg",
+    secondary: "images/certifications/haccp-badge.png",
+    captionLines: ["HACCP :", "Hazard Analysis Critical", "Control Point"],
+    primaryBox: [549, 783],
+    secondaryBox: [414, 240],
+  },
+  // --- Custom sized cards requested ---
+  {
+    id: "fsc",
+    title: "FSC : Forest Stewardship Council (CoC)",
+    tags: ["Environment", "Sustainability"],
+    primary: "images/certifications/fsc.jpg",
+    captionLines: ["FSC :", "Forest Stewardship Council"],
+    primaryBox: [549, 783],
+  },
+  {
+    id: "gmi",
+    title: "GMI – Certified Print Facility",
+    tags: ["Quality", "Awards"],
+    primary: "images/certifications/gmi.jpg",
+    secondary: "images/certifications/sgsco-badge.png",
+    captionLines: [
+      "Graphic Measures International",
+      "Certified Print Facility",
+    ],
+    primaryBox: [712, 503],
+    secondaryBox: [392, 267],
+  },
+  {
+    id: "green-industry",
+    title: "Green Industry – Level 3",
+    tags: ["Environment"],
+    primary: "images/certifications/green-industry.jpg",
+    secondary: "images/certifications/green-industry-badge.png",
+    captionLines: ["Green Industry", "Level 3"],
+    primaryBox: [535, 760],
+    secondaryBox: [494, 170],
+  },
+  // --- Full-width banner (1819×826) ---
+  {
+    id: "awards-banner",
+    title: "Awards & Recognitions",
+    tags: ["Awards"],
+    primary: "images/certifications/awards-collage.png",
+    captionLines: [],
+    primaryBox: [1819, 826],
+    layout: "banner",
+  },
+];
+
+const ALL_TAG = "All" as const;
+const TAGS_ORDER = [
+  ALL_TAG,
+  "ISO",
+  "Food Safety",
+  "Environment",
+  "Quality",
+  "Awards",
+  "Compliance",
+  "Sustainability",
+] as const;
+
+// ---------- Helpers ----------
+function cx(...s: Array<string | false | null | undefined>) {
+  return s.filter(Boolean).join(" ");
+}
+
+// ---------- Lightbox (shows primary image) ----------
+const Lightbox: React.FC<{
+  items: CertItem[];
+  index: number;
+  onClose: () => void;
+}> = ({ items, index, onClose }) => {
+  const [i, setI] = useState(index);
+  const item = items[i];
+  const esc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
   React.useEffect(() => {
-    if (!ref.current) return;
-    const el = ref.current;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            setVisible(true);
-            if (once) obs.unobserve(el);
-          } else if (!once) {
-            setVisible(false);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [once]);
-
-  const style: React.CSSProperties = delay
-    ? { animationDelay: `${delay}ms` }
-    : {};
+    document.addEventListener("keydown", esc);
+    return () => document.removeEventListener("keydown", esc);
+  }, []);
 
   return (
     <div
-      ref={ref}
-      style={style}
-      className={[
-        className,
-        visible ? `animate__animated ${effect}` : "opacity-0 translate-y-3",
-      ].join(" ")}
-    >
-      {children}
+      className="fixed inset-0 z-[80] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal>
+      <button
+        aria-label="Close"
+        onClick={onClose}
+        className="absolute top-4 right-4 rounded-full ring-1 ring-white/20 text-white/80 hover:text-white px-3 py-1 text-sm">
+        ESC
+      </button>
+      <button
+        onClick={() => setI((i - 1 + items.length) % items.length)}
+        className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 text-white/80 hover:text-white text-3xl"
+        aria-label="Previous">
+        ‹
+      </button>
+      <figure className="max-w-[min(1200px,95vw)] max-h-[85vh] w-full">
+        <img
+          src={item.primary}
+          alt={item.title}
+          className="w-full h-full object-contain select-none"
+        />
+        <figcaption className="text-white/90 text-center mt-3">
+          <div className="font-medium">{item.title}</div>
+          {item.subtitle && (
+            <div className="text-sm opacity-90">{item.subtitle}</div>
+          )}
+        </figcaption>
+      </figure>
+      <button
+        onClick={() => setI((i + 1) % items.length)}
+        className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 text-white/80 hover:text-white text-3xl"
+        aria-label="Next">
+        ›
+      </button>
     </div>
   );
-}
-
-// ===============
-// Data
-// ===============
-type CertItem = {
-  title: string;
-  body: string;
-  badges?: { src: string; alt: string }[];
 };
 
-const leftColumn: CertItem[] = [
-  {
-    title: "GHPs & HACCP",
-    body: "แนวปฏิบัติด้านสุขลักษณะที่ดีและระบบวิเคราะห์อันตรายและจุดควบคุมวิกฤต เพื่อความปลอดภัยของอาหารในทุกขั้นตอน",
-    badges: [
-      { src: "/images/cert/ghp.png", alt: "GHPs" },
-      { src: "/images/cert/haccp.png", alt: "HACCP" },
-      { src: "/images/cert/gmp.png", alt: "GMP" },
-    ],
-  },
-  {
-    title: "ISO/TS 22002-1 (PAS 220)",
-    body: "มาตรฐานโปรแกรมพื้นฐานก่อนการผลิตสำหรับอุตสาหกรรมอาหาร เพื่อสนับสนุนระบบความปลอดภัยของอาหาร ISO 22000.",
-    badges: [{ src: "/images/cert/iso22002.png", alt: "ISO/TS 22002-1" }],
-  },
-  {
-    title: "ISO 9001",
-    body: "ระบบบริหารคุณภาพที่มุ่งเน้นลูกค้าและการปรับปรุงอย่างต่อเนื่อง ครอบคลุมกระบวนการหลักทั้งหมดขององค์กร.",
-    badges: [{ src: "/images/cert/iso9001.png", alt: "ISO 9001" }],
-  },
-  {
-    title: "ISO 14001",
-    body: "ระบบการจัดการสิ่งแวดล้อมเพื่อลดผลกระทบต่อสิ่งแวดล้อมอย่างเป็นระบบและยั่งยืน.",
-    badges: [{ src: "/images/cert/iso14001.png", alt: "ISO 14001" }],
-  },
-  {
-    title: "Carbon Footprint Reduction",
-    body: "โครงการลดการปล่อยก๊าซเรือนกระจกขององค์กรและผลิตภัณฑ์ พร้อมแนวทางติดตามและเปิดเผยข้อมูลอย่างโปร่งใส.",
-    badges: [{ src: "/images/cert/tgo.png", alt: "TGO" }],
-  },
-  {
-    title: "ISO 50001",
-    body: "ระบบการจัดการพลังงานเพื่อเพิ่มประสิทธิภาพการใช้พลังงาน ลดต้นทุน และลดการปล่อยก๊าซเรือนกระจก.",
-    badges: [{ src: "/images/cert/iso50001.png", alt: "ISO 50001" }],
-  },
-  {
-    title: "Halal",
-    body: "ได้รับการรับรองฮาลาล เหมาะสมต่อผู้บริโภคมุสลิม ครอบคลุมทุกขั้นตอนการผลิตอย่างเคร่งครัด.",
-    badges: [{ src: "/images/cert/halal.png", alt: "Halal" }],
-  },
-  {
-    title: "SEDEX / SMETA & ARAVO (URSA)",
-    body: "มาตรฐานด้านจริยธรรม แรงงาน และความยั่งยืนในห่วงโซ่อุปทาน ผ่านการประเมินและแพลตฟอร์มจัดการซัพพลายเออร์.",
-    badges: [{ src: "/images/cert/sedex.png", alt: "Sedex" }],
-  },
-  {
-    title: "GMP Plus",
-    body: "แนวทางการผลิตที่ดีสำหรับอาหารสัตว์เพื่อความปลอดภัยตลอดห่วงโซ่อุปทาน.",
-    badges: [{ src: "/images/cert/gmpplus.png", alt: "GMP+" }],
-  },
-  {
-    title: "RTRS",
-    body: "มาตรฐาน Round Table on Responsible Soy: ถั่วเหลืองอย่างรับผิดชอบ ครอบคลุมสิ่งแวดล้อม สังคม และเศรษฐกิจ.",
-    badges: [{ src: "/images/cert/rtrs.png", alt: "RTRS" }],
-  },
-];
-
-const rightColumn: CertItem[] = [
-  {
-    title: "ISO 22000",
-    body: "ระบบบริหารความปลอดภัยของอาหาร ครอบคลุมการควบคุมความเสี่ยงในทุกขั้นตอนของกระบวนการผลิต.",
-    badges: [{ src: "/images/cert/iso22000.png", alt: "ISO 22000" }],
-  },
-  {
-    title: "FSSC 22000",
-    body: "Food Safety System Certification มาตรฐานความปลอดภัยอาหารระดับสากลที่อ้างอิง ISO 22000 และ ISO/TS 22002-1.",
-    badges: [{ src: "/images/cert/fssc22000.png", alt: "FSSC 22000" }],
-  },
-  {
-    title: "ISO 45001",
-    body: "มาตรฐานอาชีวอนามัยและความปลอดภัยในการทำงาน เพื่อสภาพแวดล้อมการทำงานที่ปลอดภัยและยั่งยืน.",
-    badges: [{ src: "/images/cert/iso45001.png", alt: "ISO 45001" }],
-  },
-  {
-    title: "Carbon Footprint of Products",
-    body: "แสดงปริมาณก๊าซเรือนกระจกต่อหนึ่งหน่วยผลิตภัณฑ์ เพื่อความโปร่งใสและทางเลือกที่ยั่งยืนให้ผู้บริโภค.",
-    badges: [{ src: "/images/cert/cfp.png", alt: "CFP" }],
-  },
-  {
-    title: "Green Industry",
-    body: "โรงงานอุตสาหกรรมเชิงนิเวศ พัฒนาอย่างต่อเนื่องสู่ความยั่งยืน ลดผลกระทบต่อสิ่งแวดล้อม และเติบโตไปพร้อมชุมชน.",
-    badges: [{ src: "/images/cert/greenindustry.png", alt: "Green Industry" }],
-  },
-  {
-    title: "ISO/IEC 17025",
-    body: "ความสามารถห้องปฏิบัติการทดสอบและสอบเทียบ ครอบคลุมความถูกต้องและความน่าเชื่อถือของผลทดสอบ.",
-    badges: [{ src: "/images/cert/iso17025.png", alt: "ISO/IEC 17025" }],
-  },
-  {
-    title: "Kosher",
-    body: "การรับรองโคเชอร์สำหรับผู้บริโภคชาวยิว ดูแลการคัดเลือกวัตถุดิบและกระบวนการผลิตตามหลักศาสนา.",
-    badges: [{ src: "/images/cert/kosher.png", alt: "Kosher" }],
-  },
-  {
-    title: "อย. Quality Award 2017–2025",
-    body: "รางวัลคุณภาพจากสำนักงานคณะกรรมการอาหารและยา สะท้อนมาตรฐานความปลอดภัยและคุณภาพต่อเนื่องหลายปี.",
-    badges: [{ src: "/images/cert/fda-th.png", alt: "Thai FDA" }],
-  },
-  {
-    title: "AOCS APPROVED CHEMIST",
-    body: "นักเคมีที่ได้รับอนุมัติจาก American Oil Chemists' Society ชี้วัดความเชี่ยวชาญในการทดสอบน้ำมันและไขมัน.",
-    badges: [{ src: "/images/cert/aocs.png", alt: "AOCS" }],
-  },
-  {
-    title: "มาตรฐานแรงงานไทย มรท.8001-2563",
-    body: "ยกระดับคุณภาพชีวิตแรงงาน ดูแลสิทธิมนุษยชน ความปลอดภัย และความเป็นธรรมในสถานประกอบการ.",
-    badges: [{ src: "/images/cert/tsl.png", alt: "Thai Labor Standard" }],
-  },
-];
-
-// ใช้คอนเทนเนอร์ที่ปรับ padding ได้
-function SectionContainer({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
+// ---------- Card (supports two images + text) ----------
+const CertCard: React.FC<{ item: CertItem; onOpen: () => void }> = ({
+  item,
+  onOpen,
+}) => {
   return (
-    <div
-      className={[
-        "mx-auto w-full max-w-[1280px] px-4 md:px-6 lg:px-8",
-        className,
-      ].join(" ")}
-    >
-      {children}
-    </div>
-  );
-}
-// ===============
-// Hero (เวอร์ชันเดียวพอ)
-// ===============
-function Hero() {
-  return (
-    <section className="relative -mt-px overflow-hidden rounded-b-2xl sm:rounded-b-3xl certification-bg-image">
-      {/* ห้ามใส่ overlay ซ้ำใน JSX อีกแล้ว */}
-      <SectionContainer className="min-h-[clamp(420px,36vw,700px)] px-2 md:px-3 lg:px-4">
-        <div className="grid grid-cols-12 h-full">
-          <div className="col-span-12 md:col-start-9 md:col-span-4 flex items-center justify-end text-right">
-            <AnimateOnView
-              effect="animate__fadeInDown"
-              className="w-full max-w-[720px]"
-            >
-              {/* <p className="text-sm font-medium tracking-wide text-emerald-800/80">
-        
-              </p> */}
-              <h1 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-emerald-900">
-                การรับรองคุณภาพ
-              </h1>
-              <p className="mt-3 text-emerald-900/80 text-sm sm:text-base">
-                มุ่งมั่นพัฒนามาตรฐานการผลิต ควบคุมคุณภาพและความปลอดภัย
-                ตามข้อกำหนดสากล เพื่อความเชื่อมั่นของลูกค้าและผู้บริโภค
-              </p>
-            </AnimateOnView>
-          </div>
+    <article className="group relative mb-6 break-inside-avoid overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 bg-white hover:shadow-xl transition-shadow">
+      <div className="p-3">
+        <div
+          className="relative w-full mx-auto bg-white rounded-xl ring-1 ring-neutral-200 overflow-hidden"
+          style={{
+            aspectRatio: `${item.primaryBox?.[0] ?? 549} / ${
+              item.primaryBox?.[1] ?? 783
+            }`,
+            maxWidth: item.primaryBox?.[0] ?? 549,
+          }}>
+          <img
+            src={item.primary}
+            alt={item.title}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-contain"
+          />
+          <button
+            onClick={onOpen}
+            aria-label={`Open ${item.title}`}
+            className="absolute inset-0 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-400/50"
+          />
         </div>
-      </SectionContainer>
+
+        {item.secondary && (
+          <div
+            className="mt-3 mx-auto bg-white rounded-xl ring-1 ring-neutral-200 overflow-hidden w-full"
+            style={{
+              aspectRatio: `${item.secondaryBox?.[0] ?? 414} / ${
+                item.secondaryBox?.[1] ?? 240
+              }`,
+              maxWidth: item.secondaryBox?.[0] ?? 414,
+            }}>
+            <img
+              src={item.secondary}
+              alt={`${item.title} badge`}
+              loading="lazy"
+              className="h-full w-full object-contain"
+            />
+          </div>
+        )}
+
+        {(item.captionLines?.length || item.subtitle || item.title) && (
+          <div className="mt-4 text-neutral-800">
+            {item.captionLines?.map((t, i) => (
+              <p key={i} className="leading-tight">
+                {t}
+              </p>
+            ))}
+            {!item.captionLines && (
+              <>
+                <p className="leading-tight font-medium">{item.title}</p>
+                {item.subtitle && (
+                  <p className="leading-tight text-sm text-neutral-600">
+                    {item.subtitle}
+                  </p>
+                )}
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    </article>
+  );
+};
+
+// Banner full-width (1819×826) keeps aspect ratio
+const BannerCert: React.FC<{ item: CertItem; onOpen: () => void }> = ({
+  item,
+  onOpen,
+}) => {
+  const w = item.primaryBox?.[0] ?? 1819;
+  const h = item.primaryBox?.[1] ?? 826;
+  return (
+    <section className="my-10">
+      <div
+        className="relative mx-auto w-full bg-white rounded-2xl ring-1 ring-neutral-200 overflow-hidden"
+        style={{ aspectRatio: `${w} / ${h}`, maxWidth: w }}>
+        <img
+          src={item.primary}
+          alt={item.title}
+          loading="lazy"
+          className="h-full w-full object-contain"
+        />
+        <button
+          onClick={onOpen}
+          aria-label={`Open ${item.title}`}
+          className="absolute inset-0 focus:outline-none"
+        />
+      </div>
     </section>
   );
-}
+};
 
-// ===============
-// Card
-// ===============
-function CertCard({ item, index }: { item: CertItem; index: number }) {
+// ---------- Page ----------
+export default function QualityCertificationPage() {
+  const [activeTag, setActiveTag] =
+    useState<(typeof TAGS_ORDER)[number]>(ALL_TAG);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const filtered = useMemo(() => {
+    if (activeTag === ALL_TAG) return CERTS;
+    return CERTS.filter((c) => c.tags.includes(activeTag as string));
+  }, [activeTag]);
+  const cardItems = filtered.filter((i) => (i.layout ?? "card") === "card");
+  const bannerItems = filtered.filter((i) => i.layout === "banner");
+  const ordered = [...cardItems, ...bannerItems];
+
   return (
-    <AnimateOnView delay={Math.min(index * 60, 360)} effect="animate__fadeInUp">
-      <article className="rounded-2xl border border-emerald-100 bg-white shadow-sm hover:shadow-md transition-shadow p-5 sm:p-6">
-        <h3 className="text-lg sm:text-xl font-bold text-emerald-900">
-          {item.title}
-        </h3>
-        <p className="mt-2 text-[13px] sm:text-sm leading-relaxed text-emerald-900/80">
-          {item.body}
-        </p>
-
-        {item.badges?.length ? (
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            {item.badges.map((b, i) => (
-              <div
-                key={i}
-                className="relative h-6 w-14 grayscale contrast-125 opacity-90"
-                title={b.alt}
-              >
-                <Image
-                  src={b.src}
-                  alt={b.alt}
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            ))}
-          </div>
-        ) : null}
-      </article>
-    </AnimateOnView>
-  );
-}
-
-// ===============
-// Page
-// ===============
-export default function QualityCertificationsPage() {
-  return (
-    <main className="bg-white pt-0 mt-0">
-      <Hero />
-
-      {/* CONTENT GRID */}
-      <SectionContainer>
-        <div className="py-8 sm:py-10 md:py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5 sm:gap-6 md:gap-8">
-            {/* Left column */}
-            <div className="space-y-4 sm:space-y-6">
-              {leftColumn.map((it, i) => (
-                <CertCard key={it.title} item={it} index={i} />
-              ))}
-            </div>
-
-            {/* Right column */}
-            <div className="space-y-4 sm:space-y-6">
-              {rightColumn.map((it, i) => (
-                <CertCard key={it.title} item={it} index={i} />
-              ))}
-            </div>
-          </div>
+    <main className="min-h-screen bg-white">
+      {/* Hero */}
+      <section className="relative isolate">
+        <div className="absolute inset-0 -z-10 bg-[url('/images/hero/quality-soft.jpg')] bg-cover bg-center opacity-30" />
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+          <p className="text-sm uppercase tracking-widest text-neutral-500">
+            Quality & Certifications
+          </p>
+          <h1 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-900">
+            การรับรองคุณภาพ (Quality Certification)
+          </h1>
+          <p className="mt-4 max-w-3xl text-neutral-600">
+            --------------------------------------------------------
+            --------------------------------------------------------
+            ----------------------------------------------------
+          </p>
         </div>
-      </SectionContainer>
+      </section>
+
+      {/* Filters */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap gap-2 border-b border-neutral-100 pb-6">
+          {TAGS_ORDER.map((tag) => (
+            <button
+              key={tag}
+              onClick={() => setActiveTag(tag)}
+              className={cx(
+                "rounded-full px-3.5 py-1.5 text-sm transition",
+                activeTag === tag
+                  ? "bg-neutral-900 text-white"
+                  : "bg-neutral-100 hover:bg-neutral-200 text-neutral-700"
+              )}>
+              {tag}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Masonry gallery */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6">
+          {cardItems.map((item) => (
+            <CertCard
+              key={item.id}
+              item={item}
+              onOpen={() =>
+                setLightboxIndex(ordered.findIndex((o) => o.id === item.id))
+              }
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Full-width banners */}
+      {bannerItems.map((item) => (
+        <div key={item.id} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <BannerCert
+            item={item}
+            onOpen={() =>
+              setLightboxIndex(ordered.findIndex((o) => o.id === item.id))
+            }
+          />
+        </div>
+      ))}
+
+      {lightboxIndex !== null && (
+        <Lightbox
+          items={filtered}
+          index={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
     </main>
   );
 }
