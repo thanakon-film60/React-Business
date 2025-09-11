@@ -284,7 +284,7 @@ export default function OmanAirStyleLayout() {
           will-change: transform;
         }
 
-        .hero-background {
+        .Video-background {
           position: absolute;
           top: 0;
           left: 0;
@@ -449,17 +449,17 @@ export default function OmanAirStyleLayout() {
             </article>
           </div>
 
-          {/* Hero panel with slide animation */}
+          {/* Video panel with slide animation */}
           <div
-            id="hero-panel"
+            id="Video-panel"
             data-aos="fade-left"
             data-aos-delay="200"
             className={`order-2 lg:order-2 h-full min-h-[400px] ${
-              isVisible["hero-panel"] ? "aos-animate" : ""
+              isVisible["Video-panel"] ? "aos-animate" : ""
             }`}>
             <div className="zoom-immune-container h-full">
               <div
-                className="hero-background"
+                className="Video-background"
                 role="img"
                 aria-label="Oman Air Route Map"
                 style={{
