@@ -2,22 +2,18 @@
 
 import React from "react";
 
-// ===== Badges-only page (secondary images + captions) =====
-// เพิ่ม hero full-bleed + ระยะห่างด้านบน
-
 type Badge = {
   id: string;
   title: string;
   desc?: string;
   src: string;
-  box?: [number, number]; // pixel box (w,h). Default 414x240
+  box?: [number, number];
 };
 
 function publicUrl(p: string) {
   return p.startsWith("/") ? p : `/${p}`;
 }
 
-// ⬇️ ใส่รูป 1819x826 ไว้ใต้ /public/images/certifications/
 const HERO_SRC = "images/certifications/awards-1819x826.png";
 const HERO_ALT = "TPP Awards & Certifications";
 
@@ -79,7 +75,7 @@ function FullBleedHero({ src, alt }: { src: string; alt: string }) {
       <img
         src={publicUrl(src)}
         alt={alt}
-        className="block w-screen h-auto" // รักษาสัดส่วน, เต็มความกว้างจอ
+        className="block w-screen h-auto"
         loading="eager"
       />
     </div>
@@ -88,10 +84,7 @@ function FullBleedHero({ src, alt }: { src: string; alt: string }) {
 
 export default function QualityBadgesOnlyPage() {
   return (
-    // เพิ่ม pt ให้ห่างโลโก้/เฮดเดอร์มากขึ้น (ปรับตัวเลขได้)
     <main className="min-h-screen bg-white pt-20 md:pt-24 flex flex-col">
-      {/* HERO เต็มจอแบบไม่เสียทรง */}
-
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12">
         <header className="text-center mt-10 md:mt-14">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-neutral-900">
@@ -111,7 +104,6 @@ export default function QualityBadgesOnlyPage() {
               <div
                 className="mx-auto w-full bg-white rounded-xl ring-1 ring-neutral-200 overflow-hidden"
                 style={{
-                  // กล่องโชว์โลโก้: ยังคงสัดส่วนเดิมของแต่ละ badge
                   aspectRatio: `${b.box?.[0] ?? 414} / ${b.box?.[1] ?? 240}`,
                   maxWidth: b.box?.[0] ?? 414,
                 }}>
@@ -132,16 +124,6 @@ export default function QualityBadgesOnlyPage() {
           ))}
         </div>
       </section>
-      <div className="mt-auto relative left-1/2 right-1/2 -mx-[50vw] w-screen">
-        <img
-          src={publicUrl("images/certifications/awards-collage.png")}
-          alt="TPP Awards & Certifications"
-          width={1819}
-          height={826}
-          className="block w-screen h-auto max-w-none"
-          loading="lazy"
-        />
-      </div>
     </main>
   );
 }
