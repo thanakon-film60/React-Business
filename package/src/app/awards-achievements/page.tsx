@@ -248,132 +248,6 @@ const AwardsPage = () => {
         </div>
       </div>
 
-      {/* Awards Grid with Stagger Animation */}
-      <div
-        ref={(el) => {
-          refs.current.awardsGrid = el;
-        }}
-        id="awardsGrid"
-        className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2
-            className={`text-3xl font-bold text-center text-gray-900 mb-12 transition-all duration-1000 ${
-              isVisible.awardsGrid
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}>
-            รางวัลและการรับรองมาตรฐาน
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {awards.map((award, index) => (
-              <div
-                key={index}
-                className={`bg-white rounded-lg shadow-lg p-8 border border-gray-100 transform transition-all duration-700 hover:scale-105 hover:shadow-2xl hover:-translate-y-2 ${
-                  isVisible.awardsGrid
-                    ? `opacity-100 translate-y-0`
-                    : "opacity-0 translate-y-10"
-                }`}
-                style={{
-                  transitionDelay: isVisible.awardsGrid
-                    ? `${index * 100}ms`
-                    : "0ms",
-                }}>
-                <div className="flex justify-center mb-4 transform hover:rotate-12 transition-transform duration-300">
-                  {award.icon}
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 text-center mb-2">
-                  {award.title}
-                </h3>
-                <p className="text-blue-600 text-center font-medium mb-3">
-                  {award.year}
-                </p>
-                <p className="text-gray-600 text-center text-sm">
-                  {award.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Key Achievements with Slide Animation */}
-      <div
-        ref={(el) => {
-          refs.current.achievements = el;
-        }}
-        id="achievements"
-        className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2
-            className={`text-3xl font-bold text-center text-gray-900 mb-12 transition-all duration-1000 ${
-              isVisible.achievements ? "opacity-100" : "opacity-0"
-            }`}>
-            ความสำเร็จที่โดดเด่น
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div
-              className={`bg-blue-50 rounded-lg p-8 transform transition-all duration-1000 hover:shadow-xl ${
-                isVisible.achievements
-                  ? "opacity-100 translate-x-0"
-                  : "opacity-0 -translate-x-20"
-              }`}>
-              <Target className="w-12 h-12 text-blue-600 mb-4 animate-pulse" />
-              <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-                มาตรฐานคุณภาพ
-              </h3>
-              <ul className="space-y-3 text-gray-700">
-                {[
-                  "ได้รับการรับรอง ISO 9001:2015",
-                  "มาตรฐาน GMP และ HACCP",
-                  "ระบบควบคุมคุณภาพทุกขั้นตอนการผลิต",
-                  "ห้องปฏิบัติการทดสอบที่ได้มาตรฐาน",
-                ].map((item, idx) => (
-                  <li
-                    key={idx}
-                    className={`flex items-start transition-all duration-500 hover:translate-x-2 ${
-                      isVisible.achievements ? "opacity-100" : "opacity-0"
-                    }`}
-                    style={{ transitionDelay: `${500 + idx * 100}ms` }}>
-                    <span className="text-blue-600 mr-2">✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div
-              className={`bg-green-50 rounded-lg p-8 transform transition-all duration-1000 hover:shadow-xl ${
-                isVisible.achievements
-                  ? "opacity-100 translate-x-0"
-                  : "opacity-0 translate-x-20"
-              }`}>
-              <Heart className="w-12 h-12 text-green-600 mb-4 animate-pulse" />
-              <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-                ความรับผิดชอบต่อสังคม
-              </h3>
-              <ul className="space-y-3 text-gray-700">
-                {[
-                  "โครงการอนุรักษ์สิ่งแวดล้อม",
-                  "การสนับสนุนการศึกษาในชุมชน",
-                  "กิจกรรมเพื่อสังคมอย่างต่อเนื่อง",
-                  "การจ้างงานและพัฒนาชุมชนท้องถิ่น",
-                ].map((item, idx) => (
-                  <li
-                    key={idx}
-                    className={`flex items-start transition-all duration-500 hover:translate-x-2 ${
-                      isVisible.achievements ? "opacity-100" : "opacity-0"
-                    }`}
-                    style={{ transitionDelay: `${500 + idx * 100}ms` }}>
-                    <span className="text-green-600 mr-2">✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Awards Gallery Section with Animation */}
       <div
         ref={(el) => {
@@ -388,7 +262,7 @@ const AwardsPage = () => {
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-10"
             }`}>
-            ประกาศนียบัตรและรางวัลแห่งความภาคภูมิใจ
+            รางวัลแห่งความภาคภูมิใจ
           </h2>
           <p
             className={`text-center text-gray-600 mb-12 max-w-3xl mx-auto transition-all duration-1000 delay-200 ${
@@ -402,23 +276,7 @@ const AwardsPage = () => {
           <div
             className={`flex justify-center mb-12 ${
               isVisible.gallery ? "opacity-100" : "opacity-0"
-            }`}>
-            <div className="relative">
-              <div
-                className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-8 shadow-xl transform hover:scale-105 transition-all duration-500"
-                style={{
-                  animation: "float 3s ease-in-out infinite",
-                }}>
-                <Trophy className="w-32 h-32 text-amber-500 mx-auto mb-4" />
-                <p className="text-center text-2xl font-bold text-gray-800">
-                  TBPST Award Winner
-                </p>
-                <p className="text-center text-gray-600 mt-2">
-                  รางวัลความเป็นเลิศด้านการจัดการ
-                </p>
-              </div>
-            </div>
-          </div>
+            }`}></div>
 
           {/* Certificates Image Display */}
           <div
@@ -430,17 +288,6 @@ const AwardsPage = () => {
               alt="ใบรับรองและรางวัลต่างๆ ของบริษัท TPP"
               className="w-full h-auto object-contain hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500">
-              <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                <h3 className="text-2xl font-bold mb-2">
-                  รางวัลและใบรับรองมาตรฐาน
-                </h3>
-                <p className="text-lg">
-                  ISO 9001:2015 | ISO 14001:2015 | Green Industry | FSC®
-                  Certified | GMP Certified | และรางวัลอื่นๆ อีกมากมาย
-                </p>
-              </div>
-            </div>
           </div>
 
           {/* Additional Info */}
@@ -450,43 +297,6 @@ const AwardsPage = () => {
               ในการรักษามาตรฐานคุณภาพสูงสุดและความรับผิดชอบต่อสังคมและสิ่งแวดล้อม
             </p>
           </div>
-        </div>
-      </div>
-
-      {/* Call to Action with Pulse Animation */}
-      <div className="py-16 bg-gradient-to-r from-blue-600 to-purple-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-10"></div>
-        <div
-          className="absolute -top-40 -right-40 w-80 h-80 bg-white opacity-10 rounded-full"
-          style={{
-            animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-          }}></div>
-        <div
-          className="absolute -bottom-40 -left-40 w-80 h-80 bg-white opacity-10 rounded-full"
-          style={{
-            animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-            animationDelay: "1s",
-          }}></div>
-
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 relative z-10">
-          <h2
-            className="text-3xl font-bold text-white mb-6"
-            style={{
-              animation: "fadeInUp 1s ease-out forwards",
-            }}>
-            ร่วมเป็นส่วนหนึ่งของความสำเร็จ
-          </h2>
-          <p
-            className="text-xl text-blue-100 mb-8"
-            style={{
-              animation: "fadeInUp 1s ease-out forwards",
-              animationDelay: "200ms",
-            }}>
-            TPP พร้อมเป็นพันธมิตรที่ดีในการสร้างสรรค์บรรจุภัณฑ์คุณภาพสูง
-          </p>
-          <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transform hover:scale-110 transition-all duration-300 animate-bounce">
-            ติดต่อเรา
-          </button>
         </div>
       </div>
     </div>

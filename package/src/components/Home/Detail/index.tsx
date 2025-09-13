@@ -5,23 +5,23 @@ import "animate.css";
 // ====== Data ======
 const cards = [
   {
-    staticImg: "/images/Video/Products-screen-1-img.png",
-    animatedImg: "/images/Video/Products-screen-1.gif",
+    staticImg: "/images/InvestorRelations/Products-screen-1-img.png",
+    animatedImg: "/images/InvestorRelations/Products-screen-1.gif",
     title: "การพัฒนาและการออกแบบ",
   },
   {
-    staticImg: "/images/Video/Products-screen-2-img.png",
-    animatedImg: "/images/Video/Products-screen-2.gif",
+    staticImg: "/images/InvestorRelations/Products-screen-2-img.png",
+    animatedImg: "/images/InvestorRelations/Products-screen-2.gif",
     title: "เตรียมพิมพ์",
   },
   {
-    staticImg: "/images/Video/Products-screen-3-img.png",
-    animatedImg: "/images/Video/Products-screen-3.gif",
+    staticImg: "/images/InvestorRelations/Products-screen-3-img.png",
+    animatedImg: "/images/InvestorRelations/Products-screen-3.gif",
     title: "การพิมพ์",
   },
   {
-    staticImg: "/images/Video/Products-screen-4-img.png",
-    animatedImg: "/images/Video/Products-screen-4.gif",
+    staticImg: "/images/InvestorRelations/Products-screen-4-img.png",
+    animatedImg: "/images/InvestorRelations/Products-screen-4.gif",
     title: "หลังพิมพ์",
   },
 ];
