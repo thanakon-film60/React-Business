@@ -82,7 +82,7 @@ const Header = () => {
       <div className="w-full">
         {/* Language Switcher Top Bar */}
         <div className="bg-gray-50 border-b border-gray-200">
-          <div className="max-w-screen-2xl mx-auto px-3 md:px-4 lg:px-6 py-1">
+          <div className="max-w-screen-2xl mx-auto px-3 md:px-4 lg:px-6 py-0.5">
             <div className="flex justify-end">
               <LanguageSwitch className="lang-top" />
             </div>
@@ -91,7 +91,7 @@ const Header = () => {
 
         {/* Main Navigation Container */}
         <div className="max-w-screen-2xl mx-auto">
-          <div className="flex items-center h-16 md:h-20 lg:h-24 px-3 md:px-4 lg:px-6">
+          <div className="flex items-center h-12 md:h-14 lg:h-16 px-3 md:px-4 lg:px-6">
             {/* Desktop Left Navigation - Hidden on mobile/tablet */}
             <nav className="hidden xl:flex flex-1 justify-end gap-1 xl:gap-2 2xl:gap-3 min-w-0 items-center">
               {menu1.map((item, i) => (
@@ -108,7 +108,7 @@ const Header = () => {
 
             {/* Logo - Always visible, size responsive */}
             <div className="flex-1 xl:flex-none flex items-center xl:px-4 2xl:px-8">
-              <Logo className="w-[140px] sm:w-[160px] md:w-[180px] lg:w-[200px] xl:w-[205px] h-auto" />
+              <Logo className="w-[120px] sm:w-[140px] md:w-[160px] lg:w-[180px] xl:w-[190px] h-auto" />
             </div>
 
             {/* Desktop Right Navigation - Hidden on mobile/tablet */}
