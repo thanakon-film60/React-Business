@@ -184,18 +184,12 @@ const AwardsPage = () => {
           refs.current.header = el;
         }}
         id="header"
-        className={`bg-gradient-to-r from-blue-50 to-purple-50 py-16 transition-all duration-1000 ${
+        className={`bg-gradient-to-r from-blue-50 to-purple-50 pt-[1.5in] pb-16 transition-all duration-1000 ${
           isVisible.header
             ? "opacity-100 translate-y-0"
             : "opacity-0 translate-y-10"
         }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div
-            className={`flex justify-center mb-6 ${
-              isVisible.header ? "animate-bounce" : ""
-            }`}>
-            <Award className="w-16 h-16 text-blue-600" />
-          </div>
           <h1
             className={`text-4xl font-bold text-gray-900 mb-6 transition-all duration-1000 delay-200 ${
               isVisible.header ? "opacity-100 scale-100" : "opacity-0 scale-95"
@@ -280,22 +274,14 @@ const AwardsPage = () => {
 
           {/* Certificates Image Display */}
           <div
-            className={`relative w-full overflow-hidden rounded-xl shadow-2xl transition-all duration-1000 ${
+            className={`relative w-full h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[28rem] pt-4 sm:pt-6 overflow-hidden rounded-xl shadow-2xl transition-all duration-1000 ${
               isVisible.gallery ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}>
             <img
               src="images/certifications/awards-collage.png" // เปลี่ยนเป็น URL รูปภาพของคุณ
               alt="ใบรับรองและรางวัลต่างๆ ของบริษัท TPP"
-              className="w-full h-auto object-contain hover:scale-105 transition-transform duration-700"
+              className="w-full h-full object-contain hover:scale-105 transition-transform duration-700"
             />
-          </div>
-
-          {/* Additional Info */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-600 max-w-3xl mx-auto">
-              รางวัลและการรับรองเหล่านี้สะท้อนถึงความมุ่งมั่นของ TPP
-              ในการรักษามาตรฐานคุณภาพสูงสุดและความรับผิดชอบต่อสังคมและสิ่งแวดล้อม
-            </p>
           </div>
         </div>
       </div>

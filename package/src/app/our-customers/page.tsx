@@ -579,8 +579,8 @@ const OurCustomers: React.FC = () => {
         const progress = currentStep / steps;
 
         setCounters({
-          customers: Math.round(150 * progress),
-          years: Math.round(20 * progress),
+          customers: Math.round(73 * progress),
+          years: Math.round(42 * progress),
           satisfaction: Math.round(98 * progress),
         });
 
@@ -657,7 +657,7 @@ const OurCustomers: React.FC = () => {
                 <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   {counters.customers}+
                 </div>
-                <div className="text-gray-600 mt-2">องค์กรที่ไว้วางใจ</div>
+                <div className="text-gray-600 mt-2">ลูกค้าที่ไว้วางใจ</div>
               </div>
 
               <div className="bg-white rounded-2xl shadow-lg p-8 min-w-[200px] transform hover:scale-105 transition-transform duration-300">
@@ -688,7 +688,7 @@ const OurCustomers: React.FC = () => {
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-7xl">
           <h2 className="text-3xl font-semibold text-center text-gray-900 mb-12">
-            องค์กรที่ไว้วางใจเรา
+            ลูกค้าที่ไว้วางใจเรา
           </h2>
 
           <div
@@ -839,9 +839,7 @@ const LogoCard: React.FC<LogoCardProps> = ({
             height={finalHeight}
             className="object-contain w-auto h-auto max-w-full max-h-[80px]"
             style={{
-              filter: isHovered
-                ? "grayscale(0%) opacity(1)"
-                : "grayscale(50%) opacity(0.8)",
+              filter: "none",
               transition: "filter 0.3s ease",
             }}
             onError={() => setImageError(true)}
