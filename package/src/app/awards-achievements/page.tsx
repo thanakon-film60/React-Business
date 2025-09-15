@@ -184,18 +184,12 @@ const AwardsPage = () => {
           refs.current.header = el;
         }}
         id="header"
-        className={`bg-gradient-to-r from-blue-50 to-purple-50 py-16 transition-all duration-1000 ${
+        className={`bg-gradient-to-r from-blue-50 to-purple-50 pt-[1.5in] pb-16 transition-all duration-1000 ${
           isVisible.header
             ? "opacity-100 translate-y-0"
             : "opacity-0 translate-y-10"
         }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div
-            className={`flex justify-center mb-6 ${
-              isVisible.header ? "animate-bounce" : ""
-            }`}>
-            <Award className="w-16 h-16 text-blue-600" />
-          </div>
           <h1
             className={`text-4xl font-bold text-gray-900 mb-6 transition-all duration-1000 delay-200 ${
               isVisible.header ? "opacity-100 scale-100" : "opacity-0 scale-95"
