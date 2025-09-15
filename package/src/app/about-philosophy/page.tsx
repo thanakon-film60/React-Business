@@ -41,7 +41,7 @@ export default function AboutPhilosophy() {
       {/* ส่วนบน */}
       <section className="relative w-full overflow-hidden min-h-[55svh] md:min-h-[60svh] lg:min-h-[70svh]">
         <Image
-          src="/images/aboutus/vision_tpp.png"
+          src="/images/aboutus/vision_tpp_1.png"
           alt="Tree with kids"
           fill
           className="absolute inset-0 -z-10 object-cover object-center"
