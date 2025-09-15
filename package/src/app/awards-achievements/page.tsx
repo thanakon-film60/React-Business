@@ -210,38 +210,6 @@ const AwardsPage = () => {
         </div>
       </div>
 
-      {/* Stats Section with Counter Animation */}
-      <div id="stats-section" className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <div className="p-6 transform hover:scale-110 transition-transform duration-300">
-              <div className="text-4xl font-bold text-blue-600 mb-2">
-                {counts.years}+
-              </div>
-              <div className="text-gray-600">ปีแห่งความเชื่อมั่น</div>
-            </div>
-            <div className="p-6 transform hover:scale-110 transition-transform duration-300">
-              <div className="text-4xl font-bold text-green-600 mb-2">
-                {counts.awards}+
-              </div>
-              <div className="text-gray-600">รางวัลและการรับรอง</div>
-            </div>
-            <div className="p-6 transform hover:scale-110 transition-transform duration-300">
-              <div className="text-4xl font-bold text-purple-600 mb-2">
-                {counts.customers}+
-              </div>
-              <div className="text-gray-600">ลูกค้าที่ไว้วางใจ</div>
-            </div>
-            <div className="p-6 transform hover:scale-110 transition-transform duration-300">
-              <div className="text-4xl font-bold text-orange-600 mb-2">
-                {counts.standards}
-              </div>
-              <div className="text-gray-600">มาตรฐานระดับสากล</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Awards Gallery Section with Animation */}
       <div
         ref={(el) => {
@@ -250,22 +218,6 @@ const AwardsPage = () => {
         id="gallery"
         className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2
-            className={`text-3xl font-bold text-center text-gray-900 mb-4 transition-all duration-1000 ${
-              isVisible.gallery
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}>
-            รางวัลแห่งความภาคภูมิใจ
-          </h2>
-          <p
-            className={`text-center text-gray-600 mb-12 max-w-3xl mx-auto transition-all duration-1000 delay-200 ${
-              isVisible.gallery ? "opacity-100" : "opacity-0"
-            }`}>
-            รางวัลและการรับรองมาตรฐานต่างๆ ที่ TPP ได้รับจากหน่วยงานชั้นนำ
-            ทั้งในประเทศและระดับสากล ยืนยันถึงคุณภาพและมาตรฐานการดำเนินงานของเรา
-          </p>
-
           {/* Main Trophy Display with Floating Animation */}
           <div
             className={`flex justify-center mb-12 ${
@@ -278,13 +230,20 @@ const AwardsPage = () => {
               isVisible.gallery ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}>
             <img
-              src="images/certifications/awards-collage.png" // เปลี่ยนเป็น URL รูปภาพของคุณ
+              src="images/certifications/awards-collage.png"
               alt="ใบรับรองและรางวัลต่างๆ ของบริษัท TPP"
               className="w-full h-full object-contain hover:scale-105 transition-transform duration-700"
             />
           </div>
         </div>
       </div>
+      <p
+        className={`text-center text-gray-600 mb-12 max-w-3xl mx-auto transition-all duration-1000 delay-200 ${
+          isVisible.gallery ? "opacity-100" : "opacity-0"
+        }`}>
+        รางวัลและการรับรองมาตรฐานต่างๆ ที่ TPP ได้รับจากหน่วยงานชั้นนำ
+        ทั้งในประเทศและระดับสากล ยืนยันถึงคุณภาพและมาตรฐานการดำเนินงานของเรา
+      </p>
     </div>
   );
 };
