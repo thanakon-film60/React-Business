@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>หมากฮอสออนไลน์ - Thai Checkers Online</title>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&display=swap");
 
@@ -153,6 +158,11 @@
 
       .btn:active {
         transform: translateY(0);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
 
       /* Game Container */
@@ -391,6 +401,38 @@
         letter-spacing: 2px;
         margin: 10px 0;
         text-align: center;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .room-code:hover::after {
+        content: "คลิกเพื่อคัดลอก";
+        position: absolute;
+        bottom: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .copied {
+        animation: copied 0.5s;
+      }
+
+      @keyframes copied {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       /* Win Screen */
@@ -453,6 +495,32 @@
           transform: translateY(100vh) rotate(360deg);
         }
       }
+
+      /* Loading */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .notice {
+        background: #fff3cd;
+        color: #856404;
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 20px;
+        font-size: 14px;
+      }
     </style>
   </head>
   <body>
@@ -474,15 +542,20 @@
           type="text"
           id="roomCode"
           placeholder="รหัสห้อง (ถ้ามี) / Room code (if joining)"
-          maxlength="6" />
+          maxlength="6"
+          style="text-transform: uppercase" />
       </div>
       <div class="button-group">
-        <button class="btn btn-primary" onclick="createRoom()">
+        <button class="btn btn-primary" id="createBtn" onclick="createRoom()">
           สร้างห้อง<br />Create Room
         </button>
-        <button class="btn btn-secondary" onclick="joinRoom()">
+        <button class="btn btn-secondary" id="joinBtn" onclick="joinRoom()">
           เข้าร่วม<br />Join Room
         </button>
+      </div>
+      <div class="notice">
+        ⚠️ หากไม่ทำงาน กรุณาติดต่อผู้ดูแลเพื่อตั้งค่า Firebase<br />
+        📧 ต้องการ Firebase Config ที่ถูกต้อง
       </div>
     </div>
 
@@ -499,7 +572,7 @@
         </div>
       </div>
 
-      <div class="room-code" id="roomCodeDisplay" style="display: none">
+      <div class="room-code" id="roomCodeDisplay" onclick="copyRoomCode()">
         Room: <span id="roomCodeText"></span>
       </div>
 
@@ -523,6 +596,31 @@
     </div>
 
     <script>
+      // ⚠️ สำคัญ: คุณต้องเปลี่ยน Firebase Config นี้เป็นของคุณเอง!
+      // ไปสร้าง Firebase Project ที่: https://console.firebase.google.com
+      const firebaseConfig = {
+        apiKey: "AIzaSyBxrYENEgtT36nuy5csCfwITZqD__4W9Ns",
+        authDomain: "thanakon-dev.firebaseapp.com",
+        databaseURL:
+          "https://thanakon-dev-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "thanakon-dev",
+        storageBucket: "thanakon-dev.firebasestorage.app",
+        messagingSenderId: "882525844582",
+        appId: "1:882525844582:web:08a55ec4686cc9f8bde9a7",
+        measurementId: "G-6B2QVCSSHH",
+      };
+
+      // Initialize Firebase
+      let database;
+      try {
+        firebase.initializeApp(firebaseConfig);
+        database = firebase.database();
+      } catch (error) {
+        console.error("Firebase initialization error:", error);
+        alert("ไม่สามารถเชื่อมต่อ Firebase ได้\nกรุณาติดต่อผู้ดูแลระบบ");
+      }
+
+      // Game variables
       let board = [];
       let selectedPiece = null;
       let currentPlayer = 1;
@@ -532,10 +630,8 @@
       let isHost = false;
       let gameStarted = false;
       let myPlayerNumber = 0;
-
-      // Peer connection
-      let peer = null;
-      let conn = null;
+      let roomRef = null;
+      let listeners = [];
 
       // Initialize background bubbles
       function createBubbles() {
@@ -621,7 +717,7 @@
               col,
               move.captures
             );
-            sendMove(
+            sendMoveToFirebase(
               selectedPiece.row,
               selectedPiece.col,
               row,
@@ -736,84 +832,6 @@
           board[enemyRow][enemyCol].player !== board[row][col].player &&
           !board[landRow][landCol]
         ) {
-          // Check for multiple captures
-          const tempBoard = JSON.parse(JSON.stringify(board));
-          tempBoard[landRow][landCol] = tempBoard[row][col];
-          tempBoard[row][col] = null;
-          tempBoard[enemyRow][enemyCol] = null;
-
-          const furtherCaptures = [];
-          const piece = tempBoard[landRow][landCol];
-          const directions = piece.king
-            ? [
-                [-1, -1],
-                [-1, 1],
-                [1, -1],
-                [1, 1],
-              ]
-            : piece.player === 1
-            ? [
-                [-1, -1],
-                [-1, 1],
-              ]
-            : [
-                [1, -1],
-                [1, 1],
-              ];
-
-          for (const [ndr, ndc] of directions) {
-            const nextCapture = checkCaptureOnBoard(
-              tempBoard,
-              landRow,
-              landCol,
-              ndr,
-              ndc
-            );
-            if (nextCapture) {
-              furtherCaptures.push(nextCapture);
-            }
-          }
-
-          if (furtherCaptures.length > 0) {
-            // Return the best capture chain
-            const bestCapture = furtherCaptures.reduce((best, current) =>
-              current.captures.length > best.captures.length ? current : best
-            );
-            return {
-              row: landRow,
-              col: landCol,
-              captures: [
-                { row: enemyRow, col: enemyCol },
-                ...bestCapture.captures,
-              ],
-            };
-          }
-
-          return {
-            row: landRow,
-            col: landCol,
-            captures: [{ row: enemyRow, col: enemyCol }],
-          };
-        }
-
-        return null;
-      }
-
-      // Check capture on specific board state
-      function checkCaptureOnBoard(boardState, row, col, dr, dc) {
-        const enemyRow = row + dr;
-        const enemyCol = col + dc;
-        const landRow = row + dr * 2;
-        const landCol = col + dc * 2;
-
-        if (
-          isValidPosition(enemyRow, enemyCol) &&
-          isValidPosition(landRow, landCol) &&
-          boardState[enemyRow][enemyCol] &&
-          boardState[enemyRow][enemyCol].player !==
-            boardState[row][col].player &&
-          !boardState[landRow][landCol]
-        ) {
           return {
             row: landRow,
             col: landCol,
@@ -835,18 +853,9 @@
         board[toRow][toCol] = piece;
         board[fromRow][fromCol] = null;
 
-        // Animate captures
+        // Process captures
         captures.forEach((capture) => {
-          const capturedSquare = document.querySelector(
-            `[data-row="${capture.row}"][data-col="${capture.col}"] .piece`
-          );
-          if (capturedSquare) {
-            capturedSquare.classList.add("capturing");
-            setTimeout(() => {
-              board[capture.row][capture.col] = null;
-              renderBoard();
-            }, 500);
-          }
+          board[capture.row][capture.col] = null;
         });
 
         // Check for king promotion
@@ -887,7 +896,13 @@
 
       // Show winner
       function showWinner() {
-        const winner = currentPlayer === 1 ? playerName : opponentName;
+        let winner;
+        if (currentPlayer === 1) {
+          winner = myPlayerNumber === 1 ? opponentName : playerName;
+        } else {
+          winner = myPlayerNumber === 1 ? playerName : opponentName;
+        }
+
         document.getElementById(
           "winnerText"
         ).textContent = `🎉 ${winner} ชนะ! 🎉`;
@@ -918,32 +933,90 @@
           player1Info.classList.remove("current-turn");
           player2Info.classList.add("current-turn");
         }
+
+        // Update status message
+        if (gameStarted) {
+          if (currentPlayer === myPlayerNumber) {
+            document.getElementById("connectionStatus").textContent =
+              "ตาของคุณ! / Your turn!";
+            document.getElementById("connectionStatus").className =
+              "status-connected";
+          } else {
+            document.getElementById("connectionStatus").textContent =
+              "รอคู่ต่อสู้... / Opponent's turn...";
+            document.getElementById("connectionStatus").className =
+              "status-waiting";
+          }
+        }
+      }
+
+      // Generate room code
+      function generateRoomCode() {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let code = "";
+        for (let i = 0; i < 6; i++) {
+          code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return code;
       }
 
       // Create room
-      function createRoom() {
+      async function createRoom() {
+        if (!database) {
+          alert("ไม่สามารถเชื่อมต่อ Firebase ได้");
+          return;
+        }
+
         playerName = document.getElementById("playerName").value.trim();
         if (!playerName) {
           alert("กรุณาใส่ชื่อผู้เล่น / Please enter your name");
           return;
         }
 
-        isHost = true;
-        myPlayerNumber = 1;
+        document.getElementById("createBtn").disabled = true;
         roomCode = generateRoomCode();
 
-        document.getElementById("loginScreen").style.display = "none";
-        document.getElementById("gameContainer").style.display = "block";
-        document.getElementById("player1Name").textContent = playerName;
-        document.getElementById("roomCodeDisplay").style.display = "block";
-        document.getElementById("roomCodeText").textContent = roomCode;
+        try {
+          // Check if room exists
+          const roomSnapshot = await database
+            .ref(`rooms/${roomCode}`)
+            .once("value");
+          if (roomSnapshot.exists()) {
+            document.getElementById("createBtn").disabled = false;
+            createRoom(); // Try again with new code
+            return;
+          }
 
-        initBoard();
-        setupPeerConnection();
+          isHost = true;
+          myPlayerNumber = 1;
+
+          // Create room in Firebase
+          roomRef = database.ref(`rooms/${roomCode}`);
+          await roomRef.set({
+            host: playerName,
+            guest: null,
+            board: initBoardData(),
+            currentPlayer: 1,
+            lastMove: null,
+            created: firebase.database.ServerValue.TIMESTAMP,
+          });
+
+          setupGame();
+          listenForOpponent();
+        } catch (error) {
+          console.error("Error creating room:", error);
+          alert("เกิดข้อผิดพลาดในการสร้างห้อง");
+          document.getElementById("createBtn").disabled = false;
+        }
       }
 
       // Join room
-      function joinRoom() {
+      async function joinRoom() {
+        if (!database) {
+          alert("ไม่สามารถเชื่อมต่อ Firebase ได้");
+          return;
+        }
+
         playerName = document.getElementById("playerName").value.trim();
         roomCode = document
           .getElementById("roomCode")
@@ -960,148 +1033,301 @@
           return;
         }
 
-        isHost = false;
-        myPlayerNumber = 2;
+        document.getElementById("joinBtn").disabled = true;
 
+        try {
+          // Check if room exists
+          roomRef = database.ref(`rooms/${roomCode}`);
+          const roomSnapshot = await roomRef.once("value");
+
+          if (!roomSnapshot.exists()) {
+            alert("ไม่พบห้องที่ระบุ / Room not found");
+            document.getElementById("joinBtn").disabled = false;
+            return;
+          }
+
+          const roomData = roomSnapshot.val();
+          if (roomData.guest) {
+            alert("ห้องเต็มแล้ว / Room is full");
+            document.getElementById("joinBtn").disabled = false;
+            return;
+          }
+
+          isHost = false;
+          myPlayerNumber = 2;
+
+          // Join room
+          await roomRef.update({
+            guest: playerName,
+          });
+
+          setupGame();
+          listenForGameUpdates();
+        } catch (error) {
+          console.error("Error joining room:", error);
+          alert("เกิดข้อผิดพลาดในการเข้าร่วมห้อง");
+          document.getElementById("joinBtn").disabled = false;
+        }
+      }
+
+      // Setup game
+      function setupGame() {
         document.getElementById("loginScreen").style.display = "none";
         document.getElementById("gameContainer").style.display = "block";
-        document.getElementById("player2Name").textContent = playerName;
+
+        if (isHost) {
+          document.getElementById("player1Name").textContent = playerName;
+          document.getElementById("roomCodeDisplay").style.display = "block";
+          document.getElementById("roomCodeText").textContent = roomCode;
+        } else {
+          document.getElementById("player2Name").textContent = playerName;
+          roomRef.once("value").then((snapshot) => {
+            const data = snapshot.val();
+            document.getElementById("player1Name").textContent = data.host;
+            opponentName = data.host;
+            board = data.board;
+            currentPlayer = data.currentPlayer;
+            renderBoard();
+            gameStarted = true;
+            updateCurrentPlayerIndicator();
+          });
+        }
 
         initBoard();
-        connectToPeer(roomCode);
       }
 
-      // Generate room code
-      function generateRoomCode() {
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        let code = "";
-        for (let i = 0; i < 6; i++) {
-          code += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return code;
+      // Listen for opponent (host only)
+      function listenForOpponent() {
+        const guestListener = roomRef.child("guest").on("value", (snapshot) => {
+          const guest = snapshot.val();
+          if (guest && !gameStarted) {
+            opponentName = guest;
+            document.getElementById("player2Name").textContent = guest;
+            document.getElementById("connectionStatus").textContent =
+              "เชื่อมต่อแล้ว! / Connected!";
+            document.getElementById("connectionStatus").className =
+              "status-connected";
+            gameStarted = true;
+            updateCurrentPlayerIndicator();
+            listenForGameUpdates();
+          }
+        });
+        listeners.push(() =>
+          roomRef.child("guest").off("value", guestListener)
+        );
       }
 
-      // Setup peer connection (simplified simulation)
-      function setupPeerConnection() {
-        // In a real implementation, you would use PeerJS or WebRTC here
-        // For this demo, we'll simulate with localStorage
-        localStorage.setItem(
-          `room_${roomCode}`,
-          JSON.stringify({
-            host: playerName,
+      // Listen for game updates
+      function listenForGameUpdates() {
+        // Listen for board changes
+        const boardListener = roomRef.child("board").on("value", (snapshot) => {
+          const newBoard = snapshot.val();
+          if (newBoard && JSON.stringify(newBoard) !== JSON.stringify(board)) {
+            board = newBoard;
+            renderBoard();
+          }
+        });
+        listeners.push(() =>
+          roomRef.child("board").off("value", boardListener)
+        );
+
+        // Listen for current player changes
+        const playerListener = roomRef
+          .child("currentPlayer")
+          .on("value", (snapshot) => {
+            const player = snapshot.val();
+            if (player !== null) {
+              currentPlayer = player;
+              updateCurrentPlayerIndicator();
+            }
+          });
+        listeners.push(() =>
+          roomRef.child("currentPlayer").off("value", playerListener)
+        );
+
+        // Listen for disconnection
+        const disconnectRef = roomRef.child(isHost ? "guest" : "host");
+        disconnectRef.on("child_removed", () => {
+          document.getElementById("connectionStatus").textContent =
+            "คู่ต่อสู้ออกจากเกม / Opponent disconnected";
+          document.getElementById("connectionStatus").className =
+            "status-disconnected";
+          gameStarted = false;
+        });
+      }
+
+      // Send move to Firebase
+      async function sendMoveToFirebase(
+        fromRow,
+        fromCol,
+        toRow,
+        toCol,
+        captures
+      ) {
+        if (!roomRef) return;
+
+        try {
+          await roomRef.update({
             board: board,
             currentPlayer: currentPlayer,
-          })
-        );
-
-        // Check for opponent
-        setInterval(() => {
-          const roomData = JSON.parse(
-            localStorage.getItem(`room_${roomCode}`) || "{}"
-          );
-          if (roomData.guest && !gameStarted) {
-            opponentName = roomData.guest;
-            document.getElementById("player2Name").textContent = opponentName;
-            document.getElementById("connectionStatus").textContent =
-              "เชื่อมต่อแล้ว! / Connected!";
-            document.getElementById("connectionStatus").className =
-              "status-connected";
-            gameStarted = true;
-          }
-
-          if (roomData.lastMove && roomData.lastMovePlayer !== myPlayerNumber) {
-            const move = roomData.lastMove;
-            makeMove(
-              move.fromRow,
-              move.fromCol,
-              move.toRow,
-              move.toCol,
-              move.captures
-            );
-          }
-        }, 1000);
+            lastMove: {
+              from: { row: fromRow, col: fromCol },
+              to: { row: toRow, col: toCol },
+              captures: captures,
+              player: myPlayerNumber,
+              timestamp: firebase.database.ServerValue.TIMESTAMP,
+            },
+          });
+        } catch (error) {
+          console.error("Error sending move:", error);
+        }
       }
 
-      // Connect to peer
-      function connectToPeer(code) {
-        // Check if room exists
-        const checkRoom = setInterval(() => {
-          const roomData = JSON.parse(
-            localStorage.getItem(`room_${code}`) || "{}"
-          );
-          if (roomData.host) {
-            clearInterval(checkRoom);
-            opponentName = roomData.host;
-            document.getElementById("player1Name").textContent = opponentName;
-
-            // Update room with guest info
-            roomData.guest = playerName;
-            localStorage.setItem(`room_${code}`, JSON.stringify(roomData));
-
-            document.getElementById("connectionStatus").textContent =
-              "เชื่อมต่อแล้ว! / Connected!";
-            document.getElementById("connectionStatus").className =
-              "status-connected";
-            gameStarted = true;
-
-            // Listen for moves
-            setInterval(() => {
-              const updatedRoomData = JSON.parse(
-                localStorage.getItem(`room_${code}`) || "{}"
-              );
-              if (
-                updatedRoomData.lastMove &&
-                updatedRoomData.lastMovePlayer !== myPlayerNumber
-              ) {
-                const move = updatedRoomData.lastMove;
-                makeMove(
-                  move.fromRow,
-                  move.fromCol,
-                  move.toRow,
-                  move.toCol,
-                  move.captures
-                );
+      // Initialize board data for Firebase
+      function initBoardData() {
+        const boardData = [];
+        for (let row = 0; row < 8; row++) {
+          boardData[row] = [];
+          for (let col = 0; col < 8; col++) {
+            if ((row + col) % 2 === 1) {
+              if (row < 3) {
+                boardData[row][col] = { player: 2, king: false };
+              } else if (row > 4) {
+                boardData[row][col] = { player: 1, king: false };
+              } else {
+                boardData[row][col] = null;
               }
-            }, 1000);
+            } else {
+              boardData[row][col] = null;
+            }
           }
-        }, 1000);
+        }
+        return boardData;
       }
 
-      // Send move
-      function sendMove(fromRow, fromCol, toRow, toCol, captures) {
-        const roomData = JSON.parse(
-          localStorage.getItem(`room_${roomCode}`) || "{}"
-        );
-        roomData.lastMove = { fromRow, fromCol, toRow, toCol, captures };
-        roomData.lastMovePlayer = myPlayerNumber;
-        roomData.board = board;
-        roomData.currentPlayer = currentPlayer;
-        localStorage.setItem(`room_${roomCode}`, JSON.stringify(roomData));
+      // Copy room code
+      function copyRoomCode() {
+        const roomCodeText =
+          document.getElementById("roomCodeText").textContent;
+        navigator.clipboard
+          .writeText(roomCodeText)
+          .then(() => {
+            document.getElementById("roomCodeDisplay").classList.add("copied");
+            setTimeout(() => {
+              document
+                .getElementById("roomCodeDisplay")
+                .classList.remove("copied");
+            }, 300);
+
+            // Show toast notification
+            const originalText =
+              document.getElementById("connectionStatus").textContent;
+            document.getElementById("connectionStatus").textContent =
+              "คัดลอกรหัสห้องแล้ว! / Room code copied!";
+            setTimeout(() => {
+              document.getElementById("connectionStatus").textContent =
+                originalText;
+            }, 2000);
+          })
+          .catch((err) => {
+            // Fallback for older browsers
+            const textArea = document.createElement("textarea");
+            textArea.value = roomCodeText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+          });
       }
 
       // Reset game
-      function resetGame() {
+      async function resetGame() {
+        // Clean up Firebase listeners
+        listeners.forEach((cleanup) => cleanup());
+        listeners = [];
+
+        // Delete room if host
+        if (isHost && roomRef) {
+          try {
+            await roomRef.remove();
+          } catch (error) {
+            console.error("Error removing room:", error);
+          }
+        }
+
+        // Reset variables
         board = [];
         selectedPiece = null;
         currentPlayer = 1;
         gameStarted = false;
+        roomRef = null;
+        playerName = "";
+        opponentName = "";
+        roomCode = "";
+        isHost = false;
+        myPlayerNumber = 0;
 
+        // Reset UI
         document.getElementById("winScreen").style.display = "none";
         document.getElementById("gameContainer").style.display = "none";
         document.getElementById("loginScreen").style.display = "block";
+        document.getElementById("createBtn").disabled = false;
+        document.getElementById("joinBtn").disabled = false;
+        document.getElementById("playerName").value = "";
+        document.getElementById("roomCode").value = "";
 
         // Clear confetti
         const confetti = document.querySelectorAll(".confetti");
         confetti.forEach((c) => c.remove());
+      }
 
-        // Clear room data
-        if (roomCode) {
-          localStorage.removeItem(`room_${roomCode}`);
+      // Clean up on page unload
+      window.addEventListener("beforeunload", async () => {
+        if (roomRef) {
+          try {
+            if (isHost) {
+              await roomRef.remove();
+            } else {
+              await roomRef.child("guest").remove();
+            }
+          } catch (error) {
+            console.error("Error cleaning up:", error);
+          }
+        }
+      });
+
+      // Clean old rooms (older than 1 hour)
+      async function cleanOldRooms() {
+        if (!database) return;
+
+        try {
+          const roomsRef = database.ref("rooms");
+          const snapshot = await roomsRef.once("value");
+          const rooms = snapshot.val();
+
+          if (rooms) {
+            const now = Date.now();
+            const oneHour = 60 * 60 * 1000;
+
+            Object.keys(rooms).forEach(async (key) => {
+              const room = rooms[key];
+              if (room.created && now - room.created > oneHour) {
+                await roomsRef.child(key).remove();
+              }
+            });
+          }
+        } catch (error) {
+          console.error("Error cleaning old rooms:", error);
         }
       }
 
       // Initialize
       createBubbles();
+
+      // Clean old rooms on load
+      setTimeout(() => {
+        cleanOldRooms();
+      }, 1000);
     </script>
   </body>
 </html>
