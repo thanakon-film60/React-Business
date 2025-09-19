@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>หมากฮอสออนไลน์ - Thai Checkers Online</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Kanit", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* Animated background */
+      .bg-animation {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      }
+
+      .bg-bubble {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        animation: float 20s infinite ease-in-out;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) translateX(0);
+        }
+        25% {
+          transform: translateY(-100px) translateX(50px);
+        }
+        50% {
+          transform: translateY(-50px) translateX(-50px);
+        }
+        75% {
+          transform: translateY(-150px) translateX(25px);
+        }
+      }
+
+      /* Login Screen */
+      .login-screen {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 500px;
+        width: 90%;
+        backdrop-filter: blur(10px);
+        animation: slideIn 0.5s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .login-screen h1 {
+        color: #764ba2;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 800;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .login-screen h2 {
+        color: #667eea;
+        font-size: 1.5em;
+        margin-bottom: 30px;
+        font-weight: 400;
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        font-family: "Kanit", sans-serif;
+        transition: all 0.3s;
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 10px;
+        font-size: 18px;
+        font-family: "Kanit", sans-serif;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #f093fb, #f5576c);
+        color: white;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      /* Game Container */
+      .game-container {
+        display: none;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        animation: fadeIn 0.5s;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Player Info */
+      .player-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding: 15px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 15px;
+        color: white;
+      }
+
+      .player {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .player-piece {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .player1-piece {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      }
+      .player2-piece {
+        background: linear-gradient(135deg, #4ecdc4, #44a3aa);
+      }
+
+      .player-name {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .current-turn {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      /* Game Board */
+      .board {
+        display: grid;
+        grid-template-columns: repeat(8, 60px);
+        grid-template-rows: repeat(8, 60px);
+        gap: 2px;
+        background: #2c3e50;
+        padding: 10px;
+        border-radius: 15px;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .square {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+      }
+
+      .square.light {
+        background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      }
+
+      .square.dark {
+        background: linear-gradient(135deg, #3c3c3c, #2c2c2c);
+      }
+
+      .square.valid-move {
+        background: linear-gradient(135deg, #a8ff78, #78ffd6) !important;
+        animation: glow 1s infinite;
+      }
+
+      @keyframes glow {
+        0%,
+        100% {
+          box-shadow: 0 0 5px rgba(168, 255, 120, 0.5);
+        }
+        50% {
+          box-shadow: 0 0 20px rgba(168, 255, 120, 0.8);
+        }
+      }
+
+      .square.selected {
+        background: linear-gradient(135deg, #ffd89b, #19547b) !important;
+        animation: selected-pulse 0.5s infinite;
+      }
+
+      @keyframes selected-pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(0.95);
+        }
+      }
+
+      .piece {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      }
+
+      .piece.player1 {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      }
+
+      .piece.player2 {
+        background: linear-gradient(135deg, #4ecdc4, #44a3aa);
+      }
+
+      .piece.king::after {
+        content: "♔";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        color: gold;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        animation: crown-glow 2s infinite;
+      }
+
+      @keyframes crown-glow {
+        0%,
+        100% {
+          filter: brightness(1);
+        }
+        50% {
+          filter: brightness(1.5);
+        }
+      }
+
+      .piece:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      }
+
+      .piece.capturing {
+        animation: capture-shake 0.5s;
+      }
+
+      @keyframes capture-shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px) rotate(-5deg);
+        }
+        75% {
+          transform: translateX(5px) rotate(5deg);
+        }
+      }
+
+      /* Connection Status */
+      .connection-status {
+        margin-top: 20px;
+        padding: 10px;
+        background: #f0f0f0;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .status-waiting {
+        color: #f39c12;
+        animation: blink 1s infinite;
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .status-connected {
+        color: #27ae60;
+      }
+      .status-disconnected {
+        color: #e74c3c;
+      }
+
+      /* Room Code Display */
+      .room-code {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 20px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        margin: 10px 0;
+        text-align: center;
+      }
+
+      /* Win Screen */
+      .win-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .win-content {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        animation: bounceIn 0.5s;
+      }
+
+      @keyframes bounceIn {
+        0% {
+          transform: scale(0.3);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .win-content h2 {
+        font-size: 2.5em;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 20px;
+      }
+
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: #f39c12;
+        animation: confetti-fall 3s infinite;
+      }
+
+      @keyframes confetti-fall {
+        to {
+          transform: translateY(100vh) rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-animation"></div>
+
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+      <h1>หมากฮอส</h1>
+      <h2>Thai Checkers Online</h2>
+      <div class="input-group">
+        <input
+          type="text"
+          id="playerName"
+          placeholder="ใส่ชื่อผู้เล่น / Enter your name"
+          maxlength="20" />
+      </div>
+      <div class="input-group">
+        <input
+          type="text"
+          id="roomCode"
+          placeholder="รหัสห้อง (ถ้ามี) / Room code (if joining)"
+          maxlength="6" />
+      </div>
+      <div class="button-group">
+        <button class="btn btn-primary" onclick="createRoom()">
+          สร้างห้อง<br />Create Room
+        </button>
+        <button class="btn btn-secondary" onclick="joinRoom()">
+          เข้าร่วม<br />Join Room
+        </button>
+      </div>
+    </div>
+
+    <!-- Game Container -->
+    <div class="game-container" id="gameContainer">
+      <div class="player-info">
+        <div class="player" id="player1Info">
+          <div class="player-piece player1-piece"></div>
+          <span class="player-name" id="player1Name">Player 1</span>
+        </div>
+        <div class="player" id="player2Info">
+          <div class="player-piece player2-piece"></div>
+          <span class="player-name" id="player2Name">Waiting...</span>
+        </div>
+      </div>
+
+      <div class="room-code" id="roomCodeDisplay" style="display: none">
+        Room: <span id="roomCodeText"></span>
+      </div>
+
+      <div class="board" id="board"></div>
+
+      <div class="connection-status">
+        <span id="connectionStatus" class="status-waiting"
+          >รอผู้เล่นอีกคน... / Waiting for opponent...</span
+        >
+      </div>
+    </div>
+
+    <!-- Win Screen -->
+    <div class="win-screen" id="winScreen">
+      <div class="win-content">
+        <h2 id="winnerText">🎉 Winner! 🎉</h2>
+        <button class="btn btn-primary" onclick="resetGame()">
+          เล่นใหม่ / Play Again
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let board = [];
+      let selectedPiece = null;
+      let currentPlayer = 1;
+      let playerName = "";
+      let opponentName = "";
+      let roomCode = "";
+      let isHost = false;
+      let gameStarted = false;
+      let myPlayerNumber = 0;
+
+      // Peer connection
+      let peer = null;
+      let conn = null;
+
+      // Initialize background bubbles
+      function createBubbles() {
+        const bgAnimation = document.querySelector(".bg-animation");
+        for (let i = 0; i < 15; i++) {
+          const bubble = document.createElement("div");
+          bubble.className = "bg-bubble";
+          bubble.style.width = Math.random() * 100 + 50 + "px";
+          bubble.style.height = bubble.style.width;
+          bubble.style.left = Math.random() * 100 + "%";
+          bubble.style.top = Math.random() * 100 + "%";
+          bubble.style.animationDelay = Math.random() * 20 + "s";
+          bubble.style.animationDuration = Math.random() * 10 + 20 + "s";
+          bgAnimation.appendChild(bubble);
+        }
+      }
+
+      // Initialize board
+      function initBoard() {
+        board = [];
+        for (let row = 0; row < 8; row++) {
+          board[row] = [];
+          for (let col = 0; col < 8; col++) {
+            if ((row + col) % 2 === 1) {
+              if (row < 3) {
+                board[row][col] = { player: 2, king: false };
+              } else if (row > 4) {
+                board[row][col] = { player: 1, king: false };
+              } else {
+                board[row][col] = null;
+              }
+            } else {
+              board[row][col] = null;
+            }
+          }
+        }
+        renderBoard();
+      }
+
+      // Render board
+      function renderBoard() {
+        const boardElement = document.getElementById("board");
+        boardElement.innerHTML = "";
+
+        for (let row = 0; row < 8; row++) {
+          for (let col = 0; col < 8; col++) {
+            const square = document.createElement("div");
+            square.className =
+              "square " + ((row + col) % 2 === 0 ? "light" : "dark");
+            square.dataset.row = row;
+            square.dataset.col = col;
+
+            if (board[row][col]) {
+              const piece = document.createElement("div");
+              piece.className = `piece player${board[row][col].player}`;
+              if (board[row][col].king) {
+                piece.classList.add("king");
+              }
+              square.appendChild(piece);
+            }
+
+            square.onclick = () => handleSquareClick(row, col);
+            boardElement.appendChild(square);
+          }
+        }
+
+        updateCurrentPlayerIndicator();
+      }
+
+      // Handle square click
+      function handleSquareClick(row, col) {
+        if (!gameStarted || currentPlayer !== myPlayerNumber) return;
+
+        if (selectedPiece) {
+          const moves = getValidMoves(selectedPiece.row, selectedPiece.col);
+          const move = moves.find((m) => m.row === row && m.col === col);
+
+          if (move) {
+            makeMove(
+              selectedPiece.row,
+              selectedPiece.col,
+              row,
+              col,
+              move.captures
+            );
+            sendMove(
+              selectedPiece.row,
+              selectedPiece.col,
+              row,
+              col,
+              move.captures
+            );
+            clearSelection();
+          } else {
+            clearSelection();
+            if (board[row][col] && board[row][col].player === currentPlayer) {
+              selectPiece(row, col);
+            }
+          }
+        } else if (
+          board[row][col] &&
+          board[row][col].player === currentPlayer
+        ) {
+          selectPiece(row, col);
+        }
+      }
+
+      // Select piece
+      function selectPiece(row, col) {
+        selectedPiece = { row, col };
+        const squares = document.querySelectorAll(".square");
+        squares.forEach((sq) => {
+          sq.classList.remove("selected", "valid-move");
+        });
+
+        const selectedSquare = document.querySelector(
+          `[data-row="${row}"][data-col="${col}"]`
+        );
+        selectedSquare.classList.add("selected");
+
+        const moves = getValidMoves(row, col);
+        moves.forEach((move) => {
+          const moveSquare = document.querySelector(
+            `[data-row="${move.row}"][data-col="${move.col}"]`
+          );
+          moveSquare.classList.add("valid-move");
+        });
+      }
+
+      // Clear selection
+      function clearSelection() {
+        selectedPiece = null;
+        const squares = document.querySelectorAll(".square");
+        squares.forEach((sq) => {
+          sq.classList.remove("selected", "valid-move");
+        });
+      }
+
+      // Get valid moves
+      function getValidMoves(row, col) {
+        const piece = board[row][col];
+        if (!piece) return [];
+
+        const moves = [];
+        const directions = piece.king
+          ? [
+              [-1, -1],
+              [-1, 1],
+              [1, -1],
+              [1, 1],
+            ]
+          : piece.player === 1
+          ? [
+              [-1, -1],
+              [-1, 1],
+            ]
+          : [
+              [1, -1],
+              [1, 1],
+            ];
+
+        // Check for captures first
+        const captures = [];
+        for (const [dr, dc] of directions) {
+          const captureMove = checkCapture(row, col, dr, dc);
+          if (captureMove) {
+            captures.push(captureMove);
+          }
+        }
+
+        if (captures.length > 0) {
+          return captures;
+        }
+
+        // Regular moves
+        for (const [dr, dc] of directions) {
+          const newRow = row + dr;
+          const newCol = col + dc;
+          if (isValidPosition(newRow, newCol) && !board[newRow][newCol]) {
+            moves.push({ row: newRow, col: newCol, captures: [] });
+          }
+        }
+
+        return moves;
+      }
+
+      // Check capture
+      function checkCapture(row, col, dr, dc) {
+        const enemyRow = row + dr;
+        const enemyCol = col + dc;
+        const landRow = row + dr * 2;
+        const landCol = col + dc * 2;
+
+        if (
+          isValidPosition(enemyRow, enemyCol) &&
+          isValidPosition(landRow, landCol) &&
+          board[enemyRow][enemyCol] &&
+          board[enemyRow][enemyCol].player !== board[row][col].player &&
+          !board[landRow][landCol]
+        ) {
+          // Check for multiple captures
+          const tempBoard = JSON.parse(JSON.stringify(board));
+          tempBoard[landRow][landCol] = tempBoard[row][col];
+          tempBoard[row][col] = null;
+          tempBoard[enemyRow][enemyCol] = null;
+
+          const furtherCaptures = [];
+          const piece = tempBoard[landRow][landCol];
+          const directions = piece.king
+            ? [
+                [-1, -1],
+                [-1, 1],
+                [1, -1],
+                [1, 1],
+              ]
+            : piece.player === 1
+            ? [
+                [-1, -1],
+                [-1, 1],
+              ]
+            : [
+                [1, -1],
+                [1, 1],
+              ];
+
+          for (const [ndr, ndc] of directions) {
+            const nextCapture = checkCaptureOnBoard(
+              tempBoard,
+              landRow,
+              landCol,
+              ndr,
+              ndc
+            );
+            if (nextCapture) {
+              furtherCaptures.push(nextCapture);
+            }
+          }
+
+          if (furtherCaptures.length > 0) {
+            // Return the best capture chain
+            const bestCapture = furtherCaptures.reduce((best, current) =>
+              current.captures.length > best.captures.length ? current : best
+            );
+            return {
+              row: landRow,
+              col: landCol,
+              captures: [
+                { row: enemyRow, col: enemyCol },
+                ...bestCapture.captures,
+              ],
+            };
+          }
+
+          return {
+            row: landRow,
+            col: landCol,
+            captures: [{ row: enemyRow, col: enemyCol }],
+          };
+        }
+
+        return null;
+      }
+
+      // Check capture on specific board state
+      function checkCaptureOnBoard(boardState, row, col, dr, dc) {
+        const enemyRow = row + dr;
+        const enemyCol = col + dc;
+        const landRow = row + dr * 2;
+        const landCol = col + dc * 2;
+
+        if (
+          isValidPosition(enemyRow, enemyCol) &&
+          isValidPosition(landRow, landCol) &&
+          boardState[enemyRow][enemyCol] &&
+          boardState[enemyRow][enemyCol].player !==
+            boardState[row][col].player &&
+          !boardState[landRow][landCol]
+        ) {
+          return {
+            row: landRow,
+            col: landCol,
+            captures: [{ row: enemyRow, col: enemyCol }],
+          };
+        }
+
+        return null;
+      }
+
+      // Is valid position
+      function isValidPosition(row, col) {
+        return row >= 0 && row < 8 && col >= 0 && col < 8;
+      }
+
+      // Make move
+      function makeMove(fromRow, fromCol, toRow, toCol, captures) {
+        const piece = board[fromRow][fromCol];
+        board[toRow][toCol] = piece;
+        board[fromRow][fromCol] = null;
+
+        // Animate captures
+        captures.forEach((capture) => {
+          const capturedSquare = document.querySelector(
+            `[data-row="${capture.row}"][data-col="${capture.col}"] .piece`
+          );
+          if (capturedSquare) {
+            capturedSquare.classList.add("capturing");
+            setTimeout(() => {
+              board[capture.row][capture.col] = null;
+              renderBoard();
+            }, 500);
+          }
+        });
+
+        // Check for king promotion
+        if (
+          (piece.player === 1 && toRow === 0) ||
+          (piece.player === 2 && toRow === 7)
+        ) {
+          piece.king = true;
+        }
+
+        renderBoard();
+
+        // Check win condition
+        if (checkWin()) {
+          showWinner();
+        } else {
+          currentPlayer = currentPlayer === 1 ? 2 : 1;
+          updateCurrentPlayerIndicator();
+        }
+      }
+
+      // Check win
+      function checkWin() {
+        let player1Pieces = 0;
+        let player2Pieces = 0;
+
+        for (let row = 0; row < 8; row++) {
+          for (let col = 0; col < 8; col++) {
+            if (board[row][col]) {
+              if (board[row][col].player === 1) player1Pieces++;
+              else player2Pieces++;
+            }
+          }
+        }
+
+        return player1Pieces === 0 || player2Pieces === 0;
+      }
+
+      // Show winner
+      function showWinner() {
+        const winner = currentPlayer === 1 ? playerName : opponentName;
+        document.getElementById(
+          "winnerText"
+        ).textContent = `🎉 ${winner} ชนะ! 🎉`;
+        document.getElementById("winScreen").style.display = "flex";
+
+        // Create confetti
+        for (let i = 0; i < 50; i++) {
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+          confetti.style.left = Math.random() * 100 + "%";
+          confetti.style.backgroundColor = `hsl(${
+            Math.random() * 360
+          }, 100%, 50%)`;
+          confetti.style.animationDelay = Math.random() * 3 + "s";
+          document.getElementById("winScreen").appendChild(confetti);
+        }
+      }
+
+      // Update current player indicator
+      function updateCurrentPlayerIndicator() {
+        const player1Info = document.getElementById("player1Info");
+        const player2Info = document.getElementById("player2Info");
+
+        if (currentPlayer === 1) {
+          player1Info.classList.add("current-turn");
+          player2Info.classList.remove("current-turn");
+        } else {
+          player1Info.classList.remove("current-turn");
+          player2Info.classList.add("current-turn");
+        }
+      }
+
+      // Create room
+      function createRoom() {
+        playerName = document.getElementById("playerName").value.trim();
+        if (!playerName) {
+          alert("กรุณาใส่ชื่อผู้เล่น / Please enter your name");
+          return;
+        }
+
+        isHost = true;
+        myPlayerNumber = 1;
+        roomCode = generateRoomCode();
+
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("gameContainer").style.display = "block";
+        document.getElementById("player1Name").textContent = playerName;
+        document.getElementById("roomCodeDisplay").style.display = "block";
+        document.getElementById("roomCodeText").textContent = roomCode;
+
+        initBoard();
+        setupPeerConnection();
+      }
+
+      // Join room
+      function joinRoom() {
+        playerName = document.getElementById("playerName").value.trim();
+        roomCode = document
+          .getElementById("roomCode")
+          .value.trim()
+          .toUpperCase();
+
+        if (!playerName) {
+          alert("กรุณาใส่ชื่อผู้เล่น / Please enter your name");
+          return;
+        }
+
+        if (!roomCode) {
+          alert("กรุณาใส่รหัสห้อง / Please enter room code");
+          return;
+        }
+
+        isHost = false;
+        myPlayerNumber = 2;
+
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("gameContainer").style.display = "block";
+        document.getElementById("player2Name").textContent = playerName;
+
+        initBoard();
+        connectToPeer(roomCode);
+      }
+
+      // Generate room code
+      function generateRoomCode() {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let code = "";
+        for (let i = 0; i < 6; i++) {
+          code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return code;
+      }
+
+      // Setup peer connection (simplified simulation)
+      function setupPeerConnection() {
+        // In a real implementation, you would use PeerJS or WebRTC here
+        // For this demo, we'll simulate with localStorage
+        localStorage.setItem(
+          `room_${roomCode}`,
+          JSON.stringify({
+            host: playerName,
+            board: board,
+            currentPlayer: currentPlayer,
+          })
+        );
+
+        // Check for opponent
+        setInterval(() => {
+          const roomData = JSON.parse(
+            localStorage.getItem(`room_${roomCode}`) || "{}"
+          );
+          if (roomData.guest && !gameStarted) {
+            opponentName = roomData.guest;
+            document.getElementById("player2Name").textContent = opponentName;
+            document.getElementById("connectionStatus").textContent =
+              "เชื่อมต่อแล้ว! / Connected!";
+            document.getElementById("connectionStatus").className =
+              "status-connected";
+            gameStarted = true;
+          }
+
+          if (roomData.lastMove && roomData.lastMovePlayer !== myPlayerNumber) {
+            const move = roomData.lastMove;
+            makeMove(
+              move.fromRow,
+              move.fromCol,
+              move.toRow,
+              move.toCol,
+              move.captures
+            );
+          }
+        }, 1000);
+      }
+
+      // Connect to peer
+      function connectToPeer(code) {
+        // Check if room exists
+        const checkRoom = setInterval(() => {
+          const roomData = JSON.parse(
+            localStorage.getItem(`room_${code}`) || "{}"
+          );
+          if (roomData.host) {
+            clearInterval(checkRoom);
+            opponentName = roomData.host;
+            document.getElementById("player1Name").textContent = opponentName;
+
+            // Update room with guest info
+            roomData.guest = playerName;
+            localStorage.setItem(`room_${code}`, JSON.stringify(roomData));
+
+            document.getElementById("connectionStatus").textContent =
+              "เชื่อมต่อแล้ว! / Connected!";
+            document.getElementById("connectionStatus").className =
+              "status-connected";
+            gameStarted = true;
+
+            // Listen for moves
+            setInterval(() => {
+              const updatedRoomData = JSON.parse(
+                localStorage.getItem(`room_${code}`) || "{}"
+              );
+              if (
+                updatedRoomData.lastMove &&
+                updatedRoomData.lastMovePlayer !== myPlayerNumber
+              ) {
+                const move = updatedRoomData.lastMove;
+                makeMove(
+                  move.fromRow,
+                  move.fromCol,
+                  move.toRow,
+                  move.toCol,
+                  move.captures
+                );
+              }
+            }, 1000);
+          }
+        }, 1000);
+      }
+
+      // Send move
+      function sendMove(fromRow, fromCol, toRow, toCol, captures) {
+        const roomData = JSON.parse(
+          localStorage.getItem(`room_${roomCode}`) || "{}"
+        );
+        roomData.lastMove = { fromRow, fromCol, toRow, toCol, captures };
+        roomData.lastMovePlayer = myPlayerNumber;
+        roomData.board = board;
+        roomData.currentPlayer = currentPlayer;
+        localStorage.setItem(`room_${roomCode}`, JSON.stringify(roomData));
+      }
+
+      // Reset game
+      function resetGame() {
+        board = [];
+        selectedPiece = null;
+        currentPlayer = 1;
+        gameStarted = false;
+
+        document.getElementById("winScreen").style.display = "none";
+        document.getElementById("gameContainer").style.display = "none";
+        document.getElementById("loginScreen").style.display = "block";
+
+        // Clear confetti
+        const confetti = document.querySelectorAll(".confetti");
+        confetti.forEach((c) => c.remove());
+
+        // Clear room data
+        if (roomCode) {
+          localStorage.removeItem(`room_${roomCode}`);
+        }
+      }
+
+      // Initialize
+      createBubbles();
+    </script>
+  </body>
+</html>
