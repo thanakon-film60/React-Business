@@ -654,7 +654,8 @@
         for (let row = 0; row < 8; row++) {
           board[row] = [];
           for (let col = 0; col < 8; col++) {
-            if ((row + col) % 2 === 1) {
+            if ((row + col) % 2 === 0) {
+              // <-- เปลี่ยนเป็น 0
               if (row < 3) {
                 board[row][col] = { player: 2, king: false };
               } else if (row > 4) {
@@ -669,7 +670,6 @@
         }
         renderBoard();
       }
-
       // Render board
       function renderBoard() {
         const boardElement = document.getElementById("board");
@@ -846,18 +846,13 @@
         return row >= 0 && row < 8 && col >= 0 && col < 8;
       }
 
-      // Make move
       function makeMove(fromRow, fromCol, toRow, toCol, captures) {
         const piece = board[fromRow][fromCol];
         board[toRow][toCol] = piece;
         board[fromRow][fromCol] = null;
 
-        // Process captures
-        captures.forEach((capture) => {
-          board[capture.row][capture.col] = null;
-        });
+        captures.forEach((c) => (board[c.row][c.col] = null));
 
-        // Check for king promotion
         if (
           (piece.player === 1 && toRow === 0) ||
           (piece.player === 2 && toRow === 7)
@@ -865,18 +860,19 @@
           piece.king = true;
         }
 
-        renderBoard();
-
-        // Check win condition
+        // เช็คชนะก่อนสลับตา
         if (checkWin()) {
+          renderBoard();
           showWinner();
-        } else {
-          currentPlayer = currentPlayer === 1 ? 2 : 1;
-          updateCurrentPlayerIndicator();
+          return;
         }
+
+        // สลับตาแล้วค่อยยิงขึ้น Firebase
+        currentPlayer = currentPlayer === 1 ? 2 : 1;
+        renderBoard();
+        updateCurrentPlayerIndicator();
       }
 
-      // Check win
       function checkWin() {
         let player1Pieces = 0;
         let player2Pieces = 0;
@@ -1078,6 +1074,16 @@
           document.getElementById("player1Name").textContent = playerName;
           document.getElementById("roomCodeDisplay").style.display = "block";
           document.getElementById("roomCodeText").textContent = roomCode;
+
+          // โหลดบอร์ดจากห้อง (ที่เพิ่ง set ตอน createRoom) แล้วค่อย render
+          roomRef.once("value").then((snap) => {
+            const data = snap.val();
+            board = data.board;
+            currentPlayer = data.currentPlayer || 1;
+            renderBoard();
+            gameStarted = true;
+            updateCurrentPlayerIndicator();
+          });
         } else {
           document.getElementById("player2Name").textContent = playerName;
           roomRef.once("value").then((snapshot) => {
@@ -1091,8 +1097,6 @@
             updateCurrentPlayerIndicator();
           });
         }
-
-        initBoard();
       }
 
       // Listen for opponent (host only)
@@ -1188,7 +1192,8 @@
         for (let row = 0; row < 8; row++) {
           boardData[row] = [];
           for (let col = 0; col < 8; col++) {
-            if ((row + col) % 2 === 1) {
+            if ((row + col) % 2 === 0) {
+              // <-- เปลี่ยนเป็น 0
               if (row < 3) {
                 boardData[row][col] = { player: 2, king: false };
               } else if (row > 4) {
