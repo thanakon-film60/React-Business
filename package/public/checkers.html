@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>หมากฮอสออนไลน์ - Thai Checkers Online</title>
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK (compat for simple script usage) -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
@@ -19,7 +19,8 @@
       }
 
       body {
-        font-family: "Kanit", sans-serif;
+        font-family: "Kanit", system-ui, -apple-system, Segoe UI, Roboto,
+          Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
         display: flex;
@@ -27,25 +28,21 @@
         align-items: center;
         overflow: hidden;
         position: relative;
+        color: #1f2937;
       }
 
       /* Animated background */
       .bg-animation {
         position: fixed;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
+        inset: 0;
         z-index: -1;
       }
-
       .bg-bubble {
         position: absolute;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.08);
         animation: float 20s infinite ease-in-out;
       }
-
       @keyframes float {
         0%,
         100% {
@@ -62,401 +59,304 @@
         }
       }
 
-      /* Login Screen */
-      .login-screen {
-        background: rgba(255, 255, 255, 0.95);
-        padding: 40px;
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        text-align: center;
-        max-width: 500px;
-        width: 90%;
+      /* Cards */
+      .card {
+        background: rgba(255, 255, 255, 0.96);
         backdrop-filter: blur(10px);
-        animation: slideIn 0.5s ease-out;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
       }
 
+      /* Login */
+      .login-screen {
+        width: min(520px, 92vw);
+        padding: 36px;
+        text-align: center;
+        animation: slideIn 0.45s ease-out;
+      }
       @keyframes slideIn {
         from {
           opacity: 0;
-          transform: translateY(-30px);
+          transform: translateY(-24px);
         }
         to {
           opacity: 1;
           transform: translateY(0);
         }
       }
-
       .login-screen h1 {
         color: #764ba2;
-        font-size: 2.5em;
-        margin-bottom: 10px;
+        font-size: 2.4rem;
         font-weight: 800;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        letter-spacing: 0.2px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.08);
       }
-
       .login-screen h2 {
         color: #667eea;
-        font-size: 1.5em;
-        margin-bottom: 30px;
-        font-weight: 400;
+        font-size: 1.25rem;
+        font-weight: 500;
+        margin: 6px 0 22px;
       }
 
       .input-group {
-        margin-bottom: 20px;
+        margin: 14px 0;
+        text-align: left;
       }
-
       .input-group input {
         width: 100%;
-        padding: 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
+        padding: 14px 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
         font-size: 16px;
-        font-family: "Kanit", sans-serif;
-        transition: all 0.3s;
+        transition: all 0.25s;
+        font-family: inherit;
       }
-
       .input-group input:focus {
         outline: none;
         border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
       }
 
       .button-group {
         display: flex;
-        gap: 10px;
-        margin-top: 20px;
+        gap: 12px;
+        margin-top: 18px;
       }
-
       .btn {
         flex: 1;
-        padding: 15px 30px;
-        border: none;
-        border-radius: 10px;
-        font-size: 18px;
-        font-family: "Kanit", sans-serif;
-        font-weight: 600;
+        padding: 14px 18px;
+        border: 0;
+        border-radius: 12px;
+        font-weight: 700;
         cursor: pointer;
-        transition: all 0.3s;
-        position: relative;
-        overflow: hidden;
+        color: #fff;
+        transition: transform 0.15s, box-shadow 0.15s;
       }
-
       .btn-primary {
         background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
       }
-
       .btn-secondary {
         background: linear-gradient(135deg, #f093fb, #f5576c);
-        color: white;
       }
-
       .btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
       }
-
-      .btn:active {
-        transform: translateY(0);
-      }
-
       .btn:disabled {
-        opacity: 0.5;
+        opacity: 0.55;
         cursor: not-allowed;
       }
 
-      /* Game Container */
+      .notice {
+        margin-top: 18px;
+        padding: 12px 14px;
+        background: #fff7d6;
+        color: #8a6d3b;
+        border-radius: 12px;
+        font-size: 13px;
+      }
+
+      /* Game container */
       .game-container {
         display: none;
-        background: rgba(255, 255, 255, 0.95);
-        padding: 20px;
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(10px);
-        animation: fadeIn 0.5s;
+        width: min(760px, 92vw);
+        padding: 18px;
       }
 
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      /* Player Info */
       .player-info {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 20px;
-        padding: 15px;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 12px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        color: #fff;
         background: linear-gradient(135deg, #667eea, #764ba2);
-        border-radius: 15px;
-        color: white;
       }
-
       .player {
         display: flex;
         align-items: center;
         gap: 10px;
       }
-
       .player-piece {
-        width: 30px;
-        height: 30px;
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
       }
-
       .player1-piece {
         background: linear-gradient(135deg, #ff6b6b, #ee5a24);
       }
       .player2-piece {
         background: linear-gradient(135deg, #4ecdc4, #44a3aa);
       }
-
       .player-name {
-        font-size: 18px;
-        font-weight: 600;
+        font-weight: 700;
+        font-size: 17px;
       }
-
       .current-turn {
-        animation: pulse 2s infinite;
+        animation: pulse 1.5s infinite;
       }
-
       @keyframes pulse {
         0%,
         100% {
           transform: scale(1);
         }
         50% {
-          transform: scale(1.1);
+          transform: scale(1.06);
         }
       }
 
-      /* Game Board */
-      .board {
-        display: grid;
-        grid-template-columns: repeat(8, 60px);
-        grid-template-rows: repeat(8, 60px);
-        gap: 2px;
-        background: #2c3e50;
-        padding: 10px;
-        border-radius: 15px;
-        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+      .room-code {
+        margin: 10px auto;
+        text-align: center;
+        width: max-content;
+        color: #fff;
+        padding: 8px 16px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        font-weight: 700;
+        letter-spacing: 2px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .room-code:hover::after {
+        content: "คลิกเพื่อคัดลอก";
+        display: block;
+        font-weight: 500;
+        font-size: 12px;
+        margin-top: 4px;
+        opacity: 0.9;
+      }
+      .copied {
+        animation: copied 0.35s;
+      }
+      @keyframes copied {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.08);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
+      /* Board */
+      .board {
+        display: grid;
+        grid-template-columns: repeat(8, 64px);
+        grid-template-rows: repeat(8, 64px);
+        gap: 2px;
+        background: #1f2b38;
+        padding: 10px;
+        border-radius: 16px;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.35);
+        margin: 0 auto;
+      }
       .square {
-        width: 60px;
-        height: 60px;
+        width: 64px;
+        height: 64px;
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
-        transition: all 0.3s;
+        transition: all 0.2s;
         position: relative;
       }
-
+      /* IMPORTANT: dark (playable) uses parity (row+col)%2===0 */
       .square.light {
         background: linear-gradient(135deg, #ffecd2, #fcb69f);
       }
-
       .square.dark {
         background: linear-gradient(135deg, #3c3c3c, #2c2c2c);
       }
-
       .square.valid-move {
-        background: linear-gradient(135deg, #a8ff78, #78ffd6) !important;
-        animation: glow 1s infinite;
+        outline: 3px solid #78ffd6;
+        box-shadow: 0 0 18px rgba(120, 255, 214, 0.8) inset;
       }
-
-      @keyframes glow {
-        0%,
-        100% {
-          box-shadow: 0 0 5px rgba(168, 255, 120, 0.5);
-        }
-        50% {
-          box-shadow: 0 0 20px rgba(168, 255, 120, 0.8);
-        }
-      }
-
       .square.selected {
-        background: linear-gradient(135deg, #ffd89b, #19547b) !important;
-        animation: selected-pulse 0.5s infinite;
-      }
-
-      @keyframes selected-pulse {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(0.95);
-        }
+        outline: 3px solid #ffd166;
+        box-shadow: 0 0 18px rgba(255, 209, 102, 0.85) inset;
       }
 
       .piece {
-        width: 45px;
-        height: 45px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
         cursor: pointer;
-        transition: all 0.3s;
+        transition: transform 0.15s, box-shadow 0.15s;
         position: relative;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
       }
-
       .piece.player1 {
         background: linear-gradient(135deg, #ff6b6b, #ee5a24);
       }
-
       .piece.player2 {
         background: linear-gradient(135deg, #4ecdc4, #44a3aa);
       }
-
       .piece.king::after {
         content: "♔";
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        inset: 0;
+        display: grid;
+        place-items: center;
         font-size: 24px;
         color: gold;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-        animation: crown-glow 2s infinite;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.85);
       }
-
-      @keyframes crown-glow {
-        0%,
-        100% {
-          filter: brightness(1);
-        }
-        50% {
-          filter: brightness(1.5);
-        }
-      }
-
       .piece:hover {
-        transform: scale(1.1);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        transform: scale(1.08);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
       }
 
-      .piece.capturing {
-        animation: capture-shake 0.5s;
-      }
-
-      @keyframes capture-shake {
-        0%,
-        100% {
-          transform: translateX(0);
-        }
-        25% {
-          transform: translateX(-5px) rotate(-5deg);
-        }
-        75% {
-          transform: translateX(5px) rotate(5deg);
-        }
-      }
-
-      /* Connection Status */
       .connection-status {
-        margin-top: 20px;
+        margin-top: 14px;
         padding: 10px;
-        background: #f0f0f0;
         border-radius: 10px;
+        background: #f3f4f6;
         text-align: center;
         font-size: 14px;
       }
-
       .status-waiting {
         color: #f39c12;
         animation: blink 1s infinite;
       }
-
-      @keyframes blink {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.5;
-        }
-      }
-
       .status-connected {
         color: #27ae60;
       }
       .status-disconnected {
         color: #e74c3c;
       }
-
-      /* Room Code Display */
-      .room-code {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 10px;
-        font-size: 20px;
-        font-weight: 600;
-        letter-spacing: 2px;
-        margin: 10px 0;
-        text-align: center;
-        cursor: pointer;
-        position: relative;
-      }
-
-      .room-code:hover::after {
-        content: "คลิกเพื่อคัดลอก";
-        position: absolute;
-        bottom: -25px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        font-size: 12px;
-        white-space: nowrap;
-      }
-
-      .copied {
-        animation: copied 0.5s;
-      }
-
-      @keyframes copied {
-        0% {
-          transform: scale(1);
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
         }
         50% {
-          transform: scale(1.1);
-        }
-        100% {
-          transform: scale(1);
+          opacity: 0.55;
         }
       }
 
-      /* Win Screen */
+      /* Win modal */
       .win-screen {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
+        inset: 0;
         display: none;
-        justify-content: center;
-        align-items: center;
+        place-items: center;
+        background: rgba(0, 0, 0, 0.8);
         z-index: 1000;
       }
-
       .win-content {
-        background: white;
-        padding: 40px;
-        border-radius: 20px;
+        background: #fff;
+        padding: 36px;
+        border-radius: 18px;
         text-align: center;
-        animation: bounceIn 0.5s;
+        min-width: 280px;
+        animation: bounceIn 0.45s;
       }
-
       @keyframes bounceIn {
         0% {
           transform: scale(0.3);
@@ -466,117 +366,97 @@
           transform: scale(1.05);
         }
         70% {
-          transform: scale(0.9);
+          transform: scale(0.92);
         }
         100% {
           transform: scale(1);
           opacity: 1;
         }
       }
-
       .win-content h2 {
-        font-size: 2.5em;
+        font-size: 2rem;
         background: linear-gradient(135deg, #667eea, #764ba2);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 20px;
+        margin-bottom: 14px;
       }
 
-      .confetti {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background: #f39c12;
-        animation: confetti-fall 3s infinite;
-      }
-
-      @keyframes confetti-fall {
-        to {
-          transform: translateY(100vh) rotate(360deg);
+      /* Responsive */
+      @media (max-width: 560px) {
+        .board {
+          grid-template-columns: repeat(8, 48px);
+          grid-template-rows: repeat(8, 48px);
         }
-      }
-
-      /* Loading */
-      .loading {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 3px solid rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        border-top-color: #fff;
-        animation: spin 1s ease-in-out infinite;
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
+        .square {
+          width: 48px;
+          height: 48px;
         }
-      }
-
-      .notice {
-        background: #fff3cd;
-        color: #856404;
-        padding: 15px;
-        border-radius: 10px;
-        margin-top: 20px;
-        font-size: 14px;
+        .piece {
+          width: 38px;
+          height: 38px;
+        }
       }
     </style>
   </head>
   <body>
     <div class="bg-animation"></div>
 
-    <!-- Login Screen -->
-    <div class="login-screen" id="loginScreen">
+    <!-- Login -->
+    <div id="loginScreen" class="card login-screen">
       <h1>หมากฮอส</h1>
       <h2>Thai Checkers Online</h2>
+
       <div class="input-group">
-        <input
-          type="text"
-          id="playerName"
-          placeholder="ใส่ชื่อผู้เล่น / Enter your name"
-          maxlength="20" />
+        <label for="playerName">ชื่อผู้เล่น / Your name</label>
+        <input id="playerName" placeholder="ใส่ชื่อ..." maxlength="20" />
       </div>
+
       <div class="input-group">
+        <label for="roomCode">รหัสห้อง / Room code (หากเข้าร่วม)</label>
         <input
-          type="text"
           id="roomCode"
-          placeholder="รหัสห้อง (ถ้ามี) / Room code (if joining)"
+          placeholder="เช่น CIJ0DZ"
           maxlength="6"
           style="text-transform: uppercase" />
       </div>
+
       <div class="button-group">
-        <button class="btn btn-primary" id="createBtn" onclick="createRoom()">
-          สร้างห้อง<br />Create Room
+        <button id="createBtn" class="btn btn-primary" onclick="createRoom()">
+          สร้างห้อง / Create Room
         </button>
-        <button class="btn btn-secondary" id="joinBtn" onclick="joinRoom()">
-          เข้าร่วม<br />Join Room
+        <button id="joinBtn" class="btn btn-secondary" onclick="joinRoom()">
+          เข้าร่วม / Join Room
         </button>
       </div>
+
       <div class="notice">
-        ⚠️ หากไม่ทำงาน กรุณาติดต่อผู้ดูแลเพื่อตั้งค่า Firebase<br />
-        📧 ต้องการ Firebase Config ที่ถูกต้อง
+        ⚠️ หากไม่ทำงาน ให้ตรวจค่า Firebase Config ให้ถูกต้อง (project:
+        thanakon-dev)
       </div>
     </div>
 
-    <!-- Game Container -->
-    <div class="game-container" id="gameContainer">
+    <!-- Game -->
+    <div id="gameContainer" class="card game-container">
       <div class="player-info">
-        <div class="player" id="player1Info">
+        <div id="player1Info" class="player">
           <div class="player-piece player1-piece"></div>
-          <span class="player-name" id="player1Name">Player 1</span>
+          <span id="player1Name" class="player-name">Player 1</span>
         </div>
-        <div class="player" id="player2Info">
+        <div id="player2Info" class="player">
           <div class="player-piece player2-piece"></div>
-          <span class="player-name" id="player2Name">Waiting...</span>
+          <span id="player2Name" class="player-name">Waiting...</span>
         </div>
       </div>
 
-      <div class="room-code" id="roomCodeDisplay" onclick="copyRoomCode()">
+      <div
+        id="roomCodeDisplay"
+        class="room-code"
+        style="display: none"
+        onclick="copyRoomCode()">
         Room: <span id="roomCodeText"></span>
       </div>
 
-      <div class="board" id="board"></div>
+      <div id="board" class="board"></div>
 
       <div class="connection-status">
         <span id="connectionStatus" class="status-waiting"
@@ -585,8 +465,8 @@
       </div>
     </div>
 
-    <!-- Win Screen -->
-    <div class="win-screen" id="winScreen">
+    <!-- Win -->
+    <div id="winScreen" class="win-screen">
       <div class="win-content">
         <h2 id="winnerText">🎉 Winner! 🎉</h2>
         <button class="btn btn-primary" onclick="resetGame()">
@@ -596,7 +476,7 @@
     </div>
 
     <script>
-      // Firebase Configuration - thankon-dev project
+      // ===== Firebase configuration (thanakon-dev) =====
       const firebaseConfig = {
         apiKey: "AIzaSyBxrYENEgtT36nuy5csCfwITZqD__4W9Ns",
         authDomain: "thanakon-dev.firebaseapp.com",
@@ -609,173 +489,143 @@
         measurementId: "G-6B2QVCSSHH",
       };
 
-      // Initialize Firebase
       let database;
       try {
         firebase.initializeApp(firebaseConfig);
         database = firebase.database();
-      } catch (error) {
-        console.error("Firebase initialization error:", error);
-        alert("ไม่สามารถเชื่อมต่อ Firebase ได้\nกรุณาติดต่อผู้ดูแลระบบ");
+      } catch (e) {
+        console.error(e);
+        alert("ไม่สามารถเชื่อมต่อ Firebase ได้");
       }
 
-      // Game variables
-      let board = [];
-      let selectedPiece = null;
-      let currentPlayer = 1;
-      let playerName = "";
-      let opponentName = "";
-      let roomCode = "";
+      // ===== Game state =====
+      let board = []; // 8x8 (null | {player:1|2, king:boolean}) เฉพาะช่องดำเท่านั้น
+      let selected = null; // {row,col}
+      let currentPlayer = 1; // 1 หรือ 2
+      let playerName = ""; // my name
+      let opponentName = ""; // other player
+      let roomCode = ""; // 6 chars
       let isHost = false;
       let gameStarted = false;
-      let myPlayerNumber = 0;
+      let myPlayerNumber = 0; // 1 หรือ 2
       let roomRef = null;
       let listeners = [];
 
-      // Initialize background bubbles
+      // ===== UI helpers =====
       function createBubbles() {
-        const bgAnimation = document.querySelector(".bg-animation");
-        for (let i = 0; i < 15; i++) {
-          const bubble = document.createElement("div");
-          bubble.className = "bg-bubble";
-          bubble.style.width = Math.random() * 100 + 50 + "px";
-          bubble.style.height = bubble.style.width;
-          bubble.style.left = Math.random() * 100 + "%";
-          bubble.style.top = Math.random() * 100 + "%";
-          bubble.style.animationDelay = Math.random() * 20 + "s";
-          bubble.style.animationDuration = Math.random() * 10 + 20 + "s";
-          bgAnimation.appendChild(bubble);
+        const bg = document.querySelector(".bg-animation");
+        for (let i = 0; i < 14; i++) {
+          const b = document.createElement("div");
+          b.className = "bg-bubble";
+          const s = 40 + Math.random() * 120;
+          b.style.width = b.style.height = s + "px";
+          b.style.left = Math.random() * 100 + "%";
+          b.style.top = Math.random() * 100 + "%";
+          b.style.animationDelay = Math.random() * 18 + "s";
+          b.style.animationDuration = 20 + Math.random() * 10 + "s";
+          bg.appendChild(b);
         }
       }
+      createBubbles();
 
-      // Initialize board
-      function initBoard() {
-        board = [];
-        for (let row = 0; row < 8; row++) {
-          board[row] = [];
-          for (let col = 0; col < 8; col++) {
-            if ((row + col) % 2 === 0) {
-              // <-- เปลี่ยนเป็น 0
-              if (row < 3) {
-                board[row][col] = { player: 2, king: false };
-              } else if (row > 4) {
-                board[row][col] = { player: 1, king: false };
-              } else {
-                board[row][col] = null;
-              }
-            } else {
-              board[row][col] = null;
+      // ===== Board setup (IMPORTANT: playable squares have (row+col)%2===0 and rendered as .dark) =====
+      function initBoardData() {
+        const data = Array.from({ length: 8 }, () => Array(8).fill(null));
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            if ((r + c) % 2 === 0) {
+              // dark squares only
+              if (r < 3) data[r][c] = { player: 2, king: false };
+              else if (r > 4) data[r][c] = { player: 1, king: false };
             }
           }
         }
-        renderBoard();
+        return data;
       }
-      // Render board
+
       function renderBoard() {
-        const boardElement = document.getElementById("board");
-        boardElement.innerHTML = "";
+        const el = document.getElementById("board");
+        el.innerHTML = "";
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            const sq = document.createElement("div");
+            // visual parity — light for non-playable, dark for playable
+            sq.className = "square " + ((r + c) % 2 === 0 ? "dark" : "light");
+            sq.dataset.row = r;
+            sq.dataset.col = c;
 
-        for (let row = 0; row < 8; row++) {
-          for (let col = 0; col < 8; col++) {
-            const square = document.createElement("div");
-            square.className =
-              "square " + ((row + col) % 2 === 0 ? "light" : "dark");
-            square.dataset.row = row;
-            square.dataset.col = col;
-
-            if (board[row][col]) {
-              const piece = document.createElement("div");
-              piece.className = `piece player${board[row][col].player}`;
-              if (board[row][col].king) {
-                piece.classList.add("king");
-              }
-              square.appendChild(piece);
+            const piece = board?.[r]?.[c];
+            if (piece) {
+              const p = document.createElement("div");
+              p.className =
+                `piece player${piece.player}` + (piece.king ? " king" : "");
+              sq.appendChild(p);
             }
 
-            square.onclick = () => handleSquareClick(row, col);
-            boardElement.appendChild(square);
+            sq.onclick = () => handleSquareClick(r, c);
+            el.appendChild(sq);
           }
         }
-
-        updateCurrentPlayerIndicator();
+        updateTurnBanner();
       }
 
-      // Handle square click
-      function handleSquareClick(row, col) {
+      // ===== Selection & moves =====
+      function handleSquareClick(r, c) {
         if (!gameStarted || currentPlayer !== myPlayerNumber) return;
+        const piece = board[r][c];
 
-        if (selectedPiece) {
-          const moves = getValidMoves(selectedPiece.row, selectedPiece.col);
-          const move = moves.find((m) => m.row === row && m.col === col);
-
-          if (move) {
-            makeMove(
-              selectedPiece.row,
-              selectedPiece.col,
-              row,
-              col,
-              move.captures
-            );
-            sendMoveToFirebase(
-              selectedPiece.row,
-              selectedPiece.col,
-              row,
-              col,
-              move.captures
-            );
-            clearSelection();
-          } else {
-            clearSelection();
-            if (board[row][col] && board[row][col].player === currentPlayer) {
-              selectPiece(row, col);
-            }
+        // selecting my piece
+        if (!selected) {
+          if (piece && piece.player === currentPlayer) {
+            select(r, c);
           }
-        } else if (
-          board[row][col] &&
-          board[row][col].player === currentPlayer
-        ) {
-          selectPiece(row, col);
+          return;
+        }
+
+        // moving to target square
+        const moves = getValidMoves(selected.row, selected.col);
+        const chosen = moves.find((m) => m.row === r && m.col === c);
+        if (chosen) {
+          makeMove(selected.row, selected.col, r, c, chosen.captures);
+          // after makeMove, currentPlayer already toggled; then sync
+          sendMoveToFirebase(selected.row, selected.col, r, c, chosen.captures);
+          clearSelect();
+        } else {
+          // reselect
+          clearSelect();
+          if (piece && piece.player === currentPlayer) select(r, c);
         }
       }
 
-      // Select piece
-      function selectPiece(row, col) {
-        selectedPiece = { row, col };
-        const squares = document.querySelectorAll(".square");
-        squares.forEach((sq) => {
-          sq.classList.remove("selected", "valid-move");
-        });
-
-        const selectedSquare = document.querySelector(
-          `[data-row="${row}"][data-col="${col}"]`
-        );
-        selectedSquare.classList.add("selected");
-
-        const moves = getValidMoves(row, col);
-        moves.forEach((move) => {
-          const moveSquare = document.querySelector(
-            `[data-row="${move.row}"][data-col="${move.col}"]`
-          );
-          moveSquare.classList.add("valid-move");
-        });
+      function select(r, c) {
+        selected = { row: r, col: c };
+        document
+          .querySelectorAll(".square")
+          .forEach((s) => s.classList.remove("selected", "valid-move"));
+        document
+          .querySelector(`[data-row="${r}"][data-col="${c}"]`)
+          ?.classList.add("selected");
+        for (const m of getValidMoves(r, c)) {
+          document
+            .querySelector(`[data-row="${m.row}"][data-col="${m.col}"]`)
+            ?.classList.add("valid-move");
+        }
+      }
+      function clearSelect() {
+        selected = null;
+        document
+          .querySelectorAll(".square")
+          .forEach((s) => s.classList.remove("selected", "valid-move"));
       }
 
-      // Clear selection
-      function clearSelection() {
-        selectedPiece = null;
-        const squares = document.querySelectorAll(".square");
-        squares.forEach((sq) => {
-          sq.classList.remove("selected", "valid-move");
-        });
+      function isInside(r, c) {
+        return r >= 0 && r < 8 && c >= 0 && c < 8;
       }
 
-      // Get valid moves
-      function getValidMoves(row, col) {
-        const piece = board[row][col];
+      function getValidMoves(r, c) {
+        const piece = board[r][c];
         if (!piece) return [];
-
-        const moves = [];
-        const directions = piece.king
+        const dir = piece.king
           ? [
               [-1, -1],
               [-1, 1],
@@ -792,476 +642,334 @@
               [1, 1],
             ];
 
-        // Check for captures first
+        // capture first
         const captures = [];
-        for (const [dr, dc] of directions) {
-          const captureMove = checkCapture(row, col, dr, dc);
-          if (captureMove) {
-            captures.push(captureMove);
-          }
+        for (const [dr, dc] of dir) {
+          const cap = checkCapture(r, c, dr, dc);
+          if (cap) captures.push(cap);
         }
+        if (captures.length) return captures;
 
-        if (captures.length > 0) {
-          return captures;
+        // normal
+        const moves = [];
+        for (const [dr, dc] of dir) {
+          const nr = r + dr,
+            nc = c + dc;
+          if (isInside(nr, nc) && !board[nr][nc])
+            moves.push({ row: nr, col: nc, captures: [] });
         }
-
-        // Regular moves
-        for (const [dr, dc] of directions) {
-          const newRow = row + dr;
-          const newCol = col + dc;
-          if (isValidPosition(newRow, newCol) && !board[newRow][newCol]) {
-            moves.push({ row: newRow, col: newCol, captures: [] });
-          }
-        }
-
         return moves;
       }
 
-      // Check capture
-      function checkCapture(row, col, dr, dc) {
-        const enemyRow = row + dr;
-        const enemyCol = col + dc;
-        const landRow = row + dr * 2;
-        const landCol = col + dc * 2;
-
+      function checkCapture(r, c, dr, dc) {
+        const er = r + dr,
+          ec = c + dc;
+        const lr = r + dr * 2,
+          lc = c + dc * 2;
+        const me = board[r][c];
         if (
-          isValidPosition(enemyRow, enemyCol) &&
-          isValidPosition(landRow, landCol) &&
-          board[enemyRow][enemyCol] &&
-          board[enemyRow][enemyCol].player !== board[row][col].player &&
-          !board[landRow][landCol]
+          isInside(er, ec) &&
+          isInside(lr, lc) &&
+          board[er][ec] &&
+          board[er][ec].player !== me.player &&
+          !board[lr][lc]
         ) {
-          return {
-            row: landRow,
-            col: landCol,
-            captures: [{ row: enemyRow, col: enemyCol }],
-          };
+          return { row: lr, col: lc, captures: [{ row: er, col: ec }] };
         }
-
         return null;
       }
 
-      // Is valid position
-      function isValidPosition(row, col) {
-        return row >= 0 && row < 8 && col >= 0 && col < 8;
-      }
-
-      function makeMove(fromRow, fromCol, toRow, toCol, captures) {
-        const piece = board[fromRow][fromCol];
-        board[toRow][toCol] = piece;
-        board[fromRow][fromCol] = null;
-
-        captures.forEach((c) => (board[c.row][c.col] = null));
-
+      function makeMove(fr, fc, tr, tc, captures) {
+        const piece = board[fr][fc];
+        board[tr][tc] = piece;
+        board[fr][fc] = null;
+        captures.forEach((x) => (board[x.row][x.col] = null));
         if (
-          (piece.player === 1 && toRow === 0) ||
-          (piece.player === 2 && toRow === 7)
-        ) {
+          (piece.player === 1 && tr === 0) ||
+          (piece.player === 2 && tr === 7)
+        )
           piece.king = true;
-        }
 
-        // เช็คชนะก่อนสลับตา
+        // win?
+        renderBoard();
         if (checkWin()) {
-          renderBoard();
           showWinner();
           return;
         }
 
-        // สลับตาแล้วค่อยยิงขึ้น Firebase
         currentPlayer = currentPlayer === 1 ? 2 : 1;
-        renderBoard();
-        updateCurrentPlayerIndicator();
+        updateTurnBanner();
       }
 
       function checkWin() {
-        let player1Pieces = 0;
-        let player2Pieces = 0;
-
-        for (let row = 0; row < 8; row++) {
-          for (let col = 0; col < 8; col++) {
-            if (board[row][col]) {
-              if (board[row][col].player === 1) player1Pieces++;
-              else player2Pieces++;
+        let p1 = 0,
+          p2 = 0;
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            const t = board[r][c];
+            if (t) {
+              if (t.player === 1) p1++;
+              else p2++;
             }
           }
         }
-
-        return player1Pieces === 0 || player2Pieces === 0;
+        return p1 === 0 || p2 === 0;
       }
 
-      // Show winner
       function showWinner() {
-        let winner;
-        if (currentPlayer === 1) {
-          winner = myPlayerNumber === 1 ? opponentName : playerName;
-        } else {
-          winner = myPlayerNumber === 1 ? playerName : opponentName;
-        }
-
+        const name =
+          currentPlayer === 1
+            ? myPlayerNumber === 1
+              ? opponentName
+              : playerName
+            : myPlayerNumber === 1
+            ? playerName
+            : opponentName;
         document.getElementById(
           "winnerText"
-        ).textContent = `🎉 ${winner} ชนะ! 🎉`;
-        document.getElementById("winScreen").style.display = "flex";
-
-        // Create confetti
-        for (let i = 0; i < 50; i++) {
-          const confetti = document.createElement("div");
-          confetti.className = "confetti";
-          confetti.style.left = Math.random() * 100 + "%";
-          confetti.style.backgroundColor = `hsl(${
-            Math.random() * 360
-          }, 100%, 50%)`;
-          confetti.style.animationDelay = Math.random() * 3 + "s";
-          document.getElementById("winScreen").appendChild(confetti);
-        }
+        ).textContent = `🎉 ${name} ชนะ! 🎉`;
+        document.getElementById("winScreen").style.display = "grid";
       }
 
-      // Update current player indicator
-      function updateCurrentPlayerIndicator() {
-        const player1Info = document.getElementById("player1Info");
-        const player2Info = document.getElementById("player2Info");
-
-        if (currentPlayer === 1) {
-          player1Info.classList.add("current-turn");
-          player2Info.classList.remove("current-turn");
-        } else {
-          player1Info.classList.remove("current-turn");
-          player2Info.classList.add("current-turn");
-        }
-
-        // Update status message
+      function updateTurnBanner() {
+        const p1 = document.getElementById("player1Info");
+        const p2 = document.getElementById("player2Info");
+        p1.classList.toggle("current-turn", currentPlayer === 1);
+        p2.classList.toggle("current-turn", currentPlayer === 2);
         if (gameStarted) {
+          const el = document.getElementById("connectionStatus");
           if (currentPlayer === myPlayerNumber) {
-            document.getElementById("connectionStatus").textContent =
-              "ตาของคุณ! / Your turn!";
-            document.getElementById("connectionStatus").className =
-              "status-connected";
+            el.textContent = "ตาของคุณ! / Your turn!";
+            el.className = "status-connected";
           } else {
-            document.getElementById("connectionStatus").textContent =
-              "รอคู่ต่อสู้... / Opponent's turn...";
-            document.getElementById("connectionStatus").className =
-              "status-waiting";
+            el.textContent = "รอคู่ต่อสู้... / Opponent's turn...";
+            el.className = "status-waiting";
           }
         }
       }
 
-      // Generate room code
-      function generateRoomCode() {
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        let code = "";
-        for (let i = 0; i < 6; i++) {
-          code += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return code;
+      // ===== Room helpers =====
+      function genRoom() {
+        const s = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let x = "";
+        for (let i = 0; i < 6; i++)
+          x += s[Math.floor(Math.random() * s.length)];
+        return x;
       }
 
-      // Create room
       async function createRoom() {
         if (!database) {
           alert("ไม่สามารถเชื่อมต่อ Firebase ได้");
           return;
         }
-
         playerName = document.getElementById("playerName").value.trim();
         if (!playerName) {
-          alert("กรุณาใส่ชื่อผู้เล่น / Please enter your name");
+          alert("กรุณาใส่ชื่อผู้เล่น");
           return;
         }
-
         document.getElementById("createBtn").disabled = true;
-        roomCode = generateRoomCode();
 
-        try {
-          // Check if room exists
-          const roomSnapshot = await database
-            .ref(`rooms/${roomCode}`)
-            .once("value");
-          if (roomSnapshot.exists()) {
-            document.getElementById("createBtn").disabled = false;
-            createRoom(); // Try again with new code
-            return;
-          }
+        // generate new unique code
+        let code;
+        let tries = 0;
+        do {
+          code = genRoom();
+          const snap = await database.ref(`rooms/${code}`).once("value");
+          if (!snap.exists()) break;
+          tries++;
+        } while (tries < 6);
+        roomCode = code;
+        isHost = true;
+        myPlayerNumber = 1;
+        roomRef = database.ref(`rooms/${roomCode}`);
 
-          isHost = true;
-          myPlayerNumber = 1;
-
-          // Create room in Firebase
-          roomRef = database.ref(`rooms/${roomCode}`);
-          await roomRef.set({
-            host: playerName,
-            guest: null,
-            board: initBoardData(),
-            currentPlayer: 1,
-            lastMove: null,
-            created: firebase.database.ServerValue.TIMESTAMP,
-          });
-
-          setupGame();
-          listenForOpponent();
-        } catch (error) {
-          console.error("Error creating room:", error);
-          alert("เกิดข้อผิดพลาดในการสร้างห้อง");
-          document.getElementById("createBtn").disabled = false;
-        }
+        const data = {
+          host: playerName,
+          guest: null,
+          board: initBoardData(),
+          currentPlayer: 1,
+          lastMove: null,
+          created: firebase.database.ServerValue.TIMESTAMP,
+        };
+        await roomRef.set(data);
+        setupGame();
+        listenForOpponent();
       }
 
-      // Join room
       async function joinRoom() {
         if (!database) {
           alert("ไม่สามารถเชื่อมต่อ Firebase ได้");
           return;
         }
-
         playerName = document.getElementById("playerName").value.trim();
         roomCode = document
           .getElementById("roomCode")
           .value.trim()
           .toUpperCase();
-
         if (!playerName) {
-          alert("กรุณาใส่ชื่อผู้เล่น / Please enter your name");
+          alert("กรุณาใส่ชื่อผู้เล่น");
           return;
         }
-
         if (!roomCode) {
-          alert("กรุณาใส่รหัสห้อง / Please enter room code");
+          alert("กรุณาใส่รหัสห้อง");
           return;
         }
-
         document.getElementById("joinBtn").disabled = true;
 
-        try {
-          // Check if room exists
-          roomRef = database.ref(`rooms/${roomCode}`);
-          const roomSnapshot = await roomRef.once("value");
-
-          if (!roomSnapshot.exists()) {
-            alert("ไม่พบห้องที่ระบุ / Room not found");
-            document.getElementById("joinBtn").disabled = false;
-            return;
-          }
-
-          const roomData = roomSnapshot.val();
-          if (roomData.guest) {
-            alert("ห้องเต็มแล้ว / Room is full");
-            document.getElementById("joinBtn").disabled = false;
-            return;
-          }
-
-          isHost = false;
-          myPlayerNumber = 2;
-
-          // Join room
-          await roomRef.update({
-            guest: playerName,
-          });
-
-          setupGame();
-          listenForGameUpdates();
-        } catch (error) {
-          console.error("Error joining room:", error);
-          alert("เกิดข้อผิดพลาดในการเข้าร่วมห้อง");
+        roomRef = database.ref(`rooms/${roomCode}`);
+        const snap = await roomRef.once("value");
+        if (!snap.exists()) {
+          alert("ไม่พบห้อง");
           document.getElementById("joinBtn").disabled = false;
+          return;
         }
+        if (snap.val().guest) {
+          alert("ห้องเต็มแล้ว");
+          document.getElementById("joinBtn").disabled = false;
+          return;
+        }
+
+        isHost = false;
+        myPlayerNumber = 2;
+        await roomRef.update({ guest: playerName });
+        setupGame();
+        listenForGameUpdates();
       }
 
-      // Setup game
       function setupGame() {
+        // switch screens
         document.getElementById("loginScreen").style.display = "none";
         document.getElementById("gameContainer").style.display = "block";
 
         if (isHost) {
           document.getElementById("player1Name").textContent = playerName;
-          document.getElementById("roomCodeDisplay").style.display = "block";
+          document.getElementById("roomCodeDisplay").style.display =
+            "inline-block";
           document.getElementById("roomCodeText").textContent = roomCode;
-
-          // โหลดบอร์ดจากห้อง (ที่เพิ่ง set ตอน createRoom) แล้วค่อย render
-          roomRef.once("value").then((snap) => {
-            const data = snap.val();
-            board = data.board;
-            currentPlayer = data.currentPlayer || 1;
+          // host loads board from room then render
+          roomRef.once("value").then((s) => {
+            const d = s.val();
+            board = d.board;
+            currentPlayer = d.currentPlayer || 1;
             renderBoard();
             gameStarted = true;
-            updateCurrentPlayerIndicator();
+            updateTurnBanner();
           });
         } else {
           document.getElementById("player2Name").textContent = playerName;
-          roomRef.once("value").then((snapshot) => {
-            const data = snapshot.val();
-            document.getElementById("player1Name").textContent = data.host;
-            opponentName = data.host;
-            board = data.board;
-            currentPlayer = data.currentPlayer;
+          roomRef.once("value").then((s) => {
+            const d = s.val();
+            document.getElementById("player1Name").textContent = d.host;
+            opponentName = d.host;
+            board = d.board;
+            currentPlayer = d.currentPlayer;
             renderBoard();
             gameStarted = true;
-            updateCurrentPlayerIndicator();
+            updateTurnBanner();
           });
         }
+        // DO NOT call initBoard() here to avoid overwriting Firebase state
       }
 
-      // Listen for opponent (host only)
       function listenForOpponent() {
-        const guestListener = roomRef.child("guest").on("value", (snapshot) => {
-          const guest = snapshot.val();
-          if (guest && !gameStarted) {
-            opponentName = guest;
-            document.getElementById("player2Name").textContent = guest;
-            document.getElementById("connectionStatus").textContent =
-              "เชื่อมต่อแล้ว! / Connected!";
-            document.getElementById("connectionStatus").className =
-              "status-connected";
+        const l = roomRef.child("guest").on("value", (snap) => {
+          const g = snap.val();
+          if (g && !gameStarted) {
+            opponentName = g;
+            document.getElementById("player2Name").textContent = g;
+            const cs = document.getElementById("connectionStatus");
+            cs.textContent = "เชื่อมต่อแล้ว! / Connected!";
+            cs.className = "status-connected";
             gameStarted = true;
-            updateCurrentPlayerIndicator();
+            updateTurnBanner();
             listenForGameUpdates();
           }
         });
-        listeners.push(() =>
-          roomRef.child("guest").off("value", guestListener)
-        );
+        listeners.push(() => roomRef.child("guest").off("value", l));
       }
 
-      // Listen for game updates
       function listenForGameUpdates() {
-        // Listen for board changes
-        const boardListener = roomRef.child("board").on("value", (snapshot) => {
-          const newBoard = snapshot.val();
-          if (newBoard && JSON.stringify(newBoard) !== JSON.stringify(board)) {
-            board = newBoard;
+        // board sync
+        const bL = roomRef.child("board").on("value", (snap) => {
+          const v = snap.val();
+          if (v && JSON.stringify(v) !== JSON.stringify(board)) {
+            board = v;
             renderBoard();
           }
         });
-        listeners.push(() =>
-          roomRef.child("board").off("value", boardListener)
-        );
-
-        // Listen for current player changes
-        const playerListener = roomRef
-          .child("currentPlayer")
-          .on("value", (snapshot) => {
-            const player = snapshot.val();
-            if (player !== null) {
-              currentPlayer = player;
-              updateCurrentPlayerIndicator();
-            }
-          });
-        listeners.push(() =>
-          roomRef.child("currentPlayer").off("value", playerListener)
-        );
-
-        // Listen for disconnection
-        const disconnectRef = roomRef.child(isHost ? "guest" : "host");
-        disconnectRef.on("child_removed", () => {
-          document.getElementById("connectionStatus").textContent =
-            "คู่ต่อสู้ออกจากเกม / Opponent disconnected";
-          document.getElementById("connectionStatus").className =
-            "status-disconnected";
-          gameStarted = false;
+        listeners.push(() => roomRef.child("board").off("value", bL));
+        // current player sync
+        const pL = roomRef.child("currentPlayer").on("value", (snap) => {
+          const v = snap.val();
+          if (v !== null) {
+            currentPlayer = v;
+            updateTurnBanner();
+          }
         });
+        listeners.push(() => roomRef.child("currentPlayer").off("value", pL));
+        // disconnect watch (value becomes null)
+        const who = isHost ? "guest" : "host";
+        const dL = roomRef.child(who).on("value", (snap) => {
+          if (!snap.val()) {
+            const el = document.getElementById("connectionStatus");
+            el.textContent = "คู่ต่อสู้ออกจากเกม / Opponent disconnected";
+            el.className = "status-disconnected";
+            gameStarted = false;
+          }
+        });
+        listeners.push(() => roomRef.child(who).off("value", dL));
       }
 
-      // Send move to Firebase
-      async function sendMoveToFirebase(
-        fromRow,
-        fromCol,
-        toRow,
-        toCol,
-        captures
-      ) {
+      async function sendMoveToFirebase(fr, fc, tr, tc, captures) {
         if (!roomRef) return;
-
         try {
           await roomRef.update({
             board: board,
             currentPlayer: currentPlayer,
             lastMove: {
-              from: { row: fromRow, col: fromCol },
-              to: { row: toRow, col: toCol },
-              captures: captures,
+              from: { row: fr, col: fc },
+              to: { row: tr, col: tc },
+              captures,
               player: myPlayerNumber,
               timestamp: firebase.database.ServerValue.TIMESTAMP,
             },
           });
-        } catch (error) {
-          console.error("Error sending move:", error);
+        } catch (e) {
+          console.error("send move error", e);
         }
       }
 
-      // Initialize board data for Firebase
-      function initBoardData() {
-        const boardData = [];
-        for (let row = 0; row < 8; row++) {
-          boardData[row] = [];
-          for (let col = 0; col < 8; col++) {
-            if ((row + col) % 2 === 0) {
-              // <-- เปลี่ยนเป็น 0
-              if (row < 3) {
-                boardData[row][col] = { player: 2, king: false };
-              } else if (row > 4) {
-                boardData[row][col] = { player: 1, king: false };
-              } else {
-                boardData[row][col] = null;
-              }
-            } else {
-              boardData[row][col] = null;
-            }
-          }
-        }
-        return boardData;
-      }
-
-      // Copy room code
       function copyRoomCode() {
-        const roomCodeText =
-          document.getElementById("roomCodeText").textContent;
+        const code = document.getElementById("roomCodeText").textContent;
         navigator.clipboard
-          .writeText(roomCodeText)
+          ?.writeText(code)
           .then(() => {
-            document.getElementById("roomCodeDisplay").classList.add("copied");
+            const el = document.getElementById("roomCodeDisplay");
+            el.classList.add("copied");
+            setTimeout(() => el.classList.remove("copied"), 300);
+            const s = document.getElementById("connectionStatus");
+            const prev = s.textContent;
+            s.textContent = "คัดลอกรหัสห้องแล้ว! / Room code copied!";
             setTimeout(() => {
-              document
-                .getElementById("roomCodeDisplay")
-                .classList.remove("copied");
-            }, 300);
-
-            // Show toast notification
-            const originalText =
-              document.getElementById("connectionStatus").textContent;
-            document.getElementById("connectionStatus").textContent =
-              "คัดลอกรหัสห้องแล้ว! / Room code copied!";
-            setTimeout(() => {
-              document.getElementById("connectionStatus").textContent =
-                originalText;
-            }, 2000);
+              s.textContent = prev;
+            }, 1600);
           })
-          .catch((err) => {
-            // Fallback for older browsers
-            const textArea = document.createElement("textarea");
-            textArea.value = roomCodeText;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand("copy");
-            document.body.removeChild(textArea);
-          });
+          .catch(() => {});
       }
 
-      // Reset game
+      // ===== Reset / cleanup =====
       async function resetGame() {
-        // Clean up Firebase listeners
-        listeners.forEach((cleanup) => cleanup());
+        listeners.forEach((fn) => fn());
         listeners = [];
-
-        // Delete room if host
         if (isHost && roomRef) {
           try {
             await roomRef.remove();
-          } catch (error) {
-            console.error("Error removing room:", error);
+          } catch (e) {
+            console.error(e);
           }
         }
-
-        // Reset variables
         board = [];
-        selectedPiece = null;
+        selected = null;
         currentPlayer = 1;
         gameStarted = false;
         roomRef = null;
@@ -1270,8 +978,6 @@
         roomCode = "";
         isHost = false;
         myPlayerNumber = 0;
-
-        // Reset UI
         document.getElementById("winScreen").style.display = "none";
         document.getElementById("gameContainer").style.display = "none";
         document.getElementById("loginScreen").style.display = "block";
@@ -1279,59 +985,41 @@
         document.getElementById("joinBtn").disabled = false;
         document.getElementById("playerName").value = "";
         document.getElementById("roomCode").value = "";
-
-        // Clear confetti
-        const confetti = document.querySelectorAll(".confetti");
-        confetti.forEach((c) => c.remove());
       }
 
-      // Clean up on page unload
       window.addEventListener("beforeunload", async () => {
         if (roomRef) {
           try {
-            if (isHost) {
-              await roomRef.remove();
-            } else {
-              await roomRef.child("guest").remove();
-            }
-          } catch (error) {
-            console.error("Error cleaning up:", error);
+            if (isHost) await roomRef.remove();
+            else await roomRef.child("guest").remove();
+          } catch (e) {
+            console.error(e);
           }
         }
       });
 
-      // Clean old rooms (older than 1 hour)
+      // Clean old rooms (> 1 hour)
       async function cleanOldRooms() {
         if (!database) return;
-
         try {
           const roomsRef = database.ref("rooms");
-          const snapshot = await roomsRef.once("value");
-          const rooms = snapshot.val();
-
+          const snap = await roomsRef.once("value");
+          const rooms = snap.val();
           if (rooms) {
-            const now = Date.now();
-            const oneHour = 60 * 60 * 1000;
-
-            Object.keys(rooms).forEach(async (key) => {
-              const room = rooms[key];
-              if (room.created && now - room.created > oneHour) {
+            const now = Date.now(),
+              hour = 3600 * 1000;
+            for (const key of Object.keys(rooms)) {
+              const r = rooms[key];
+              if (r.created && now - r.created > hour) {
                 await roomsRef.child(key).remove();
               }
-            });
+            }
           }
-        } catch (error) {
-          console.error("Error cleaning old rooms:", error);
+        } catch (e) {
+          console.error(e);
         }
       }
-
-      // Initialize
-      createBubbles();
-
-      // Clean old rooms on load
-      setTimeout(() => {
-        cleanOldRooms();
-      }, 1000);
+      setTimeout(cleanOldRooms, 1000);
     </script>
   </body>
 </html>
