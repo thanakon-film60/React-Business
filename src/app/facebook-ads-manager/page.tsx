@@ -184,6 +184,8 @@ export default function FacebookAdsManagerPage() {
   const [customDateStart, setCustomDateStart] = useState("");
   const [customDateEnd, setCustomDateEnd] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false);
+  // Page selection for different ad portfolios (Facebook, TikTok, etc.)
+  const [selectedPage, setSelectedPage] = useState<1 | 2 | 3 | 4>(1);
   const [googleSheetsData, setGoogleSheetsData] = useState<number>(0);
   const [googleSheetsLoading, setGoogleSheetsLoading] = useState(false);
   const [googleAdsData, setGoogleAdsData] = useState<number>(0);
@@ -205,9 +207,9 @@ export default function FacebookAdsManagerPage() {
   const [selectedAdForPreview, setSelectedAdForPreview] =
     useState<AdInsight | null>(null);
   const [showVideoModal, setShowVideoModal] = useState(false);
-  const [topAdsSortBy, setTopAdsSortBy] = useState<"leads" | "cost" | "phone">(
-    "leads"
-  );
+  const [topAdsSortBy, setTopAdsSortBy] = useState<
+    "leads" | "cost" | "phone" | "thruplay"
+  >("leads");
   const [dailySummaryData, setDailySummaryData] = useState<AdInsight[]>([]);
   const [dailySummaryLoading, setDailySummaryLoading] = useState(false);
   const [phoneLeadsData, setPhoneLeadsData] = useState<{
@@ -220,6 +222,44 @@ export default function FacebookAdsManagerPage() {
   const [topAdsPhoneLeadsLoading, setTopAdsPhoneLeadsLoading] = useState(false);
   const [topAdsLimit, setTopAdsLimit] = useState<5 | 10 | 15 | 20 | 30 | "all">(
     20
+  );
+  // State for adset-level insights (for TOP Ad Set table)
+  const [adsetInsights, setAdsetInsights] = useState<AdInsight[]>([]);
+  const [adsetInsightsLoading, setAdsetInsightsLoading] = useState(false);
+  // Campaign type filter for Ad Set table (TOF, MOF, BOF)
+  const [adSetCampaignFilter, setAdSetCampaignFilter] = useState<Set<string>>(
+    new Set(["MOF", "BOF"])
+  );
+  // Separate state for Ad Set table sorting and limit (independent from TOP Ads)
+  const [topAdSetSortBy, setTopAdSetSortBy] = useState<
+    "leads" | "phone" | "thruplay"
+  >("leads");
+  const [topAdSetLimit, setTopAdSetLimit] = useState<
+    5 | 10 | 15 | 20 | 30 | "all"
+  >(20);
+  // State for Ad Set detail modal
+  const [selectedAdSet, setSelectedAdSet] = useState<AdInsight | null>(null);
+  const [showAdSetModal, setShowAdSetModal] = useState(false);
+
+  // Get ads that belong to a specific adset
+  const getAdsByAdSetId = useCallback(
+    (adsetId: string) => {
+      return insights.filter((ad) => ad.adset_id === adsetId);
+    },
+    [insights]
+  );
+
+  // Get total phone leads for an adset (sum of all ads in this adset)
+  const getPhoneLeadsByAdSetId = useCallback(
+    (adsetId: string) => {
+      const adsInAdSet = insights.filter((ad) => ad.adset_id === adsetId);
+      let totalPhoneLeads = 0;
+      adsInAdSet.forEach((ad) => {
+        totalPhoneLeads += topAdsPhoneLeads.get(ad.ad_id) || 0;
+      });
+      return totalPhoneLeads;
+    },
+    [insights, topAdsPhoneLeads]
   );
   // Helper function to check if local video exists
   const getLocalVideoPath = (videoId: string | undefined): string | null => {
@@ -721,6 +761,63 @@ export default function FacebookAdsManagerPage() {
       setDailySummaryLoading(false);
     }
   }, [fetchPhoneLeadsData]);
+
+  // Fetch adset-level insights for TOP Ad Set table
+  const fetchAdsetInsights = useCallback(async () => {
+    try {
+      setAdsetInsightsLoading(true);
+      let url = `https://believable-ambition-production.up.railway.app/api/facebook-ads-campaigns?level=adset`;
+
+      if (dateRange === "custom" && customDateStart && customDateEnd) {
+        const timeRange = JSON.stringify({
+          since: customDateStart,
+          until: customDateEnd,
+        });
+        url += `&time_range=${encodeURIComponent(timeRange)}`;
+      } else {
+        url += `&date_preset=${dateRange}`;
+      }
+
+      const response = await fetch(url);
+      const result: ApiResponse = await response.json();
+
+      if (!response.ok || !result.success) {
+        setAdsetInsights([]);
+      } else {
+        // Deduplicate adset data
+        const uniqueData = new Map<string, AdInsight>();
+        result.data.forEach((item) => {
+          const key = item.adset_id;
+          if (uniqueData.has(key)) {
+            const existing = uniqueData.get(key)!;
+            if (item.actions) {
+              if (!existing.actions) existing.actions = [];
+              item.actions.forEach((action) => {
+                const existingAction = existing.actions!.find(
+                  (a) => a.action_type === action.action_type
+                );
+                if (existingAction) {
+                  existingAction.value = String(
+                    parseInt(existingAction.value || "0") +
+                      parseInt(action.value || "0")
+                  );
+                } else {
+                  existing.actions!.push({ ...action });
+                }
+              });
+            }
+          } else {
+            uniqueData.set(key, { ...item });
+          }
+        });
+        setAdsetInsights(Array.from(uniqueData.values()));
+      }
+    } catch (err) {
+      setAdsetInsights([]);
+    } finally {
+      setAdsetInsightsLoading(false);
+    }
+  }, [dateRange, customDateStart, customDateEnd]);
   useEffect(() => {
     const loadAllData = async () => {
       try {
@@ -731,6 +828,7 @@ export default function FacebookAdsManagerPage() {
           fetchFacebookBalance(),
           fetchPhoneCount(),
           fetchDailySummaryData(),
+          fetchAdsetInsights(),
         ]);
       } catch (error) {
         setError("เกิดข้อผิดพลาดในการโหลดข้อมูล");
@@ -747,6 +845,7 @@ export default function FacebookAdsManagerPage() {
         fetchFacebookBalance(),
         fetchPhoneCount(),
         fetchDailySummaryData(),
+        fetchAdsetInsights(),
       ]);
     }, 120000); // 120000ms = 2 minutes (เพิ่มจาก 1 นาที เป็น 2 นาที)
     // Cleanup interval on unmount
@@ -760,6 +859,7 @@ export default function FacebookAdsManagerPage() {
     fetchFacebookBalance,
     fetchPhoneCount,
     fetchDailySummaryData,
+    fetchAdsetInsights,
   ]);
   // Monitor adCreatives changes
   useEffect(() => {
@@ -1003,6 +1103,51 @@ export default function FacebookAdsManagerPage() {
                 {customDateStart} ถึง {customDateEnd}
               </span>
             )}
+            {/* Spacer to push page buttons to the right */}
+            <div className="flex-1"></div>
+            {/* Page Selection Buttons */}
+            <div className="flex items-center gap-2 border-l border-gray-300 pl-4 ml-2">
+              <button
+                onClick={() => setSelectedPage(1)}
+                className={`px-4 py-2 rounded-lg transition-colors font-medium text-sm ${
+                  selectedPage === 1
+                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                Page 1
+              </button>
+              <button
+                onClick={() => setSelectedPage(2)}
+                className={`px-4 py-2 rounded-lg transition-colors font-medium text-sm ${
+                  selectedPage === 2
+                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                Page 2
+              </button>
+              <button
+                onClick={() => setSelectedPage(3)}
+                className={`px-4 py-2 rounded-lg transition-colors font-medium text-sm ${
+                  selectedPage === 3
+                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                Page 3
+              </button>
+              <button
+                onClick={() => setSelectedPage(4)}
+                className={`px-4 py-2 rounded-lg transition-colors font-medium text-sm ${
+                  selectedPage === 4
+                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                Page 4
+              </button>
+            </div>
           </div>
           {/* Mobile View: Dropdown */}
           <div className="md:hidden space-y-3">
@@ -1027,6 +1172,22 @@ export default function FacebookAdsManagerPage() {
                 {customDateStart} ถึง {customDateEnd}
               </div>
             )}
+            {/* Mobile Page Selection */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-700">📄</span>
+              <select
+                value={selectedPage}
+                onChange={(e) =>
+                  setSelectedPage(Number(e.target.value) as 1 | 2 | 3 | 4)
+                }
+                className="flex-1 px-4 py-2 border-2 border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white text-gray-700 font-medium text-sm"
+              >
+                <option value={1}>Page 1</option>
+                <option value={2}>Page 2</option>
+                <option value={3}>Page 3</option>
+                <option value={4}>Page 4</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -1130,21 +1291,26 @@ export default function FacebookAdsManagerPage() {
             className="video-modal-container bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-10">
+            <div className="sticky top-0 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 px-6 py-4 flex items-center justify-between z-10 rounded-t-2xl">
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-gray-800 truncate">
-                  {selectedAdForPreview.ad_name}
+                <h3 className="text-xl font-bold text-white truncate">
+                  🎯 {selectedAdForPreview.ad_name}
                 </h3>
-                <p className="text-sm text-gray-500 mt-1">
-                  Campaign: {selectedAdForPreview.campaign_name}
-                </p>
+                <div className="flex flex-col sm:flex-row sm:gap-4 mt-1">
+                  <p className="text-sm text-white/80">
+                    📁 Campaign: {selectedAdForPreview.campaign_name}
+                  </p>
+                  <p className="text-sm text-white/80">
+                    📂 Ad Set: {selectedAdForPreview.adset_name || "—"}
+                  </p>
+                </div>
               </div>
               <button
                 onClick={() => {
                   setShowVideoModal(false);
                   setSelectedAdForPreview(null);
                 }}
-                className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-2 transition-all text-2xl w-10 h-10 flex items-center justify-center ml-4"
+                className="text-white hover:text-gray-200 hover:bg-white/20 rounded-full p-2 transition-all text-2xl w-10 h-10 flex items-center justify-center ml-4"
               >
                 ✕
               </button>
@@ -1276,13 +1442,13 @@ export default function FacebookAdsManagerPage() {
               {/* Ad Performance Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 <div className="bg-blue-50 rounded-lg p-4">
-                  <div className="text-sm text-gray-600 mb-1">Spent</div>
+                  <div className="text-sm text-gray-600 mb-1">💰 Spent</div>
                   <div className="text-xl font-bold text-blue-700">
                     {formatCurrency(selectedAdForPreview.spend)}
                   </div>
                 </div>
                 <div className="bg-green-50 rounded-lg p-4">
-                  <div className="text-sm text-gray-600 mb-1">Results</div>
+                  <div className="text-sm text-gray-600 mb-1">💬 New Inbox</div>
                   <div className="text-xl font-bold text-green-700">
                     {getResultsByActionType(
                       selectedAdForPreview.actions,
@@ -1290,54 +1456,149 @@ export default function FacebookAdsManagerPage() {
                     )}
                   </div>
                 </div>
-                <div className="bg-purple-50 rounded-lg p-4">
-                  <div className="text-sm text-gray-600 mb-1">CPC</div>
-                  <div className="text-xl font-bold text-purple-700">
-                    {formatCurrency(selectedAdForPreview.cpc)}
+                <div className="bg-teal-50 rounded-lg p-4">
+                  <div className="text-sm text-gray-600 mb-1">
+                    📨 Total Inbox
+                  </div>
+                  <div className="text-xl font-bold text-teal-700">
+                    {getResultsByActionType(
+                      selectedAdForPreview.actions,
+                      "onsite_conversion.total_messaging_connection"
+                    )}
                   </div>
                 </div>
-                <div className="bg-orange-50 rounded-lg p-4">
-                  <div className="text-sm text-gray-600 mb-1">CTR</div>
-                  <div className="text-xl font-bold text-orange-700">
-                    {formatPercentage(selectedAdForPreview.ctr)}
+                <div className="bg-purple-50 rounded-lg p-4">
+                  <div className="text-sm text-gray-600 mb-1">
+                    📞 ชื่อ - เบอร์
+                  </div>
+                  <div className="text-xl font-bold text-purple-700">
+                    {topAdsPhoneLeads.get(selectedAdForPreview.ad_id) || 0}
                   </div>
                 </div>
               </div>
+
+              {/* CTR, CPM, CPC Stats */}
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="bg-orange-50 rounded-lg p-4 text-center">
+                  <div className="text-sm text-gray-600 mb-1">📊 CTR</div>
+                  <div className="text-2xl font-bold text-orange-700">
+                    {formatPercentage(selectedAdForPreview.ctr)}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    Click-Through Rate
+                  </div>
+                </div>
+                <div className="bg-pink-50 rounded-lg p-4 text-center">
+                  <div className="text-sm text-gray-600 mb-1">💵 CPM</div>
+                  <div className="text-2xl font-bold text-pink-700">
+                    {formatCurrency(selectedAdForPreview.cpm)}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    Cost per 1,000 Impressions
+                  </div>
+                </div>
+                <div className="bg-indigo-50 rounded-lg p-4 text-center">
+                  <div className="text-sm text-gray-600 mb-1">🖱️ CPC</div>
+                  <div className="text-2xl font-bold text-indigo-700">
+                    {formatCurrency(selectedAdForPreview.cpc)}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    Cost per Click
+                  </div>
+                </div>
+              </div>
+
               {/* Ad Details */}
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h4 className="font-semibold text-gray-800 mb-3">Ad Details</h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Impressions:</span>
-                    <span className="font-medium">
-                      {formatNumber(selectedAdForPreview.impressions)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Clicks:</span>
-                    <span className="font-medium">
-                      {formatNumber(selectedAdForPreview.clicks)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">CPM:</span>
-                    <span className="font-medium">
-                      {formatCurrency(selectedAdForPreview.cpm)}
-                    </span>
-                  </div>
-                  {selectedAdForPreview.reach && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-800 mb-3">
+                    📈 Performance Details
+                  </h4>
+                  <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Reach:</span>
+                      <span className="text-gray-600">Impressions:</span>
                       <span className="font-medium">
-                        {formatNumber(selectedAdForPreview.reach)}
+                        {formatNumber(selectedAdForPreview.impressions)}
                       </span>
                     </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Date:</span>
-                    <span className="font-medium">
-                      {selectedAdForPreview.date_start}
-                    </span>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Clicks:</span>
+                      <span className="font-medium">
+                        {formatNumber(selectedAdForPreview.clicks)}
+                      </span>
+                    </div>
+                    {selectedAdForPreview.reach && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Reach:</span>
+                        <span className="font-medium">
+                          {formatNumber(selectedAdForPreview.reach)}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">ThruPlay:</span>
+                      <span className="font-medium">
+                        {(() => {
+                          const thruplay = selectedAdForPreview.actions?.find(
+                            (action) => action.action_type === "video_view"
+                          );
+                          return thruplay ? formatNumber(thruplay.value) : "—";
+                        })()}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Cost per Inbox:</span>
+                      <span className="font-medium">
+                        {(() => {
+                          const costPerMessaging =
+                            selectedAdForPreview.cost_per_action_type?.find(
+                              (cost) =>
+                                cost.action_type ===
+                                "onsite_conversion.total_messaging_connection"
+                            );
+                          return costPerMessaging
+                            ? formatCurrency(costPerMessaging.value)
+                            : "—";
+                        })()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-800 mb-3">
+                    📋 Campaign & Ad Set Info
+                  </h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Campaign:</span>
+                      <span
+                        className="font-medium text-right max-w-[180px] truncate"
+                        title={selectedAdForPreview.campaign_name}
+                      >
+                        {selectedAdForPreview.campaign_name}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Ad Set:</span>
+                      <span
+                        className="font-medium text-right max-w-[180px] truncate"
+                        title={selectedAdForPreview.adset_name}
+                      >
+                        {selectedAdForPreview.adset_name || "—"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Ad ID:</span>
+                      <span className="font-medium text-xs">
+                        {selectedAdForPreview.ad_id}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Date Range:</span>
+                      <span className="font-medium">
+                        {selectedAdForPreview.date_start}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1345,6 +1606,262 @@ export default function FacebookAdsManagerPage() {
           </div>
         </div>
       )}
+      {/* Ad Set Detail Modal */}
+      {showAdSetModal && selectedAdSet && (
+        <div
+          className="modal-overlay fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100vw",
+            height: "100vh",
+            margin: 0,
+            padding: "1rem",
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowAdSetModal(false);
+              setSelectedAdSet(null);
+            }
+          }}
+        >
+          <div
+            className="video-modal-container bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="sticky top-0 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 px-6 py-4 flex items-center justify-between z-10 rounded-t-2xl">
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-white truncate">
+                  📊 {selectedAdSet.adset_name}
+                </h3>
+                <p className="text-sm text-white/80 mt-1">
+                  Campaign: {selectedAdSet.campaign_name}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setShowAdSetModal(false);
+                  setSelectedAdSet(null);
+                }}
+                className="text-white hover:text-gray-200 hover:bg-white/20 rounded-full p-2 transition-all text-2xl w-10 h-10 flex items-center justify-center ml-4"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Ad Set Summary */}
+            <div className="p-6 border-b border-gray-200">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div className="bg-blue-50 rounded-lg p-4">
+                  <div className="text-sm text-gray-600 mb-1">จ่ายแล้ว</div>
+                  <div className="text-xl font-bold text-blue-700">
+                    {formatCurrency(selectedAdSet.spend)}
+                  </div>
+                </div>
+                <div className="bg-green-50 rounded-lg p-4">
+                  <div className="text-sm text-gray-600 mb-1">New Inbox</div>
+                  <div className="text-xl font-bold text-green-700">
+                    {getResultsByActionType(
+                      selectedAdSet.actions,
+                      "onsite_conversion.messaging_first_reply"
+                    )}
+                  </div>
+                </div>
+                <div className="bg-purple-50 rounded-lg p-4">
+                  <div className="text-sm text-gray-600 mb-1">Total Inbox</div>
+                  <div className="text-xl font-bold text-purple-700">
+                    {getResultsByActionType(
+                      selectedAdSet.actions,
+                      "onsite_conversion.total_messaging_connection"
+                    )}
+                  </div>
+                </div>
+                <div className="bg-cyan-50 rounded-lg p-4">
+                  <div className="text-sm text-gray-600 mb-1">ThruPlay</div>
+                  <div className="text-xl font-bold text-cyan-700">
+                    {(() => {
+                      const thruplay = selectedAdSet.actions?.find(
+                        (action) => action.action_type === "video_view"
+                      );
+                      return thruplay ? formatNumber(thruplay.value) : "—";
+                    })()}
+                  </div>
+                </div>
+                <div className="bg-orange-50 rounded-lg p-4">
+                  <div className="text-sm text-gray-600 mb-1">ต้นทุน/Inbox</div>
+                  <div className="text-xl font-bold text-orange-700">
+                    {(() => {
+                      const spend = parseFloat(selectedAdSet.spend || "0");
+                      const inbox = getResultsByActionType(
+                        selectedAdSet.actions,
+                        "onsite_conversion.total_messaging_connection"
+                      );
+                      return inbox > 0 ? formatCurrency(spend / inbox) : "—";
+                    })()}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Ads List */}
+            <div className="p-6">
+              <h4 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                🎯 Ads ใน Ad Set นี้
+                <span className="bg-purple-100 text-purple-700 text-sm px-2 py-1 rounded-full">
+                  {getAdsByAdSetId(selectedAdSet.adset_id).length} รายการ
+                </span>
+              </h4>
+
+              {getAdsByAdSetId(selectedAdSet.adset_id).length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <div className="text-4xl mb-2">💭</div>
+                  <p>ไม่พบ Ads ใน Ad Set นี้</p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b-2 border-gray-200 bg-gray-50">
+                        <th className="text-center py-3 px-2 font-semibold text-gray-700 text-sm">
+                          #
+                        </th>
+                        <th className="text-left py-3 px-2 font-semibold text-gray-700 text-sm">
+                          รูป
+                        </th>
+                        <th className="text-left py-3 px-2 font-semibold text-gray-700 text-sm">
+                          ชื่อ Ad
+                        </th>
+                        <th className="text-center py-3 px-2 font-semibold text-gray-700 text-sm">
+                          จ่ายแล้ว
+                        </th>
+                        <th className="text-center py-3 px-2 font-semibold text-gray-700 text-sm">
+                          New Inbox
+                        </th>
+                        <th className="text-center py-3 px-2 font-semibold text-gray-700 text-sm">
+                          Total Inbox
+                        </th>
+                        <th className="text-center py-3 px-2 font-semibold text-gray-700 text-sm">
+                          ชื่อ-เบอร์
+                        </th>
+                        <th className="text-center py-3 px-2 font-semibold text-gray-700 text-sm">
+                          ThruPlay
+                        </th>
+                        <th className="text-center py-3 px-2 font-semibold text-gray-700 text-sm">
+                          ต้นทุน/Inbox
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {getAdsByAdSetId(selectedAdSet.adset_id)
+                        .sort((a, b) => {
+                          const inboxA = getResultsByActionType(
+                            a.actions,
+                            "onsite_conversion.total_messaging_connection"
+                          );
+                          const inboxB = getResultsByActionType(
+                            b.actions,
+                            "onsite_conversion.total_messaging_connection"
+                          );
+                          return inboxB - inboxA;
+                        })
+                        .map((ad, idx) => {
+                          const creative = adCreatives.get(ad.ad_id);
+                          const thumbnailUrl =
+                            creative?.thumbnail_url ||
+                            creative?.image_url ||
+                            creative?.object_story_spec?.video_data?.image_url;
+                          const spend = parseFloat(ad.spend || "0");
+                          const inbox = getResultsByActionType(
+                            ad.actions,
+                            "onsite_conversion.total_messaging_connection"
+                          );
+                          const costPerInbox = inbox > 0 ? spend / inbox : 0;
+                          const phoneLeads =
+                            topAdsPhoneLeads.get(ad.ad_id) || 0;
+
+                          return (
+                            <tr
+                              key={ad.ad_id}
+                              className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer"
+                              onClick={() => {
+                                setSelectedAdForPreview(ad);
+                                setShowVideoModal(true);
+                              }}
+                            >
+                              <td className="py-3 px-2 text-center text-gray-600 font-medium">
+                                {idx + 1}
+                              </td>
+                              <td className="py-3 px-2">
+                                {thumbnailUrl ? (
+                                  <img
+                                    src={thumbnailUrl}
+                                    alt="Ad thumbnail"
+                                    className="w-12 h-12 object-cover rounded-lg shadow-sm"
+                                  />
+                                ) : (
+                                  <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
+                                    🖼️
+                                  </div>
+                                )}
+                              </td>
+                              <td className="py-3 px-2">
+                                <div
+                                  className="text-gray-700 font-medium text-sm max-w-[200px] truncate"
+                                  title={ad.ad_name}
+                                >
+                                  {ad.ad_name || "—"}
+                                </div>
+                              </td>
+                              <td className="py-3 px-2 text-center text-gray-700 font-semibold">
+                                {formatCurrency(ad.spend)}
+                              </td>
+                              <td className="py-3 px-2 text-center font-semibold text-green-600">
+                                {getResultsByActionType(
+                                  ad.actions,
+                                  "onsite_conversion.messaging_first_reply"
+                                )}
+                              </td>
+                              <td className="py-3 px-2 text-center font-semibold text-blue-600">
+                                {getResultsByActionType(
+                                  ad.actions,
+                                  "onsite_conversion.total_messaging_connection"
+                                )}
+                              </td>
+                              <td className="py-3 px-2 text-center font-semibold text-purple-600">
+                                {phoneLeads}
+                              </td>
+                              <td className="py-3 px-2 text-center font-semibold text-cyan-600">
+                                {(() => {
+                                  const thruplay = ad.actions?.find(
+                                    (action) =>
+                                      action.action_type === "video_view"
+                                  );
+                                  return thruplay
+                                    ? formatNumber(thruplay.value)
+                                    : "—";
+                                })()}
+                              </td>
+                              <td className="py-3 px-2 text-center text-gray-700">
+                                {costPerInbox > 0
+                                  ? formatCurrency(costPerInbox)
+                                  : "—"}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Content Layout */}
       <div className="px-3 sm:px-6 py-3 sm:py-6">
         {/* Performance Cards and Tables in 3-Column Layout */}
@@ -1636,7 +2153,10 @@ export default function FacebookAdsManagerPage() {
             </div>
             <div className="flex flex-col gap-3 mb-3 sm:mb-4">
               <h2 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center gap-2">
-                🏆 TOP {topAdsLimit === "all" ? "ทั้งหมด" : topAdsLimit} Ads
+                🏆 TOP {topAdsLimit === "all" ? "ทั้งหมด" : topAdsLimit} Ads{" "}
+                <span className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full text-base sm:text-xl font-bold shadow-xl">
+                  นักเตะยอดเยี่ยม
+                </span>
               </h2>
               <div className="flex flex-col sm:flex-row gap-2 w-full">
                 {/* Sort By Buttons */}
@@ -1679,6 +2199,19 @@ export default function FacebookAdsManagerPage() {
                       💰 ต้นทุน (น้อย → มาก)
                     </span>
                     <span className="sm:hidden">💰 Cost</span>
+                  </button>
+                  <button
+                    onClick={() => setTopAdsSortBy("thruplay")}
+                    className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all ${
+                      topAdsSortBy === "thruplay"
+                        ? "bg-purple-600 text-white shadow-lg"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                  >
+                    <span className="hidden sm:inline">
+                      🎬 ThruPlay (มาก → น้อย)
+                    </span>
+                    <span className="sm:hidden">🎬 ThruPlay</span>
                   </button>
                 </div>
                 {/* Top Ads Limit Dropdown */}
@@ -1768,6 +2301,21 @@ export default function FacebookAdsManagerPage() {
                         const phoneLeadsA = topAdsPhoneLeads.get(a.ad_id) || 0;
                         const phoneLeadsB = topAdsPhoneLeads.get(b.ad_id) || 0;
                         return phoneLeadsB - phoneLeadsA;
+                      } else if (topAdsSortBy === "thruplay") {
+                        // เรียงตาม ThruPlay จากมากไปน้อย
+                        const thruplayA = a.actions?.find(
+                          (action) => action.action_type === "video_view"
+                        );
+                        const thruplayB = b.actions?.find(
+                          (action) => action.action_type === "video_view"
+                        );
+                        const valueA = thruplayA
+                          ? parseFloat(thruplayA.value)
+                          : 0;
+                        const valueB = thruplayB
+                          ? parseFloat(thruplayB.value)
+                          : 0;
+                        return valueB - valueA;
                       } else {
                         // เรียงตาม cost per messaging connection จากน้อยไปมาก
                         const costA = a.cost_per_action_type?.find(
@@ -1974,22 +2522,26 @@ export default function FacebookAdsManagerPage() {
             </div>
           </div>
 
-          {/* Right Column - Duplicate TOP Ads Table */}
+          {/* Right Column - TOP Ad Set Table */}
           <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 border border-gray-100">
             <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 px-4 sm:px-8 py-4 sm:py-6 -m-4 sm:-m-8 mb-4 sm:mb-8 relative overflow-hidden rounded-t-2xl sm:rounded-t-3xl">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-10 transition-opacity duration-500"></div>
             </div>
             <div className="flex flex-col gap-3 mb-3 sm:mb-4">
               <h2 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center gap-2">
-                🏆 TOP {topAdsLimit === "all" ? "ทั้งหมด" : topAdsLimit} Ads
+                🏆 TOP {topAdSetLimit === "all" ? "ทั้งหมด" : topAdSetLimit} Ad
+                Set{" "}
+                <span className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full text-base sm:text-xl font-bold shadow-xl">
+                  พื้นที่ลูกค้ายอดเยี่ยม
+                </span>
               </h2>
               <div className="flex flex-col sm:flex-row gap-2 w-full">
                 {/* Sort By Buttons */}
                 <div className="flex gap-2 flex-1">
                   <button
-                    onClick={() => setTopAdsSortBy("leads")}
+                    onClick={() => setTopAdSetSortBy("leads")}
                     className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all ${
-                      topAdsSortBy === "leads"
+                      topAdSetSortBy === "leads"
                         ? "bg-purple-600 text-white shadow-lg"
                         : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                     }`}
@@ -2000,9 +2552,9 @@ export default function FacebookAdsManagerPage() {
                     <span className="sm:hidden">💬 Inbox</span>
                   </button>
                   <button
-                    onClick={() => setTopAdsSortBy("phone")}
+                    onClick={() => setTopAdSetSortBy("phone")}
                     className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all ${
-                      topAdsSortBy === "phone"
+                      topAdSetSortBy === "phone"
                         ? "bg-purple-600 text-white shadow-lg"
                         : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                     }`}
@@ -2013,25 +2565,25 @@ export default function FacebookAdsManagerPage() {
                     <span className="sm:hidden">📞 เบอร์</span>
                   </button>
                   <button
-                    onClick={() => setTopAdsSortBy("cost")}
+                    onClick={() => setTopAdSetSortBy("thruplay")}
                     className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all ${
-                      topAdsSortBy === "cost"
+                      topAdSetSortBy === "thruplay"
                         ? "bg-purple-600 text-white shadow-lg"
                         : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                     }`}
                   >
                     <span className="hidden sm:inline">
-                      💰 ต้นทุน (น้อย → มาก)
+                      🎬 ThruPlay (มาก → น้อย)
                     </span>
-                    <span className="sm:hidden">💰 Cost</span>
+                    <span className="sm:hidden">🎬 ThruPlay</span>
                   </button>
                 </div>
-                {/* Top Ads Limit Dropdown */}
+                {/* Top Ad Set Limit Dropdown */}
                 <select
-                  value={topAdsLimit}
+                  value={topAdSetLimit}
                   onChange={(e) => {
                     const value = e.target.value;
-                    setTopAdsLimit(
+                    setTopAdSetLimit(
                       value === "all"
                         ? "all"
                         : (Number(value) as 5 | 10 | 15 | 20 | 30)
@@ -2047,16 +2599,80 @@ export default function FacebookAdsManagerPage() {
                   <option value="all">⭐ Top ทั้งหมด</option>
                 </select>
               </div>
+              {/* Campaign Type Filter Buttons (TOF/MOF/BOF) */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    const newFilter = new Set(adSetCampaignFilter);
+                    if (newFilter.has("TOF")) {
+                      newFilter.delete("TOF");
+                    } else {
+                      newFilter.add("TOF");
+                    }
+                    setAdSetCampaignFilter(newFilter);
+                  }}
+                  className={`px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all ${
+                    adSetCampaignFilter.has("TOF")
+                      ? "bg-blue-600 text-white shadow-lg"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                >
+                  TOF
+                </button>
+                <button
+                  onClick={() => {
+                    const newFilter = new Set(adSetCampaignFilter);
+                    if (newFilter.has("MOF")) {
+                      newFilter.delete("MOF");
+                    } else {
+                      newFilter.add("MOF");
+                    }
+                    setAdSetCampaignFilter(newFilter);
+                  }}
+                  className={`px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all ${
+                    adSetCampaignFilter.has("MOF")
+                      ? "bg-green-600 text-white shadow-lg"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                >
+                  MOF
+                </button>
+                <button
+                  onClick={() => {
+                    const newFilter = new Set(adSetCampaignFilter);
+                    if (newFilter.has("BOF")) {
+                      newFilter.delete("BOF");
+                    } else {
+                      newFilter.add("BOF");
+                    }
+                    setAdSetCampaignFilter(newFilter);
+                  }}
+                  className={`px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all ${
+                    adSetCampaignFilter.has("BOF")
+                      ? "bg-orange-600 text-white shadow-lg"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                >
+                  BOF
+                </button>
+              </div>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full" key={`table2-${adCreatives.size}`}>
+              {adsetInsightsLoading && adsetInsights.length === 0 && (
+                <div className="bg-blue-50 border-l-4 border-blue-500 p-3 mb-4 rounded">
+                  <p className="text-blue-700 text-sm font-medium">
+                    ⏳ กำลังโหลดข้อมูล Ad Set...
+                  </p>
+                </div>
+              )}
+              <table className="w-full" key={`table2-${adsetInsights.length}`}>
                 <thead>
                   <tr className="border-b-2 border-gradient-to-r from-blue-200 via-purple-200 to-pink-200">
                     <th className="text-center py-2 px-1 font-semibold text-gray-700 text-sm">
                       #
                     </th>
                     <th className="text-center py-2 px-1 font-semibold text-gray-700 text-sm">
-                      Ad Image
+                      Ad Set
                     </th>
                     <th className="text-center py-2 px-1 font-semibold text-gray-700 text-sm">
                       จ่ายแล้ว
@@ -2073,15 +2689,21 @@ export default function FacebookAdsManagerPage() {
                     <th className="text-center py-2 px-1 font-semibold text-gray-700 text-sm">
                       ThruPlay
                     </th>
-                    <th className="text-center py-2 px-1 font-semibold text-gray-700 text-sm">
-                      ต้นทุน Inbox
-                    </th>
                   </tr>
                 </thead>
-                <tbody key={`tbody2-${adCreatives.size}-${Date.now()}`}>
-                  {getTopAdsFilteredInsights()
+                <tbody key={`tbody2-${adsetInsights.length}-${Date.now()}`}>
+                  {adsetInsights
+                    .filter((adset) => {
+                      // If no filter selected, show all
+                      if (adSetCampaignFilter.size === 0) return true;
+                      // Get first 3 characters of campaign name (uppercase)
+                      const campaignPrefix = (adset.campaign_name || "")
+                        .substring(0, 3)
+                        .toUpperCase();
+                      return adSetCampaignFilter.has(campaignPrefix);
+                    })
                     .sort((a, b) => {
-                      if (topAdsSortBy === "leads") {
+                      if (topAdSetSortBy === "leads") {
                         const totalInboxA = getResultsByActionType(
                           a.actions,
                           "onsite_conversion.total_messaging_connection"
@@ -2091,37 +2713,50 @@ export default function FacebookAdsManagerPage() {
                           "onsite_conversion.total_messaging_connection"
                         );
                         return totalInboxB - totalInboxA;
-                      } else if (topAdsSortBy === "phone") {
-                        const phoneLeadsA = topAdsPhoneLeads.get(a.ad_id) || 0;
-                        const phoneLeadsB = topAdsPhoneLeads.get(b.ad_id) || 0;
+                      } else if (topAdSetSortBy === "phone") {
+                        // Sort by phone leads (highest first)
+                        const phoneLeadsA = getPhoneLeadsByAdSetId(a.adset_id);
+                        const phoneLeadsB = getPhoneLeadsByAdSetId(b.adset_id);
                         return phoneLeadsB - phoneLeadsA;
                       } else {
-                        const costA = a.cost_per_action_type?.find(
-                          (cost) =>
-                            cost.action_type ===
-                            "onsite_conversion.total_messaging_connection"
+                        // Sort by thruplay (highest first)
+                        const thruplayA = a.actions?.find(
+                          (action) => action.action_type === "video_view"
                         );
-                        const costB = b.cost_per_action_type?.find(
-                          (cost) =>
-                            cost.action_type ===
-                            "onsite_conversion.total_messaging_connection"
+                        const thruplayB = b.actions?.find(
+                          (action) => action.action_type === "video_view"
                         );
-                        const valueA = costA
-                          ? parseFloat(costA.value)
-                          : Infinity;
-                        const valueB = costB
-                          ? parseFloat(costB.value)
-                          : Infinity;
-                        return valueA - valueB;
+                        const valueA = thruplayA
+                          ? parseFloat(thruplayA.value)
+                          : 0;
+                        const valueB = thruplayB
+                          ? parseFloat(thruplayB.value)
+                          : 0;
+                        return valueB - valueA;
                       }
                     })
-                    .slice(0, topAdsLimit === "all" ? undefined : topAdsLimit)
-                    .map((ad, index) => {
-                      const creative = adCreatives.get(ad.ad_id);
+                    .slice(
+                      0,
+                      topAdSetLimit === "all" ? undefined : topAdSetLimit
+                    )
+                    .map((adset, index) => {
+                      // Calculate cost per inbox
+                      const spend = parseFloat(adset.spend || "0");
+                      const totalInbox = getResultsByActionType(
+                        adset.actions,
+                        "onsite_conversion.total_messaging_connection"
+                      );
+                      const costPerInbox =
+                        totalInbox > 0 ? spend / totalInbox : 0;
+
                       return (
                         <tr
-                          key={ad.ad_id}
-                          className="border-b border-gray-100 hover:bg-gradient-to-r hover:from-blue-50 hover:via-purple-50 hover:to-pink-50 transition-all duration-300 hover:shadow-md"
+                          key={adset.adset_id}
+                          className="border-b border-gray-100 hover:bg-gradient-to-r hover:from-blue-50 hover:via-purple-50 hover:to-pink-50 transition-all duration-300 hover:shadow-md cursor-pointer"
+                          onClick={() => {
+                            setSelectedAdSet(adset);
+                            setShowAdSetModal(true);
+                          }}
                         >
                           <td className="py-2 px-1 text-center">
                             <div className="text-gray-700 font-bold text-lg">
@@ -2130,69 +2765,24 @@ export default function FacebookAdsManagerPage() {
                           </td>
                           <td className="py-2 px-1 text-center">
                             <div
-                              className="relative group cursor-pointer flex justify-center items-center"
-                              onClick={() => {
-                                setSelectedAdForPreview(ad);
-                                setShowVideoModal(true);
-                              }}
+                              className="text-gray-700 font-medium text-sm max-w-[150px] truncate mx-auto hover:text-purple-600"
+                              title={adset.adset_name}
                             >
-                              {(() => {
-                                const videoId =
-                                  creative?.object_story_spec?.video_data
-                                    ?.video_id || creative?.video_id;
-                                const localVideoPath = videoId
-                                  ? `/images/video/${videoId}.mp4`
-                                  : null;
-                                const thumbnailUrl =
-                                  creative?.thumbnail_url ||
-                                  creative?.image_url;
-                                if (localVideoPath) {
-                                  return (
-                                    <div className="w-20 h-20 flex-shrink-0">
-                                      <video
-                                        src={localVideoPath}
-                                        className="w-full h-full object-cover rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow"
-                                        autoPlay
-                                        loop
-                                        muted
-                                        playsInline
-                                      />
-                                    </div>
-                                  );
-                                }
-                                if (thumbnailUrl) {
-                                  return (
-                                    <div className="w-20 h-20 flex-shrink-0">
-                                      <img
-                                        src={thumbnailUrl}
-                                        alt="Ad preview"
-                                        className="w-full h-full object-cover rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow"
-                                      />
-                                    </div>
-                                  );
-                                }
-                                return (
-                                  <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
-                                    <span className="text-gray-400 text-xs">
-                                      📷
-                                    </span>
-                                  </div>
-                                );
-                              })()}
+                              {adset.adset_name || "—"}
                             </div>
                           </td>
                           <td className="py-2 px-1 text-center text-gray-700 font-semibold text-xl">
-                            {formatCurrency(ad.spend)}
+                            {formatCurrency(adset.spend)}
                           </td>
                           <td className="py-2 px-1 text-center font-semibold text-green-700 text-xl">
                             {getResultsByActionType(
-                              ad.actions,
+                              adset.actions,
                               "onsite_conversion.messaging_first_reply"
                             )}
                           </td>
                           <td className="py-2 px-1 text-center font-semibold text-blue-700 text-xl">
                             {getResultsByActionType(
-                              ad.actions,
+                              adset.actions,
                               "onsite_conversion.total_messaging_connection"
                             )}
                           </td>
@@ -2200,29 +2790,16 @@ export default function FacebookAdsManagerPage() {
                             {topAdsPhoneLeadsLoading ? (
                               <span className="text-sm">⏳</span>
                             ) : (
-                              topAdsPhoneLeads.get(ad.ad_id) || 0
+                              getPhoneLeadsByAdSetId(adset.adset_id)
                             )}
                           </td>
                           <td className="py-2 px-1 text-center text-gray-700 text-xl">
                             {(() => {
-                              const thruplay = ad.actions?.find(
+                              const thruplay = adset.actions?.find(
                                 (action) => action.action_type === "video_view"
                               );
                               return thruplay
                                 ? formatNumber(thruplay.value)
-                                : "—";
-                            })()}
-                          </td>
-                          <td className="py-2 px-1 text-center text-gray-700 text-xl">
-                            {(() => {
-                              const costPerMessaging =
-                                ad.cost_per_action_type?.find(
-                                  (cost) =>
-                                    cost.action_type ===
-                                    "onsite_conversion.total_messaging_connection"
-                                );
-                              return costPerMessaging
-                                ? formatCurrency(costPerMessaging.value)
                                 : "—";
                             })()}
                           </td>

@@ -46,5 +46,60 @@
   // Terminal performance optimization
   "terminal.integrated.gpuAcceleration": "off",
   "terminal.integrated.fontFamily": "Cascadia Code, Consolas, 'Courier New'",
-  "terminal.integrated.fontSize": 14
+  "terminal.integrated.fontSize": 14,
+
+  // GitHub Copilot Agent Mode settings
+  "chat.agent.enabled": true,
+  "chat.agent.maxRequests": 300,
+  "github.copilot.chat.agent.autoFix": true,
+  "github.copilot.chat.agent.runTasks": true,
+
+  // Auto-approve terminal commands
+  "chat.tools.terminal.enableAutoApprove": true,
+  "chat.tools.terminal.autoApprove": {
+    "rm": true,
+    "rmdir": true,
+    "del": true,
+    "kill": true,
+    "curl": true,
+    "wget": true,
+    "eval": true,
+    "chmod": true,
+    "chown": true,
+    "Remove-Item": true
+  },
+
+  // Alternative: allowList / denyList approach
+  "github.copilot.chat.agent.terminal.allowList": {
+    "git": true,
+    "npm": true,
+    "yarn": true,
+    "pnpm": true,
+    "node": true,
+    "npx": true,
+    "echo": true,
+    "cd": true,
+    "ls": true,
+    "cat": true,
+    "pwd": true,
+    "dir": true,
+    "code": true,
+    "tsc": true,
+    "python": true,
+    "python3": true,
+    "pip": true
+  },
+  "github.copilot.chat.agent.terminal.denyList": {
+    "rm": true,
+    "rmdir": true,
+    "del": true,
+    "kill": true,
+    "curl": true,
+    "wget": true,
+    "eval": true,
+    "chmod": true,
+    "chown": true,
+    "Remove-Item": true,
+    "Stop-Process": true
+  }
 }
