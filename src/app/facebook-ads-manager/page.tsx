@@ -1059,16 +1059,6 @@ export default function FacebookAdsManagerPage() {
               7 วัน
             </button>
             <button
-              onClick={() => handleDateRangeChange("last_14d")}
-              className={`px-6 py-2 rounded-lg transition-colors font-medium text-sm ${
-                dateRange === "last_14d"
-                  ? "bg-blue-500 text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              14 วัน
-            </button>
-            <button
               onClick={() => handleDateRangeChange("last_30d")}
               className={`px-6 py-2 rounded-lg transition-colors font-medium text-sm ${
                 dateRange === "last_30d"
