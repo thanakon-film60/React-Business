@@ -35,6 +35,7 @@ export const NotificationPopup = ({
       setIsAnimating(false);
       setTimeout(() => setIsVisible(false), 300);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   const handleClose = () => {

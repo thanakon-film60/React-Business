@@ -140,7 +140,8 @@ export default function CRMAdvancedPage() {
     if (startDate && viewMode === "table") {
       fetchRecords(startDate, startDate);
     }
-  }, [startDate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startDate, viewMode]);
 
   // โหลดข้อมูลตามเดือนที่เลือกในปฏิทิน
   useEffect(() => {
