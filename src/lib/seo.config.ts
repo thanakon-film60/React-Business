@@ -1,39 +1,39 @@
 /**
- * SEO Configuration สำหรับ BJH Bangkok
+ * SEO Configuration สำหรับ TPP (Thai Packaging & Printing)
  * สำหรับ Next.js 15 App Router ใช้ Metadata API แทน next-seo
  * Config นี้เก็บไว้เป็น reference สำหรับค่า default
  */
 export const SEO_CONFIG = {
-  titleTemplate: "%s | BJH Bangkok",
+  titleTemplate: "%s | TPP",
   defaultTitle:
-    "BJH Bangkok | Thai Packaging & Printing | บรรจุภัณฑ์และงานพิมพ์คุณภาพ",
+    "TPP | ไทยแพคเกจจิ้ง แอนด์ พริ้นติ้ง | บรรจุภัณฑ์และงานพิมพ์คุณภาพ",
   description:
-    "BJH Bangkok (บีเจเอช แบงค็อก) - ผู้นำด้านบรรจุภัณฑ์และงานพิมพ์ในประเทศไทย | Thai Packaging & Printing PCL | บริการครบวงจร คุณภาพระดับโลก | ติดต่อ BJH Bangkok วันนี้",
+    "TPP (Thai Packaging & Printing PCL) - บริษัท ไทยแพคเกจจิ้ง แอนด์ พริ้นติ้ง จำกัด (มหาชน) ผู้นำด้านบรรจุภัณฑ์และงานพิมพ์ในประเทศไทย | บริการครบวงจร คุณภาพระดับโลก | ติดต่อ TPP วันนี้",
 
-  canonical: "https://app.bjhbangkok.com",
+  canonical: "https://www.tpp.co.th",
 
   openGraph: {
     type: "website",
     locale: "th_TH",
-    url: "https://app.bjhbangkok.com",
-    siteName: "BJH Bangkok",
-    title: "BJH Bangkok | Thai Packaging & Printing | บรรจุภัณฑ์และงานพิมพ์",
+    url: "https://www.tpp.co.th",
+    siteName: "TPP - Thai Packaging & Printing",
+    title: "TPP | ไทยแพคเกจจิ้ง แอนด์ พริ้นติ้ง | บรรจุภัณฑ์และงานพิมพ์",
     description:
-      "BJH Bangkok (บีเจเอช แบงค็อก) - ผู้นำด้านบรรจุภัณฑ์และงานพิมพ์ในประเทศไทย | Thai Packaging & Printing PCL",
+      "TPP (Thai Packaging & Printing PCL) - บริษัท ไทยแพคเกจจิ้ง แอนด์ พริ้นติ้ง จำกัด (มหาชน) ผู้นำด้านบรรจุภัณฑ์และงานพิมพ์ในประเทศไทย",
     images: [
       {
-        url: "https://app.bjhbangkok.com/BJH.png",
+        url: "https://www.tpp.co.th/images/logo/LOGO-TPP-SIDE_9.png",
         width: 1200,
         height: 630,
-        alt: "BJH Bangkok Logo - Thai Packaging & Printing",
+        alt: "TPP Logo - Thai Packaging & Printing",
         type: "image/png",
       },
     ],
   },
 
   twitter: {
-    handle: "@bjhbangkok",
-    site: "@bjhbangkok",
+    handle: "@tpppcl",
+    site: "@tpppcl",
     cardType: "summary_large_image",
   },
 
@@ -45,11 +45,11 @@ export const SEO_CONFIG = {
     {
       name: "keywords",
       content:
-        "BJH Bangkok, บีเจเอช แบงค็อก, bjh bangkok, BJH, Thai Packaging, บรรจุภัณฑ์, Printing Solutions, งานพิมพ์, Packaging Thailand, TPP, Thai Packaging and Printing, กล่องกระดาษ, corrugated box, packaging company bangkok, printing company bangkok, บริษัทบรรจุภัณฑ์, บริษัทงานพิมพ์",
+        "TPP, Thai Packaging and Printing, ไทยแพคเกจจิ้ง แอนด์ พริ้นติ้ง, TPPPCL, บรรจุภัณฑ์, Printing Solutions, งานพิมพ์, Packaging Thailand, กล่องกระดาษ, corrugated box, กล่องลูกฟูก, offset printing, งานพิมพ์ออฟเซ็ท, flexible packaging, บรรจุภัณฑ์อ่อน, label printing, สติ๊กเกอร์, packaging company thailand, printing company thailand, บริษัทบรรจุภัณฑ์, บริษัทงานพิมพ์, SET:TPP",
     },
     {
       name: "author",
-      content: "BJH Bangkok",
+      content: "Thai Packaging & Printing PCL",
     },
     {
       name: "geo.region",
@@ -72,11 +72,11 @@ export const SEO_CONFIG = {
   additionalLinkTags: [
     {
       rel: "icon",
-      href: "/BJH.ico",
+      href: "/TPP.ico",
     },
     {
       rel: "apple-touch-icon",
-      href: "/BJH.png",
+      href: "/images/logo/LOGO-TPP-SIDE_9.png",
       sizes: "76x76",
     },
     {
@@ -97,20 +97,26 @@ export const SEO_CONFIG = {
 };
 
 /**
- * JSON-LD Organization Schema - เพิ่มประสิทธิภาพสำหรับการค้นหา "BJH Bangkok"
+ * JSON-LD Organization Schema - เพิ่มประสิทธิภาพสำหรับการค้นหา "TPP" และ "Thai Packaging & Printing"
  */
 export const ORGANIZATION_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "BJH Bangkok",
-  legalName: "Thai Packaging & Printing Public Company Limited",
-  alternateName: ["บีเจเอช แบงค็อก", "TPP", "Thai Packaging", "BJH"],
-  url: "https://app.bjhbangkok.com",
-  logo: "https://app.bjhbangkok.com/BJH.png",
+  name: "TPP - Thai Packaging & Printing",
+  legalName: "บริษัท ไทยแพคเกจจิ้ง แอนด์ พริ้นติ้ง จำกัด (มหาชน)",
+  alternateName: [
+    "TPP",
+    "TPPPCL",
+    "Thai Packaging & Printing",
+    "ไทยแพคเกจจิ้ง แอนด์ พริ้นติ้ง",
+    "Thai Packaging and Printing PCL",
+  ],
+  url: "https://www.tpp.co.th",
+  logo: "https://www.tpp.co.th/images/logo/LOGO-TPP-SIDE_9.png",
   description:
-    "BJH Bangkok - ผู้นำด้านบรรจุภัณฑ์และงานพิมพ์ในประเทศไทย | Leading packaging & printing solutions provider in Thailand",
-  foundingDate: "1991",
-  email: "info@bjhbangkok.com",
+    "TPP - บริษัท ไทยแพคเกจจิ้ง แอนด์ พริ้นติ้ง จำกัด (มหาชน) ผู้นำด้านบรรจุภัณฑ์และงานพิมพ์ในประเทศไทย | Leading packaging & printing solutions provider in Thailand | SET:TPP",
+  foundingDate: "1977",
+  email: "ir@tpp.co.th",
   telephone: "+66-2-xxx-xxxx",
   address: {
     "@type": "PostalAddress",
@@ -128,15 +134,21 @@ export const ORGANIZATION_SCHEMA = {
     name: "Thailand",
   },
   sameAs: [
-    "https://www.facebook.com/bjhbangkok",
-    "https://www.linkedin.com/company/bjhbangkok",
+    "https://www.facebook.com/tpppcl",
+    "https://www.linkedin.com/company/thai-packaging-printing",
+    "https://www.set.or.th/th/market/product/stock/quote/TPP/overview",
   ],
   knowsAbout: [
     "Packaging",
     "Printing",
     "Corrugated Box",
-    "Carton Box",
+    "กล่องลูกฟูก",
+    "Offset Printing",
+    "งานพิมพ์ออฟเซ็ท",
+    "Flexible Packaging",
+    "บรรจุภัณฑ์อ่อน",
     "Label Printing",
+    "สติ๊กเกอร์",
     "บรรจุภัณฑ์",
     "งานพิมพ์",
   ],
@@ -148,15 +160,16 @@ export const ORGANIZATION_SCHEMA = {
 export const LOCAL_BUSINESS_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "@id": "https://app.bjhbangkok.com/#organization",
-  name: "BJH Bangkok",
-  alternateName: "บีเจเอช แบงค็อก",
-  description: "ผู้นำด้านบรรจุภัณฑ์และงานพิมพ์ในกรุงเทพฯ และประเทศไทย",
-  url: "https://app.bjhbangkok.com",
-  image: "https://app.bjhbangkok.com/BJH.png",
+  "@id": "https://www.tpp.co.th/#organization",
+  name: "TPP - Thai Packaging & Printing",
+  alternateName: "ไทยแพคเกจจิ้ง แอนด์ พริ้นติ้ง",
+  description:
+    "บริษัท ไทยแพคเกจจิ้ง แอนด์ พริ้นติ้ง จำกัด (มหาชน) ผู้นำด้านบรรจุภัณฑ์และงานพิมพ์ในประเทศไทย",
+  url: "https://www.tpp.co.th",
+  image: "https://www.tpp.co.th/images/logo/LOGO-TPP-SIDE_9.png",
   priceRange: "$$",
   telephone: "+66-2-xxx-xxxx",
-  email: "info@bjhbangkok.com",
+  email: "ir@tpp.co.th",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Bangkok",
@@ -177,8 +190,9 @@ export const LOCAL_BUSINESS_SCHEMA = {
     },
   ],
   sameAs: [
-    "https://www.facebook.com/bjhbangkok",
-    "https://www.linkedin.com/company/bjhbangkok",
+    "https://www.facebook.com/tpppcl",
+    "https://www.linkedin.com/company/thai-packaging-printing",
+    "https://www.set.or.th/th/market/product/stock/quote/TPP/overview",
   ],
 };
 
@@ -193,7 +207,7 @@ export function createBreadcrumbSchema(items: { name: string; url: string }[]) {
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: `https://app.bjhbangkok.com${item.url}`,
+      item: `https://www.tpp.co.th${item.url}`,
     })),
   };
 }
@@ -207,7 +221,7 @@ export function createArticleSchema({
   image,
   datePublished,
   dateModified,
-  author = "BJH Bangkok",
+  author = "TPP - Thai Packaging & Printing",
 }: {
   title: string;
   description: string;
@@ -227,14 +241,14 @@ export function createArticleSchema({
     author: {
       "@type": "Organization",
       name: author,
-      url: "https://app.bjhbangkok.com",
+      url: "https://www.tpp.co.th",
     },
     publisher: {
       "@type": "Organization",
-      name: "BJH Bangkok",
+      name: "TPP - Thai Packaging & Printing",
       logo: {
         "@type": "ImageObject",
-        url: "https://app.bjhbangkok.com/BJH.png",
+        url: "https://www.tpp.co.th/images/logo/LOGO-TPP-SIDE_9.png",
       },
     },
   };
@@ -247,7 +261,7 @@ export function createProductSchema({
   name,
   description,
   image,
-  brand = "BJH Bangkok",
+  brand = "TPP",
 }: {
   name: string;
   description: string;
@@ -266,7 +280,7 @@ export function createProductSchema({
     },
     manufacturer: {
       "@type": "Organization",
-      name: "Thai Packaging & Printing PCL",
+      name: "บริษัท ไทยแพคเกจจิ้ง แอนด์ พริ้นติ้ง จำกัด (มหาชน)",
     },
   };
 }

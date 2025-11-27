@@ -236,28 +236,6 @@ export default function OmanAirStyleLayout() {
             border-radius: 1rem;
           }
         }
-        .Video-background {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          width: 100%;
-          height: 100%;
-          background-image: url("/images/subsidiaries/Cargo_Map_36677-hd_2.png");
-          background-size: auto;
-          background-position: center center;
-          background-repeat: no-repeat;
-          image-rendering: -webkit-optimize-contrast;
-          image-rendering: crisp-edges;
-          min-width: 928px;
-          min-height: 703px;
-        }
-        @media (min-width: 768px) {
-          .Video-background {
-            transform-origin: center center;
-          }
-        }
         .fixed-aspect {
           position: relative;
           width: 100%;
@@ -305,61 +283,17 @@ export default function OmanAirStyleLayout() {
           main {
             padding-top: 120px !important;
           }
-          .zoom-immune-container {
-            min-height: 350px !important;
-            overflow: visible;
-            background-color: #dbeafe !important; /* Light blue for non-PC */
-            border: 3px solid #3b82f6 !important; /* Blue border */
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-          }
-          .zoom-immune-container img {
-            max-width: 95% !important;
-            max-height: 90% !important;
-            object-fit: contain !important;
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-          }
         }
         /* Tablet and medium screens (iPad, etc.) */
         @media (min-width: 641px) and (max-width: 1199px) {
           main {
             padding-top: 110px !important;
           }
-          .zoom-immune-container {
-            min-height: 450px !important;
-            overflow: visible;
-            background-color: #dbeafe !important; /* Light blue for non-PC */
-            border: 2px solid #3b82f6 !important; /* Blue border */
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-          }
-          .zoom-immune-container img {
-            max-width: 95% !important;
-            max-height: 95% !important;
-            object-fit: contain !important;
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-          }
-          .Video-background {
-            background-size: contain !important;
-          }
         }
-        /* PC screens (≥1200px) - Original size */
+        /* PC screens (≥1200px) */
         @media (min-width: 1200px) {
           main {
             padding-top: 105px !important;
-          }
-          .zoom-immune-container {
-            background-color: transparent !important;
-            border: none !important;
-          }
-          .Video-background {
-            background-size: auto !important;
           }
         }
         /* Touch-friendly interactions */
@@ -503,78 +437,54 @@ export default function OmanAirStyleLayout() {
             id="Video-panel"
             data-aos="fade-left"
             data-aos-delay="200"
-            className={`order-2 h-full min-h-[350px] sm:min-h-[450px] lg:min-h-[500px] xl:min-h-[600px] 2xl:min-h-[703px] ${
+            className={`order-2 w-full ${
               isVisible["Video-panel"] ? "aos-animate" : ""
             }`}
           >
-            <div className="zoom-immune-container h-full relative bg-gray-100 border-2 border-blue-500">
-              {/* Auto-detect and render appropriate version */}
-              {viewportSize.width < 1200 ? (
-                // Non-PC screens (Mobile, Tablet, Small Desktop)
-                <div className="w-full h-full flex items-center justify-center bg-blue-50">
-                  <img
-                    src="/images/subsidiaries/Cargo_Map_36677-hd_2.png"
-                    alt="Oman Air Route Map"
-                    className="max-w-full max-h-full object-contain border-2 border-blue-400"
-                    style={{
-                      width: "auto",
-                      height: "auto",
-                      display: "block",
-                      maxWidth: "100%",
-                      maxHeight: "100%",
-                    }}
-                    onError={(
-                      e: React.SyntheticEvent<HTMLImageElement, Event>
-                    ) => {
-                      const img = e.currentTarget;
-                      console.log("Non-PC Image failed to load:", img.src);
-                      img.style.display = "none";
-                      const next = img.nextElementSibling as HTMLElement | null;
-                      if (next) next.style.display = "block";
-                    }}
-                    onLoad={() => {
-                      console.log("Non-PC Image loaded successfully");
-                    }}
-                  />
-                  {/* Fallback text for non-PC */}
-                  <div
-                    style={{ display: "none" }}
-                    className="text-center p-4 bg-red-100 border-2 border-red-500 rounded"
-                  >
-                    <p className="text-sm font-bold">IMAGE NOT FOUND</p>
-                    <p className="text-xs">
-                      Path: /images/subsidiaries/Cargo_Map_36677-hd_2.png
-                    </p>
-                    <p className="text-xs">Non-PC Screen Detected</p>
-                  </div>
+            {/* Fixed aspect ratio container - maintains 4:3 ratio on all screens */}
+            <div
+              className="relative w-full overflow-hidden rounded-xl lg:rounded-2xl shadow-sm ring-1 ring-black/10"
+              style={{
+                paddingBottom:
+                  "75.76%" /* 703/928 ≈ 75.76% - original image aspect ratio */,
+              }}
+            >
+              <img
+                src="/images/subsidiaries/Cargo_Map_36677-hd_2.png"
+                alt="Oman Air Route Map"
+                className="absolute top-0 left-0 w-full h-full object-contain bg-white"
+                style={{
+                  objectPosition: "center center",
+                }}
+                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                  const img = e.currentTarget;
+                  console.log("Image failed to load:", img.src);
+                  img.style.display = "none";
+                  const next = img.nextElementSibling as HTMLElement | null;
+                  if (next) next.style.display = "flex";
+                }}
+                onLoad={() => {
+                  console.log("Image loaded successfully");
+                }}
+              />
+              {/* Fallback when image fails to load */}
+              <div
+                style={{ display: "none" }}
+                className="absolute inset-0 flex items-center justify-center text-center p-4 bg-gray-100"
+              >
+                <div>
+                  <p className="text-sm font-bold text-gray-600">
+                    ไม่สามารถโหลดภาพได้
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Oman Air Route Map
+                  </p>
                 </div>
-              ) : (
-                // PC screens (≥1200px) - Original size
-                <div className="w-full h-full relative">
-                  <img
-                    src="/images/subsidiaries/Cargo_Map_36677-hd_2.png"
-                    alt="Oman Air Route Map"
-                    className="absolute inset-0 w-full h-full"
-                    style={{
-                      objectFit: "contain",
-                      objectPosition: "center center",
-                    }}
-                  />
-                  {/* Fallback background method for PC */}
-                  <div
-                    className="Video-background absolute inset-0"
-                    role="img"
-                    aria-label="Oman Air Route Map Fallback"
-                    style={{
-                      zIndex: -1,
-                    }}
-                  />
-                </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
       </section>
     </main>
   );
-}
+}

@@ -143,9 +143,11 @@ export default function LoginPage() {
           className="text-center mb-8"
         >
           <Link href="/" className="inline-block">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
-              BJH BANGKOK
-            </h1>
+            <img
+              src="/images/logo/LOGO-TPP-SIDE_9.png"
+              alt="TPP - Thai Packaging & Printing"
+              className="h-20 w-auto mx-auto"
+            />
           </Link>
         </motion.div>
         {/* Login Card */}
