@@ -45,8 +45,8 @@ export async function POST(request: NextRequest) {
 
     // บันทึกไฟล์
     const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    await writeFile(filePath, buffer);
+    const uint8Array = new Uint8Array(bytes);
+    await writeFile(filePath, uint8Array);
 
     console.log(`✅ ไฟล์ถูกบันทึกที่: ${filePath}`);
 
