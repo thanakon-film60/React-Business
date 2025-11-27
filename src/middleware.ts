@@ -3,32 +3,113 @@ import type { NextRequest } from "next/server";
 // Supported locales
 const locales = ["th", "en"];
 const defaultLocale = "th";
+
+// Public paths ที่ไม่ต้อง login (จากรายการ API-all-log)
+const publicPaths = [
+  // หน้าหลักและข้อมูลบริษัท
+  "/",
+  "/about-philosophy",
+  "/about-history",
+  "/about-executives",
+  "/about-subsidiaries",
+  // ผลิตภัณฑ์และบริการ
+  "/our-services",
+  "/our-customers",
+  "/products-pakku-packaging",
+  // โรงงานและคุณภาพ
+  "/factory-technology",
+  "/quality-control",
+  "/quality-certification",
+  // นักลงทุนสัมพันธ์
+  "/investor-stock-price",
+  "/investor-financials",
+  "/investor-governance",
+  "/investor-shareholders",
+  "/investor-downloads",
+  "/investor-contact",
+  // ข่าวสารและกิจกรรม
+  "/news-events",
+  "/articles",
+  "/tpp-news",
+  "/awards-achievements",
+  // การตลาดและโฆษณา
+  "/facebook-ads-dashboard",
+  "/facebook-ads-insights",
+  "/facebook-ads-manager",
+  "/google-ads-dashboard",
+  // การจัดการลูกค้า
+  "/contact-dashboard",
+  "/customer-contact-dashboard",
+  "/contact-inquiry",
+  // อื่นๆ
+  "/careers",
+  "/go-green",
+  "/PDPA",
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/oauth2callback",
+  // Fullscreen Pages
+  "/customer-all-data",
+  "/edit-customer",
+  "/performance-surgery-schedule",
+];
+
+// Protected paths ที่ต้อง login (เฉพาะบางหน้า)
+const protectedPaths = [
+  "/home",
+  "/crm-advanced",
+  "/customer-folder-manager",
+  "/all-files-gallery",
+];
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   // Check authentication for protected routes
   const token = request.cookies.get("authToken")?.value;
 
-  // Public paths that don't require authentication
-  const publicPaths = ["/login", "/register", "/forgot-password", "/"];
-
-  const isPublicPath =
-    publicPaths.includes(pathname) ||
+  // Check if it's a static/system path
+  const isStaticPath =
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/images") ||
     pathname.startsWith("/downloads") ||
     pathname.startsWith("/static") ||
+    pathname === "/favicon.ico" ||
+    pathname === "/TPP.ico" ||
+    pathname === "/robots.txt" ||
+    pathname === "/sitemap.xml" ||
     pathname.includes(".");
 
-  // If accessing any path without token (except public paths), redirect to login
-  if (!isPublicPath && !token) {
+  // If accessing static files, allow through
+  if (isStaticPath) {
+    return NextResponse.next();
+  }
+
+  // Check if it's a public path (ไม่ต้อง login)
+  const isPublicPath = publicPaths.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
+
+  // Check if it's a protected path (ต้อง login)
+  const isProtectedPath = protectedPaths.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
+
+  // Auth pages (login, register, forgot-password)
+  const isAuthPage = ["/login", "/register", "/forgot-password"].some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
+
+  // If accessing protected path without token, redirect to login
+  if (isProtectedPath && !token) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  // If already logged in and trying to access login page, redirect to home
-  if (token && pathname === "/login") {
+  // If already logged in and trying to access auth pages, redirect to home
+  if (token && isAuthPage) {
     return NextResponse.redirect(new URL("/home", request.url));
   }
   // ตรวจสอบว่า URL มี locale prefix หรือไม่

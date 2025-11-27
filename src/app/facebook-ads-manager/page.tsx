@@ -175,6 +175,15 @@ export default function FacebookAdsManagerPage() {
   const [topAdsLimit, setTopAdsLimit] = useState<5 | 10 | 15 | 20 | 30 | "all">(
     20
   );
+  const [adsetDetailsData, setAdsetDetailsData] = useState<any[]>([]);
+  const [adsetDetailsLoading, setAdsetDetailsLoading] = useState(false);
+  const [selectedAdDetail, setSelectedAdDetail] = useState<AdInsight | null>(
+    null
+  );
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedAdsetDetails, setSelectedAdsetDetails] = useState<any[]>([]);
+  const [adsetDetailsModalLoading, setAdsetDetailsModalLoading] =
+    useState(false);
 
   // Re-parse Facebook SDK when modal opens
   useEffect(() => {
@@ -640,6 +649,66 @@ export default function FacebookAdsManagerPage() {
     }
   }, []);
 
+  const fetchAdsetDetailsData = useCallback(async () => {
+    try {
+      setAdsetDetailsLoading(true);
+      const url =
+        "https://graph.facebook.com/v24.0/act_454323590676166/insights?level=adset&fields=adset_id,adset_name,campaign_id,campaign_name,spend,impressions,clicks,ctr,cpc,cpm,actions&action_breakdowns=action_type&date_preset=today&access_token=EAAPb1ZBYCiNcBPzNxxSUntCZCTVHyl5AkAZBIiwCmDzrWKMLU4VEHJxRve7oqUDSaMs8om9pdVWFLzUdeTbTvkGPuTeuQ4KvGFizMy3VsSid8vgmjZB8OMoLySRmXxyAUpAwyyhSqOO8tSZAU6IYpxarsXBbZCDzFdy8u279HxSXtyWMpIolRtjJEWLdmfU5SwZCsP5";
+      const response = await fetch(url);
+      const result = await response.json();
+      if (result.data) {
+        setAdsetDetailsData(result.data);
+      } else {
+        setAdsetDetailsData([]);
+      }
+    } catch (err) {
+      setAdsetDetailsData([]);
+    } finally {
+      setAdsetDetailsLoading(false);
+    }
+  }, []);
+
+  const fetchAdsetDetailsForModal = useCallback(
+    async (adsetId: string, adsetName: string) => {
+      try {
+        setAdsetDetailsModalLoading(true);
+        // ใช้ adset_id เพื่อดึงข้อมูล ads ภายใน adset นั้น
+        const url = `https://graph.facebook.com/v24.0/${adsetId}/insights?level=ad&fields=ad_id,ad_name,adset_id,adset_name,campaign_id,campaign_name,spend,impressions,clicks,ctr,cpc,cpm,actions,reach,frequency,date_start,date_stop,cost_per_action_type&action_breakdowns=action_type&date_preset=last_30d&access_token=EAAPb1ZBYCiNcBPzNxxSUntCZCTVHyl5AkAZBIiwCmDzrWKMLU4VEHJxRve7oqUDSaMs8om9pdVWFLzUdeTbTvkGPuTeuQ4KvGFizMy3VsSid8vgmjZB8OMoLySRmXxyAUpAwyyhSqOO8tSZAU6IYpxarsXBbZCDzFdy8u279HxSXtyWMpIolRtjJEWLdmfU5SwZCsP5`;
+        const response = await fetch(url);
+        const result = await response.json();
+
+        if (result.data && result.data.length > 0) {
+          // ดึงข้อมูล creative สำหรับแต่ละ ad_id
+          const detailsWithCreatives = await Promise.all(
+            result.data.map(async (ad: any) => {
+              try {
+                const creativeResponse = await fetch(
+                  `/api/facebook-ads-creative?ad_id=${ad.ad_id}`
+                );
+                const creativeResult = await creativeResponse.json();
+                return {
+                  ...ad,
+                  creative: creativeResult.success ? creativeResult.data : null,
+                };
+              } catch (error) {
+                return { ...ad, creative: null };
+              }
+            })
+          );
+
+          setSelectedAdsetDetails(detailsWithCreatives);
+        } else {
+          setSelectedAdsetDetails([]);
+        }
+      } catch (err) {
+        setSelectedAdsetDetails([]);
+      } finally {
+        setAdsetDetailsModalLoading(false);
+      }
+    },
+    []
+  );
+
   const fetchDailySummaryData = useCallback(async () => {
     try {
       setDailySummaryLoading(true);
@@ -669,6 +738,7 @@ export default function FacebookAdsManagerPage() {
           fetchFacebookBalance(),
           fetchPhoneCount(),
           fetchDailySummaryData(),
+          fetchAdsetDetailsData(),
         ]);
       } catch (error) {
         setError("เกิดข้อผิดพลาดในการโหลดข้อมูล");
@@ -685,6 +755,7 @@ export default function FacebookAdsManagerPage() {
         fetchFacebookBalance(),
         fetchPhoneCount(),
         fetchDailySummaryData(),
+        fetchAdsetDetailsData(),
       ]);
     }, 120000);
 
@@ -698,6 +769,7 @@ export default function FacebookAdsManagerPage() {
     fetchFacebookBalance,
     fetchPhoneCount,
     fetchDailySummaryData,
+    fetchAdsetDetailsData,
   ]);
 
   const formatNumber = (value: string | number) => {
@@ -1001,6 +1073,259 @@ export default function FacebookAdsManagerPage() {
               >
                 ✓ ตกลง
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Detail Modal - ตารางข้อมูลแบบละเอียด */}
+      {showDetailModal && selectedAdDetail && (
+        <div
+          className="modal-overlay fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowDetailModal(false);
+              setSelectedAdDetail(null);
+            }
+          }}
+        >
+          <div
+            className="video-modal-container bg-white rounded-2xl shadow-2xl max-w-7xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="sticky top-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-6 py-4 flex items-center justify-between z-10 rounded-t-2xl">
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-white">
+                  รายละเอียดโฆษณา
+                </h3>
+              </div>
+              <button
+                onClick={() => {
+                  setShowDetailModal(false);
+                  setSelectedAdDetail(null);
+                }}
+                className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-all text-2xl w-10 h-10 flex items-center justify-center ml-4"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-6">
+              {/* ตารางข้อมูลละเอียดแบบ Nested */}
+              {adsetDetailsModalLoading ? (
+                <div className="flex justify-center items-center py-12">
+                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-600"></div>
+                  <p className="ml-4 text-gray-700 text-lg">
+                    กำลังโหลดข้อมูล...
+                  </p>
+                </div>
+              ) : selectedAdsetDetails.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  ไม่พบข้อมูล
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          ไอคอน
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-left text-xs font-semibold text-gray-700">
+                          รายการ
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          การกระทำสำเร็จ
+                          <br />
+                          On-Facebook
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          ต้นทุนต่อ
+                          <br />
+                          ผลลัพธ์
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          จำนวนครั้ง
+                          <br />
+                          แสดงผล
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          การเข้าถึง
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          ความถี่
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          จำนวนเงิน
+                          <br />
+                          ที่ใช้
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          สิ้นสุด
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          CPM
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          ผลลัพธ์
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          ต้นทุนต่อ
+                          <br />
+                          ผลลัพธ์
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          CTR
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          CPC
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          การคลิก
+                          <br />
+                          ทั้งหมด
+                        </th>
+                        <th className="border border-gray-300 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                          การตั้งค่า
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedAdsetDetails.map((detail: any, index: number) => {
+                        const thumbnailUrl =
+                          detail.creative?.thumbnail_url ||
+                          detail.creative?.image_url;
+
+                        return (
+                          <tr
+                            key={detail.ad_id + index}
+                            className="hover:bg-blue-50"
+                          >
+                            <td className="border border-gray-300 px-2 py-2">
+                              <div className="flex justify-center items-center">
+                                {thumbnailUrl ? (
+                                  <div
+                                    className="w-12 h-12 cursor-pointer"
+                                    onClick={() => {
+                                      setSelectedAdForPreview(detail);
+                                      setShowVideoModal(true);
+                                      setShowDetailModal(false);
+                                    }}
+                                  >
+                                    <img
+                                      src={thumbnailUrl}
+                                      alt="Ad preview"
+                                      className="w-full h-full object-cover rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                                      onError={(e) => {
+                                        e.currentTarget.src =
+                                          "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%23e5e7eb'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%239ca3af' font-size='12'%3ENo Image%3C/text%3E%3C/svg%3E";
+                                      }}
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                    <span className="text-gray-400 text-xs">
+                                      📊
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2">
+                              <div className="min-w-[120px] max-w-[200px]">
+                                <div className="font-medium text-gray-800 text-sm truncate">
+                                  {detail.adset_name || "—"}
+                                </div>
+                                <div className="text-xs text-gray-500 truncate mt-1">
+                                  ข้อมูล: {detail.date_start}
+                                </div>
+                              </div>
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center text-gray-700 text-sm">
+                              {(() => {
+                                const action = detail.actions?.find(
+                                  (a: any) =>
+                                    a.action_type ===
+                                    "onsite_conversion.messaging_first_reply"
+                                );
+                                return action
+                                  ? parseInt(action.value || "0")
+                                  : "—";
+                              })()}
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center text-gray-700 text-sm">
+                              {(() => {
+                                const cost = detail.cost_per_action_type?.find(
+                                  (c: any) =>
+                                    c.action_type ===
+                                    "onsite_conversion.messaging_first_reply"
+                                );
+                                return cost ? formatCurrency(cost.value) : "—";
+                              })()}
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center text-gray-700 text-sm">
+                              {formatNumber(detail.impressions)}
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center text-gray-700 text-sm">
+                              {detail.reach ? formatNumber(detail.reach) : "—"}
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center text-gray-700 text-sm">
+                              {detail.frequency
+                                ? formatNumber(detail.frequency)
+                                : "—"}
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center font-semibold text-blue-700 text-sm">
+                              {formatCurrency(detail.spend)}
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center text-gray-700 text-xs">
+                              {detail.date_stop || "—"}
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center text-gray-700 text-sm">
+                              {formatCurrency(detail.cpm)}
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center font-semibold text-green-700 text-sm">
+                              {(() => {
+                                const action = detail.actions?.find(
+                                  (a: any) =>
+                                    a.action_type ===
+                                    "onsite_conversion.total_messaging_connection"
+                                );
+                                return action
+                                  ? parseInt(action.value || "0")
+                                  : "—";
+                              })()}
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center text-gray-700 text-sm">
+                              {(() => {
+                                const cost = detail.cost_per_action_type?.find(
+                                  (c: any) =>
+                                    c.action_type ===
+                                    "onsite_conversion.total_messaging_connection"
+                                );
+                                return cost ? formatCurrency(cost.value) : "—";
+                              })()}
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center text-gray-700 text-sm">
+                              {formatPercentage(detail.ctr)}
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center text-gray-700 text-sm">
+                              {formatCurrency(detail.cpc)}
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center text-gray-700 text-sm">
+                              {formatNumber(detail.clicks)}
+                            </td>
+                            <td className="border border-gray-300 px-2 py-2 text-center text-gray-700 text-sm">
+                              <div className="min-w-[100px] max-w-[150px] truncate">
+                                {detail.campaign_name || "—"}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1317,31 +1642,116 @@ export default function FacebookAdsManagerPage() {
 
         {/* Grid: Two TOP Ads tables + Daily Summary */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8 mt-4 sm:mt-8">
-          {/* TOP Ads Table - Left */}
+          {/* TOP Ads Table -  */}
           <div className="lg:col-span-6">
-            <TopAdsTable
-              title="🏆 TOP Ads (Left)"
-              insights={getTopAdsFilteredInsights()}
-              adCreatives={adCreatives}
-              topAdsSortBy={topAdsSortBy}
-              setTopAdsSortBy={setTopAdsSortBy}
-              topAdsLimit={topAdsLimit}
-              setTopAdsLimit={setTopAdsLimit}
-              topAdsPhoneLeads={topAdsPhoneLeads}
-              topAdsPhoneLeadsLoading={topAdsPhoneLeadsLoading}
-              creativesLoading={creativesLoading}
-              getResultsByActionType={getResultsByActionType}
-              formatCurrency={formatCurrency}
-              formatNumber={formatNumber}
-              setSelectedAdForPreview={setSelectedAdForPreview}
-              setShowVideoModal={setShowVideoModal}
-            />
-          </div>
+            <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-gray-100 mt-4 sm:mt-8">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-4 sm:px-8 py-4 sm:py-8 relative overflow-hidden">
+                <h2 className="text-xl sm:text-3xl font-bold text-white flex items-center justify-between gap-2 sm:gap-3 relative z-10">
+                  <span>📋ชุดโฆษณา</span>
+                  <span className="md:hidden text-xs font-normal opacity-75">
+                    👉 เลื่อนดูเพิ่ม
+                  </span>
+                </h2>
+              </div>
 
+              {/* Main Data Table */}
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-max">
+                  <thead className="bg-gray-50 sticky top-0 z-10">
+                    <tr>
+                      {/* <th className="text-center py-3 px-4 font-semibold text-gray-700 text-sm whitespace-nowrap">
+                        รูป
+                      </th> */}
+                      <th className="text-center py-3 px-4 font-semibold text-gray-700 text-sm whitespace-nowrap">
+                        ชื่อโฆษณา
+                      </th>
+                      <th className="text-center py-3 px-4 font-semibold text-gray-700 text-sm whitespace-nowrap">
+                        แคมเปญ
+                      </th>
+                      <th className="text-center py-3 px-4 font-semibold text-gray-700 text-sm whitespace-nowrap">
+                        ใช้จ่าย
+                      </th>
+                      <th className="text-center py-3 px-4 font-semibold text-gray-700 text-sm whitespace-nowrap">
+                        รายใหม่
+                      </th>
+                      <th className="text-center py-3 px-4 font-semibold text-gray-700 text-sm whitespace-nowrap">
+                        เริ่มสนทนา
+                      </th>
+                      <th className="text-center py-3 px-4 font-semibold text-gray-700 text-sm whitespace-nowrap">
+                        ต้นทุน/สนทนา
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredInsights.map((ad) => {
+                      const creative = adCreatives.get(ad.ad_id);
+                      const messagingFirstReply = getResultsByActionType(
+                        ad.actions,
+                        "onsite_conversion.messaging_first_reply"
+                      );
+                      const messagingConnection = getResultsByActionType(
+                        ad.actions,
+                        "onsite_conversion.total_messaging_connection"
+                      );
+                      const costPerMessagingConnection =
+                        ad.cost_per_action_type?.find(
+                          (cost) =>
+                            cost.action_type ===
+                            "onsite_conversion.total_messaging_connection"
+                        );
+
+                      return (
+                        <tr
+                          key={ad.ad_id}
+                          className="border-b border-gray-100 hover:bg-blue-50 transition-colors cursor-pointer"
+                          onClick={async () => {
+                            setSelectedAdDetail(ad);
+                            setShowDetailModal(true);
+                            // ดึงข้อมูลทั้งหมดภายใน adset นี้
+                            await fetchAdsetDetailsForModal(
+                              ad.adset_id,
+                              ad.adset_name
+                            );
+                          }}
+                        >
+                          <td className="py-3 px-4 text-center text-gray-800 font-medium text-sm">
+                            <div className="min-w-[150px] max-w-[200px] truncate">
+                              {ad.adset_name || "—"}
+                            </div>
+                          </td>
+                          <td className="py-3 px-4 text-center text-gray-600 text-sm">
+                            <div className="min-w-[120px] max-w-[180px] truncate">
+                              {ad.campaign_name || "—"}
+                            </div>
+                          </td>
+                          <td className="py-3 px-4 text-center font-semibold text-blue-700 text-sm">
+                            {formatCurrency(ad.spend)}
+                          </td>
+                          <td className="py-3 px-4 text-center font-semibold text-green-700 text-sm">
+                            {messagingFirstReply}
+                          </td>
+                          <td className="py-3 px-4 text-center font-semibold text-teal-700 text-sm">
+                            {messagingConnection}
+                          </td>
+                          <td className="py-3 px-4 text-center text-gray-700 text-sm">
+                            {costPerMessagingConnection
+                              ? formatCurrency(costPerMessagingConnection.value)
+                              : "—"}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
           {/* TOP Ads Table - Right */}
           <div className="lg:col-span-6">
             <TopAdsTable
-              title="🏆 TOP Ads (Right)"
+              title={`🏆 TOP ${
+                topAdsLimit === "all" ? "ทั้งหมด" : topAdsLimit
+              } Ads`}
               insights={getTopAdsFilteredInsights()}
               adCreatives={adCreatives}
               topAdsSortBy={topAdsSortBy}
@@ -1610,7 +2020,7 @@ function TopAdsTable({
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
             >
-              💬 Inbox
+              💬 Total Inbox (มาก → น้อย)
             </button>
             <button
               onClick={() => setTopAdsSortBy("phone")}
@@ -1620,7 +2030,7 @@ function TopAdsTable({
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
             >
-              📞 เบอร์
+              📞 ชื่อ - เบอร์ (มาก → น้อย)
             </button>
             <button
               onClick={() => setTopAdsSortBy("cost")}
@@ -1630,7 +2040,7 @@ function TopAdsTable({
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
             >
-              💰 Cost
+              💰 ต้นทุน (น้อย → มาก)
             </button>
           </div>
           <select

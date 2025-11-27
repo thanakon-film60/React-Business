@@ -1,5 +1,5 @@
 "use client";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Mail,
@@ -11,11 +11,14 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { validateEmail } from "@/utils/validateEmail";
 import type { LoginFormData, LoginResponse } from "@/types/auth";
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect") || "/home";
+
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -104,9 +107,9 @@ export default function LoginPage() {
         document.cookie = `authToken=${data.token}; path=/; max-age=${
           formData.rememberMe ? 2592000 : 604800
         }`;
-        // Redirect after 1.5 seconds
+        // Redirect after 1.5 seconds to the original page or home
         setTimeout(() => {
-          router.push("/home");
+          router.push(redirectUrl);
         }, 1500);
       } else {
         setErrors({ general: data.message });
