@@ -191,13 +191,13 @@ const DevMiniToolbar: React.FC<DevMiniToolbarProps> = ({
 
   return (
     <div className={`fixed ${containerPos} z-[9999] select-none`}>
-      {/* Animated background glow */}
+      {/* Animated background glow - TPP Red */}
       <div
         className={`
           absolute inset-0 w-16 h-16 rounded-full 
-          bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400
+          bg-gradient-to-r from-red-600 via-red-500 to-red-400
           blur-xl transition-all duration-500
-          ${open ? "opacity-60 scale-150" : "opacity-0 scale-100"}
+          ${open ? "opacity-70 scale-150" : "opacity-0 scale-100"}
         `}
         style={{ left: "-4px", bottom: "-4px" }}
       />
@@ -215,7 +215,7 @@ const DevMiniToolbar: React.FC<DevMiniToolbarProps> = ({
           />
         ))}
 
-        {/* ปุ่มลอยหลัก */}
+        {/* ปุ่มลอยหลัก - TPP Style (แดง-ขาว) */}
         <button
           ref={btnRef}
           onClick={() => setOpen((v) => !v)}
@@ -225,59 +225,91 @@ const DevMiniToolbar: React.FC<DevMiniToolbarProps> = ({
           aria-expanded={open}
           className={`
             relative w-16 h-16 rounded-full shadow-2xl
-            flex items-center justify-center text-white font-bold
+            flex items-center justify-center font-bold
             transition-all duration-500 ease-out
             focus:outline-none
             overflow-hidden
-            ${open ? "rotate-135 scale-110" : "rotate-0 scale-100"}
+            ${open ? "rotate-45 scale-110" : "rotate-0 scale-100"}
           `}
           style={{
             background: open
-              ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-              : "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
+              ? "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)"
+              : "linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%)",
             boxShadow: open
-              ? "0 0 30px rgba(102, 126, 234, 0.8), 0 0 60px rgba(118, 75, 162, 0.6), 0 10px 40px rgba(0,0,0,0.3)"
+              ? "0 0 30px rgba(220, 38, 38, 0.8), 0 0 60px rgba(185, 28, 28, 0.5), 0 10px 40px rgba(0,0,0,0.3)"
               : isHovering
-              ? "0 0 25px rgba(240, 147, 251, 0.6), 0 0 50px rgba(102, 126, 234, 0.4), 0 8px 32px rgba(0,0,0,0.3)"
-              : "0 0 15px rgba(102, 126, 234, 0.4), 0 6px 24px rgba(0,0,0,0.25)",
+              ? "0 0 25px rgba(239, 68, 68, 0.7), 0 0 50px rgba(220, 38, 38, 0.4), 0 8px 32px rgba(0,0,0,0.3)"
+              : "0 0 15px rgba(220, 38, 38, 0.5), 0 6px 24px rgba(0,0,0,0.25)",
           }}
-          title="ติดต่อเรา (Ctrl+; เพื่อซ่อน/แสดง)"
+          title="ติดต่อเรา TPP (Ctrl+; เพื่อซ่อน/แสดง)"
         >
-          {/* Animated gradient border */}
+          {/* White outer ring */}
           <span
-            className="absolute inset-0 rounded-full p-[3px]"
+            className="absolute inset-0 rounded-full"
             style={{
-              background:
-                "linear-gradient(45deg, #f093fb, #f5576c, #4facfe, #00f2fe, #f093fb)",
-              backgroundSize: "400% 400%",
-              animation: "gradientRotate 3s ease infinite",
+              border: "3px solid white",
+              boxShadow: "inset 0 0 10px rgba(255,255,255,0.3)",
             }}
-          >
-            <span className="w-full h-full rounded-full bg-gradient-to-br from-purple-600 via-pink-500 to-purple-700 flex items-center justify-center"></span>
-          </span>
+          />
+
+          {/* Inner red circle with white accent */}
+          <span
+            className="absolute inset-[6px] rounded-full"
+            style={{
+              background: "linear-gradient(135deg, #dc2626 0%, #991b1b 100%)",
+              border: "2px solid rgba(255,255,255,0.4)",
+            }}
+          />
+
+          {/* Animated glow ring */}
+          <span
+            className={`
+              absolute inset-0 rounded-full
+              ${open ? "" : "animate-pulse"}
+            `}
+            style={{
+              border: "2px solid rgba(255,255,255,0.5)",
+              animationDuration: "2s",
+            }}
+          />
 
           {/* Pulse rings */}
           <span
             className={`
-              absolute inset-0 rounded-full border-2 border-white/30
+              absolute -inset-1 rounded-full border-2 border-red-300/50
               ${open ? "" : "animate-ping"}
             `}
             style={{ animationDuration: "2s" }}
           />
           <span
             className={`
-              absolute -inset-2 rounded-full border border-white/20
+              absolute -inset-3 rounded-full border border-red-200/30
               ${open ? "" : "animate-ping"}
             `}
             style={{ animationDuration: "2.5s", animationDelay: "0.5s" }}
           />
 
-          {/* Icon */}
+          {/* TPP Text or Icon */}
+          <span
+            className={`
+              relative z-10 text-white font-extrabold text-sm
+              transition-all duration-500 drop-shadow-lg
+              ${open ? "opacity-0 scale-0" : "opacity-100 scale-100"}
+            `}
+            style={{
+              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+              letterSpacing: "0.5px",
+            }}
+          >
+            TPP
+          </span>
+
+          {/* X Icon when open */}
           <svg
             className={`
-              relative z-10 w-8 h-8 transition-all duration-500
+              absolute z-10 w-6 h-6 text-white transition-all duration-500
               drop-shadow-lg
-              ${open ? "rotate-0" : ""}
+              ${open ? "opacity-100 scale-100" : "opacity-0 scale-0"}
             `}
             fill="none"
             stroke="currentColor"
@@ -286,12 +318,12 @@ const DevMiniToolbar: React.FC<DevMiniToolbarProps> = ({
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2.5}
-              d="M12 4v16m8-8H4"
+              strokeWidth={3}
+              d="M6 18L18 6M6 6l12 12"
             />
           </svg>
 
-          {/* Sparkle effects */}
+          {/* Sparkle effects - white */}
           <span
             className={`
               absolute w-2 h-2 bg-white rounded-full
@@ -299,8 +331,8 @@ const DevMiniToolbar: React.FC<DevMiniToolbarProps> = ({
               ${isHovering || open ? "opacity-100" : "opacity-0"}
             `}
             style={{
-              top: "8px",
-              right: "12px",
+              top: "6px",
+              right: "10px",
               animation: "sparkle 1.5s ease-in-out infinite",
             }}
           />
@@ -311,9 +343,21 @@ const DevMiniToolbar: React.FC<DevMiniToolbarProps> = ({
               ${isHovering || open ? "opacity-100" : "opacity-0"}
             `}
             style={{
-              bottom: "10px",
-              left: "10px",
+              bottom: "8px",
+              left: "8px",
               animation: "sparkle 1.5s ease-in-out infinite 0.5s",
+            }}
+          />
+          <span
+            className={`
+              absolute w-1 h-1 bg-white rounded-full
+              transition-all duration-300
+              ${isHovering ? "opacity-100" : "opacity-0"}
+            `}
+            style={{
+              top: "12px",
+              left: "6px",
+              animation: "sparkle 1.5s ease-in-out infinite 1s",
             }}
           />
         </button>
@@ -321,17 +365,6 @@ const DevMiniToolbar: React.FC<DevMiniToolbarProps> = ({
 
       {/* CSS Animations */}
       <style jsx>{`
-        @keyframes gradientRotate {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
         @keyframes sparkle {
           0%,
           100% {
