@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { headers } from "next/headers";
+import pool from "@/lib/db";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -14,7 +15,7 @@ interface Props {
  * 3. og:video:secure_url = same as og:video
  * 4. og:video:type = "video/mp4"
  * 5. og:video:width and og:video:height
- * 6. og:image = thumbnail URL
+ * 6. og:image = thumbnail URL (must be HTTPS, not data URL)
  *
  * The video must be:
  * - MP4 format with H.264 codec
@@ -24,6 +25,11 @@ interface Props {
  */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
+  const videoId = parseInt(id);
+
+  if (isNaN(videoId)) {
+    return getDefaultMetadata();
+  }
 
   // Get base URL from environment or headers
   const headersList = await headers();
@@ -31,33 +37,57 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const protocol = host.includes("localhost") ? "http" : "https";
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`;
 
+  let client;
   try {
-    const response = await fetch(`${baseUrl}/api/line-share/video/${id}`, {
-      cache: "no-store",
-    });
+    client = await pool.connect();
 
-    if (!response.ok) {
+    // Fetch video directly from database for server-side rendering
+    const query = `
+      SELECT 
+        id,
+        name,
+        description,
+        file_type,
+        file_url,
+        mime_type,
+        duration,
+        duration_seconds,
+        width,
+        height,
+        category_name
+      FROM media_files
+      WHERE id = $1 AND is_active = TRUE
+    `;
+
+    const result = await client.query(query, [videoId]);
+
+    if (result.rows.length === 0) {
       return getDefaultMetadata();
     }
 
-    const data = await response.json();
-    const video = data.data;
-    const og = data.ogMeta;
+    const video = result.rows[0];
 
-    // Construct URLs
+    // Construct URLs - use streaming endpoint for video
     const pageUrl = `${baseUrl}/share/video/${id}`;
     const videoStreamUrl = `${baseUrl}/api/video-stream/${id}`;
-    const thumbnailUrl = og?.image || `${baseUrl}/images/video-placeholder.jpg`;
+    const embedUrl = `${baseUrl}/share/video/${id}/embed`;
+
+    // Use API endpoint for thumbnail (not base64 data URL)
+    // LINE requires HTTPS URL, not data: URLs
+    const thumbnailUrl = `${baseUrl}/api/video-thumbnail/${id}`;
 
     // Title and description
-    const title = og?.title || video?.name || "Video";
+    const title = video.name || "Video";
     const description =
-      og?.description ||
-      video?.description ||
-      `Watch ${video?.type === "clip" ? "clip" : "video"} - Media Gallery`;
+      video.description ||
+      `ดู${video.file_type === "clip" ? "คลิป" : "วิดีโอ"} - ${
+        video.category_name || "Media Gallery"
+      }`;
 
-    // Embed URL for player iframe
-    const embedUrl = `${baseUrl}/share/video/${id}/embed`;
+    const videoWidth = video.width || 1280;
+    const videoHeight = video.height || 720;
+    const mimeType = video.mime_type || "video/mp4";
+    const durationSeconds = video.duration_seconds || 0;
 
     return {
       title: title,
@@ -72,8 +102,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         images: [
           {
             url: thumbnailUrl,
-            width: video?.width || 1280,
-            height: video?.height || 720,
+            width: videoWidth,
+            height: videoHeight,
             alt: title,
           },
         ],
@@ -81,9 +111,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           {
             url: videoStreamUrl,
             secureUrl: videoStreamUrl,
-            type: video?.mimeType || "video/mp4",
-            width: video?.width || 1280,
-            height: video?.height || 720,
+            type: mimeType,
+            width: videoWidth,
+            height: videoHeight,
           },
         ],
         locale: "th_TH",
@@ -98,8 +128,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           {
             playerUrl: embedUrl,
             streamUrl: videoStreamUrl,
-            width: video?.width || 1280,
-            height: video?.height || 720,
+            width: videoWidth,
+            height: videoHeight,
           },
         ],
       },
@@ -109,17 +139,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         "og:video": videoStreamUrl,
         "og:video:url": videoStreamUrl,
         "og:video:secure_url": videoStreamUrl,
-        "og:video:type": video?.mimeType || "video/mp4",
-        "og:video:width": String(video?.width || 1280),
-        "og:video:height": String(video?.height || 720),
-        "og:video:duration": String(video?.durationSeconds || 0),
+        "og:video:type": mimeType,
+        "og:video:width": String(videoWidth),
+        "og:video:height": String(videoHeight),
+        "og:video:duration": String(durationSeconds),
 
         // Twitter player tags (LINE compatible)
         "twitter:player": embedUrl,
-        "twitter:player:width": String(video?.width || 1280),
-        "twitter:player:height": String(video?.height || 720),
+        "twitter:player:width": String(videoWidth),
+        "twitter:player:height": String(videoHeight),
         "twitter:player:stream": videoStreamUrl,
-        "twitter:player:stream:content_type": video?.mimeType || "video/mp4",
+        "twitter:player:stream:content_type": mimeType,
 
         // LINE specific meta tags
         "line:title": title,
@@ -130,6 +160,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   } catch (error) {
     console.error("Error generating video metadata:", error);
     return getDefaultMetadata();
+  } finally {
+    if (client) {
+      client.release();
+    }
   }
 }
 
