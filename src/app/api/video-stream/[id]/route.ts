@@ -78,8 +78,10 @@ export async function GET(
         const chunkSize = end - start + 1;
 
         const chunk = buffer.slice(start, end + 1);
+        // Convert Buffer to Uint8Array for NextResponse compatibility
+        const uint8Chunk = new Uint8Array(chunk);
 
-        return new NextResponse(chunk, {
+        return new NextResponse(uint8Chunk, {
           status: 206,
           headers: {
             "Content-Range": `bytes ${start}-${end}/${contentLength}`,
@@ -94,8 +96,9 @@ export async function GET(
         });
       }
 
-      // Full video response
-      return new NextResponse(buffer, {
+      // Full video response - convert Buffer to Uint8Array
+      const uint8Buffer = new Uint8Array(buffer);
+      return new NextResponse(uint8Buffer, {
         status: 200,
         headers: {
           "Content-Type": mimeType,
