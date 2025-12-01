@@ -1203,10 +1203,22 @@ const AllFilesGalleryPage = () => {
 
                   {/* Info Section */}
                   <div className="p-4 space-y-3">
-                    {/* File Name */}
-                    <h3 className="font-semibold text-white truncate group-hover:text-purple-300 transition-colors">
-                      {file.name}
-                    </h3>
+                    {/* File Name - Clickable link to video player */}
+                    {file.type === "video" || file.type === "clip" ? (
+                      <a
+                        href={`/share/video/${file.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block font-semibold text-white truncate hover:text-purple-300 transition-colors cursor-pointer underline decoration-purple-400/50 hover:decoration-purple-400"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        🎬 {file.name}
+                      </a>
+                    ) : (
+                      <h3 className="font-semibold text-white truncate group-hover:text-purple-300 transition-colors">
+                        {file.name}
+                      </h3>
+                    )}
 
                     {/* Tags */}
                     <div className="flex flex-wrap gap-1.5">
