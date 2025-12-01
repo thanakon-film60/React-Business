@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
 import pool from "@/lib/db";
 
 /**
@@ -25,6 +26,12 @@ export async function GET(
       );
     }
 
+    // Get base URL dynamically
+    const headersList = await headers();
+    const host = headersList.get("host") || "localhost:3000";
+    const protocol = host.includes("localhost") ? "http" : "https";
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`;
+
     // Fetch video details from database
     const query = `
       SELECT 
@@ -36,8 +43,10 @@ export async function GET(
         file_base64,
         thumbnail_base64,
         mime_type,
+        file_size,
         file_size_display,
         duration,
+        duration_seconds,
         width,
         height,
         category_name,
@@ -63,6 +72,24 @@ export async function GET(
       [videoId]
     );
 
+    // Construct URLs for LINE compatibility
+    const pageUrl = `${baseUrl}/share/video/${videoId}`;
+    const streamUrl = `${baseUrl}/api/video-stream/${videoId}`;
+
+    // Determine the best video URL
+    // Priority: external URL > stream URL (for base64 stored videos)
+    let videoUrl = video.file_url;
+    if (!videoUrl || videoUrl.startsWith("data:")) {
+      videoUrl = streamUrl;
+    }
+
+    // Determine thumbnail URL
+    let thumbnailUrl = video.thumbnail_base64;
+    if (!thumbnailUrl || thumbnailUrl.startsWith("data:")) {
+      // Use a placeholder or the first frame
+      thumbnailUrl = `${baseUrl}/images/video-placeholder.jpg`;
+    }
+
     // Return video data optimized for LINE playback
     return NextResponse.json({
       success: true,
@@ -71,13 +98,16 @@ export async function GET(
         name: video.name,
         description: video.description,
         type: video.file_type,
-        url: video.file_url || video.file_base64,
-        thumbnail: video.thumbnail_base64,
-        mimeType: video.mime_type,
+        url: videoUrl,
+        streamUrl: streamUrl,
+        pageUrl: pageUrl,
+        thumbnail: thumbnailUrl,
+        mimeType: video.mime_type || "video/mp4",
         size: video.file_size_display,
         duration: video.duration,
-        width: video.width,
-        height: video.height,
+        durationSeconds: video.duration_seconds || 0,
+        width: video.width || 1280,
+        height: video.height || 720,
         category: video.category_name,
         views: video.view_count + 1,
       },
@@ -89,10 +119,15 @@ export async function GET(
           `${video.file_type === "clip" ? "คลิป" : "วิดีโอ"} - ${
             video.category_name || "Media Gallery"
           }`,
-        image: video.thumbnail_base64 || video.file_url,
-        video: video.file_url || video.file_base64,
+        image: thumbnailUrl,
+        video: videoUrl,
+        streamUrl: streamUrl,
         type: "video.other",
         duration: video.duration,
+        durationSeconds: video.duration_seconds || 0,
+        width: video.width || 1280,
+        height: video.height || 720,
+        mimeType: video.mime_type || "video/mp4",
       },
     });
   } catch (error) {

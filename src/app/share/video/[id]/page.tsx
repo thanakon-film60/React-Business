@@ -23,10 +23,13 @@ interface VideoData {
   description: string;
   type: "image" | "video" | "clip";
   url: string;
+  streamUrl: string;
+  pageUrl: string;
   thumbnail: string;
   mimeType: string;
   size: string;
   duration: string;
+  durationSeconds: number;
   width: number;
   height: number;
   category: string;
@@ -156,12 +159,20 @@ export default function VideoSharePage() {
     };
   }, [isPlaying]);
 
-  // Share via LINE
+  // Share via LINE - use the proper LINE share URL format
   const shareToLine = () => {
-    const shareUrl = `line://msg/text/${encodeURIComponent(
-      `🎬 ${video?.name}\n\n▶️ ดูวิดีโอ:\n${window.location.href}`
-    )}`;
-    window.location.href = shareUrl;
+    const shareText = encodeURIComponent(`🎬 ${video?.name}\n\n▶️ ดูวิดีโอ:`);
+    const shareUrl = encodeURIComponent(window.location.href);
+
+    // Use LINE's social plugin URL for proper preview
+    const lineShareUrl = `https://social-plugins.line.me/lineit/share?url=${shareUrl}&text=${shareText}`;
+
+    // Open in new window for desktop, or redirect for mobile
+    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      window.location.href = `line://msg/text/${shareText}%0A${shareUrl}`;
+    } else {
+      window.open(lineShareUrl, "_blank", "width=600,height=600");
+    }
   };
 
   if (isLoading) {
@@ -211,18 +222,26 @@ export default function VideoSharePage() {
         ) : (
           <video
             ref={videoRef}
-            src={video.url}
+            src={video.streamUrl || video.url}
             poster={video.thumbnail}
             className="w-full h-full object-contain"
             playsInline
             webkit-playsinline="true"
+            preload="metadata"
+            crossOrigin="anonymous"
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
             onEnded={() => setIsPlaying(false)}
             onClick={togglePlay}
-          />
+          >
+            <source
+              src={video.streamUrl || video.url}
+              type={video.mimeType || "video/mp4"}
+            />
+            Your browser does not support the video tag.
+          </video>
         )}
 
         {/* Play Button Overlay (when paused) */}
