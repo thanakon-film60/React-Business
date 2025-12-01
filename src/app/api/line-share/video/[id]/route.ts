@@ -76,19 +76,21 @@ export async function GET(
     const pageUrl = `${baseUrl}/share/video/${videoId}`;
     const streamUrl = `${baseUrl}/api/video-stream/${videoId}`;
 
-    // Determine the best video URL
-    // Priority: external URL > stream URL (for base64 stored videos)
-    let videoUrl = video.file_url;
-    if (!videoUrl || videoUrl.startsWith("data:")) {
+    // For videos stored in database (base64 or reference), always use streaming endpoint
+    // This ensures consistent delivery and proper CORS/headers for LINE
+    // Note: If you have external video hosting (CDN), update this logic
+    let videoUrl: string;
+    if (video.file_url && video.file_url.startsWith("http")) {
+      // External CDN URL - use directly
+      videoUrl = video.file_url;
+    } else {
+      // Database stored video (base64) or local file - use streaming API
+      // The streaming API handles proper video delivery with Range requests
       videoUrl = streamUrl;
     }
 
-    // Determine thumbnail URL
-    let thumbnailUrl = video.thumbnail_base64;
-    if (!thumbnailUrl || thumbnailUrl.startsWith("data:")) {
-      // Use a placeholder or the first frame
-      thumbnailUrl = `${baseUrl}/images/video-placeholder.jpg`;
-    }
+    // Determine thumbnail URL - always use API endpoint for consistency
+    const thumbnailUrl = `${baseUrl}/api/video-thumbnail/${videoId}`;
 
     // Return video data optimized for LINE playback
     return NextResponse.json({

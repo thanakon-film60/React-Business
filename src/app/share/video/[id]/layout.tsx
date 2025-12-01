@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { headers } from "next/headers";
 import pool from "@/lib/db";
 
 interface Props {
@@ -11,17 +10,17 @@ interface Props {
  *
  * Requirements for LINE inline video playback:
  * 1. og:type = "video.other"
- * 2. og:video = direct MP4 URL (HTTPS required)
+ * 2. og:video = direct MP4 URL (HTTPS required) - MUST be actual .mp4 file
  * 3. og:video:secure_url = same as og:video
  * 4. og:video:type = "video/mp4"
  * 5. og:video:width and og:video:height
  * 6. og:image = thumbnail URL (must be HTTPS, not data URL)
  *
- * The video must be:
- * - MP4 format with H.264 codec
- * - Served over HTTPS
- * - Optimized for mobile (under 10MB recommended)
- * - Direct URL (not HLS/streaming)
+ * IMPORTANT for LINE inline playback:
+ * - Video URL must point to actual MP4 file (not streaming/HLS)
+ * - Video should be under 10MB for best experience
+ * - H.264 codec required
+ * - If video is stored as base64, we use streaming endpoint with .mp4 extension
  */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
@@ -31,11 +30,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return getDefaultMetadata();
   }
 
-  // Get base URL from environment or headers
-  const headersList = await headers();
-  const host = headersList.get("host") || "localhost:3000";
-  const protocol = host.includes("localhost") ? "http" : "https";
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`;
+  // Use hardcoded base URL for production
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://tpp-thanakon.store";
 
   let client;
   try {
@@ -67,14 +64,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const video = result.rows[0];
 
-    // Construct URLs - use streaming endpoint for video
+    // Construct URLs
     const pageUrl = `${baseUrl}/share/video/${id}`;
-    const videoStreamUrl = `${baseUrl}/api/video-stream/${id}`;
-    const embedUrl = `${baseUrl}/share/video/${id}/embed`;
 
-    // Use API endpoint for thumbnail (not base64 data URL)
-    // LINE requires HTTPS URL, not data: URLs
+    // For LINE inline playback, we need a direct video URL
+    // Use streaming endpoint for database-stored videos (handles Range requests)
+    // Only use external URL if it's a full CDN/external URL
+    let videoUrl: string;
+    if (video.file_url && video.file_url.startsWith("http")) {
+      // External CDN URL - use directly
+      videoUrl = video.file_url;
+    } else {
+      // Database stored video (base64) or local file - use streaming API
+      // The streaming API handles proper video delivery with Range requests
+      videoUrl = `${baseUrl}/api/video-stream/${id}`;
+    } // Thumbnail URL via API
     const thumbnailUrl = `${baseUrl}/api/video-thumbnail/${id}`;
+
+    // Embed URL for player iframe
+    const embedUrl = `${baseUrl}/share/video/${id}/embed`;
 
     // Title and description
     const title = video.name || "Video";
@@ -109,8 +117,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         ],
         videos: [
           {
-            url: videoStreamUrl,
-            secureUrl: videoStreamUrl,
+            url: videoUrl,
+            secureUrl: videoUrl,
             type: mimeType,
             width: videoWidth,
             height: videoHeight,
@@ -127,7 +135,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         players: [
           {
             playerUrl: embedUrl,
-            streamUrl: videoStreamUrl,
+            streamUrl: videoUrl,
             width: videoWidth,
             height: videoHeight,
           },
@@ -136,9 +144,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       // Additional meta tags for LINE and other platforms
       other: {
         // Primary video meta tags
-        "og:video": videoStreamUrl,
-        "og:video:url": videoStreamUrl,
-        "og:video:secure_url": videoStreamUrl,
+        "og:video": videoUrl,
+        "og:video:url": videoUrl,
+        "og:video:secure_url": videoUrl,
         "og:video:type": mimeType,
         "og:video:width": String(videoWidth),
         "og:video:height": String(videoHeight),
@@ -148,7 +156,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         "twitter:player": embedUrl,
         "twitter:player:width": String(videoWidth),
         "twitter:player:height": String(videoHeight),
-        "twitter:player:stream": videoStreamUrl,
+        "twitter:player:stream": videoUrl,
         "twitter:player:stream:content_type": mimeType,
 
         // LINE specific meta tags
