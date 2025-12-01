@@ -37,6 +37,7 @@ import {
   HardDrive,
   Check,
   MessageCircle,
+  AlertCircle,
 } from "lucide-react";
 import UserMenu from "@/components/UserMenu";
 import VideoUploadModal from "@/components/VideoUploadModal";
@@ -336,8 +337,9 @@ const mockFiles: FileItem[] = [
 
 const AllFilesGalleryPage = () => {
   const router = useRouter();
-  const [files, setFiles] = useState<FileItem[]>(mockFiles);
-  const [isLoading, setIsLoading] = useState(false);
+  const [files, setFiles] = useState<FileItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list" | "masonry">("grid");
@@ -354,11 +356,12 @@ const AllFilesGalleryPage = () => {
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  
+
   // Modal states for upload and LINE share
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showLineShareModal, setShowLineShareModal] = useState(false);
-  const [selectedFileForShare, setSelectedFileForShare] = useState<FileItem | null>(null);
+  const [selectedFileForShare, setSelectedFileForShare] =
+    useState<FileItem | null>(null);
 
   // Categories สำหรับ filter
   const categories = useMemo(() => {
@@ -452,6 +455,39 @@ const AllFilesGalleryPage = () => {
     checkAuth();
   }, []);
 
+  // Fetch media files from database
+  useEffect(() => {
+    const fetchMediaFiles = async () => {
+      try {
+        setIsLoading(true);
+        setFetchError(null);
+
+        const response = await fetch("/api/media-files");
+        const result = await response.json();
+
+        if (result.success && result.data) {
+          setFiles(result.data);
+          console.log(
+            `✅ Loaded ${result.data.length} media files from database`
+          );
+        } else {
+          console.error("❌ Failed to fetch media files:", result.error);
+          setFetchError(result.error || "Failed to load media files");
+          // Fallback to empty array
+          setFiles([]);
+        }
+      } catch (error) {
+        console.error("❌ Error fetching media files:", error);
+        setFetchError(error instanceof Error ? error.message : "Network error");
+        setFiles([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMediaFiles();
+  }, []);
+
   const toggleFavorite = (id: number) => {
     setFiles((prev) =>
       prev.map((f) => (f.id === id ? { ...f, favorite: !f.favorite } : f))
@@ -477,23 +513,37 @@ const AllFilesGalleryPage = () => {
     setShowLightbox(true);
   };
 
-  // Handle upload completion
-  const handleUploadComplete = (uploadedFile: any) => {
-    // Add the new file to the list
-    const newFile: FileItem = {
-      id: uploadedFile.id,
-      name: uploadedFile.name,
-      type: uploadedFile.type,
-      url: "",
-      thumbnail: "https://picsum.photos/seed/" + uploadedFile.id + "/400/300",
-      size: uploadedFile.size,
-      date: new Date().toISOString().split("T")[0],
-      tags: [],
-      favorite: false,
-      views: 0,
-      category: "Uncategorized",
-    };
-    setFiles((prev) => [newFile, ...prev]);
+  // Refresh files from database
+  const refreshFiles = async () => {
+    try {
+      setIsLoading(true);
+      setFetchError(null);
+
+      const response = await fetch("/api/media-files");
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        setFiles(result.data);
+        console.log(
+          `✅ Refreshed ${result.data.length} media files from database`
+        );
+      } else {
+        console.error("❌ Failed to refresh media files:", result.error);
+        setFetchError(result.error || "Failed to refresh media files");
+      }
+    } catch (error) {
+      console.error("❌ Error refreshing media files:", error);
+      setFetchError(error instanceof Error ? error.message : "Network error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle upload completion - refresh from database to get complete data
+  const handleUploadComplete = async (uploadedFile: any) => {
+    console.log("✅ File uploaded:", uploadedFile);
+    // Refresh from database to get complete data
+    await refreshFiles();
   };
 
   // Handle LINE share
@@ -844,12 +894,24 @@ const AllFilesGalleryPage = () => {
                 </button>
               )}
 
-              <button 
+              <button
                 onClick={() => setShowUploadModal(true)}
                 className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white rounded-xl transition-all shadow-lg"
               >
                 <Upload className="w-4 h-4" />
                 <span className="font-medium">อัพโหลด</span>
+              </button>
+
+              <button
+                onClick={refreshFiles}
+                disabled={isLoading}
+                className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-purple-300 rounded-xl transition-all disabled:opacity-50"
+                title="รีเฟรชข้อมูล"
+              >
+                <RefreshCw
+                  className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
+                />
+                <span className="font-medium">รีเฟรช</span>
               </button>
             </div>
 
@@ -868,8 +930,27 @@ const AllFilesGalleryPage = () => {
 
           {/* Files Grid */}
           {isLoading ? (
-            <div className="flex items-center justify-center h-96">
+            <div className="flex flex-col items-center justify-center h-96">
               <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-500 border-t-transparent" />
+              <p className="text-purple-200/60 mt-4">
+                กำลังโหลดไฟล์จากฐานข้อมูล...
+              </p>
+            </div>
+          ) : fetchError ? (
+            <div className="flex flex-col items-center justify-center h-96 text-center">
+              <div className="p-6 rounded-full bg-red-500/20 mb-4">
+                <AlertCircle className="w-16 h-16 text-red-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">
+                เกิดข้อผิดพลาด
+              </h3>
+              <p className="text-red-300/80 mb-4">{fetchError}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-colors"
+              >
+                ลองใหม่อีกครั้ง
+              </button>
             </div>
           ) : filteredFiles.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-96 text-center">
@@ -877,9 +958,20 @@ const AllFilesGalleryPage = () => {
                 <FolderOpen className="w-16 h-16 text-purple-400" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">ไม่พบไฟล์</h3>
-              <p className="text-purple-200/60">
-                ลองเปลี่ยนตัวกรองหรือคำค้นหาใหม่
+              <p className="text-purple-200/60 mb-4">
+                {files.length === 0
+                  ? "ยังไม่มีไฟล์ในฐานข้อมูล กรุณาอัพโหลดไฟล์ใหม่"
+                  : "ลองเปลี่ยนตัวกรองหรือคำค้นหาใหม่"}
               </p>
+              {files.length === 0 && (
+                <button
+                  onClick={() => setShowUploadModal(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white rounded-lg transition-all shadow-lg"
+                >
+                  <Upload className="w-4 h-4" />
+                  <span>อัพโหลดไฟล์แรก</span>
+                </button>
+              )}
             </div>
           ) : viewMode === "list" ? (
             // List View
@@ -1007,7 +1099,7 @@ const AllFilesGalleryPage = () => {
                           <button className="p-2 rounded-lg bg-white/10 text-purple-300 hover:bg-white/20 transition-colors">
                             <Download className="w-4 h-4" />
                           </button>
-                          <button 
+                          <button
                             onClick={() => handleLineShare(file)}
                             className="p-2 rounded-lg bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 hover:from-green-500/30 hover:to-emerald-500/30 transition-colors"
                             title="แชร์ไปยัง LINE"
@@ -1171,7 +1263,7 @@ const AllFilesGalleryPage = () => {
                       <button className="p-2 rounded-xl bg-white/10 text-purple-300 hover:bg-white/20 transition-colors">
                         <Download className="w-4 h-4" />
                       </button>
-                      <button 
+                      <button
                         onClick={(e) => {
                           e.stopPropagation();
                           handleLineShare(file);
