@@ -43,8 +43,8 @@ export async function GET(request: NextRequest) {
 
     console.log("🔄 Fetching media files from database...");
 
-    // Build dynamic query
-    const conditions: string[] = ["m.is_active = TRUE"];
+    // Build dynamic query - use public schema explicitly
+    const conditions: string[] = ["COALESCE(m.is_active, TRUE) = TRUE"];
     const params: any[] = [];
     let paramIndex = 1;
 
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
         m.name ILIKE $${paramIndex} OR 
         m.description ILIKE $${paramIndex} OR 
         m.category_name ILIKE $${paramIndex} OR
-        EXISTS (SELECT 1 FROM media_tags t WHERE t.media_id = m.id AND t.tag_name ILIKE $${paramIndex})
+        EXISTS (SELECT 1 FROM public.media_tags t WHERE t.media_id = m.id AND t.tag_name ILIKE $${paramIndex})
       )`);
       params.push(`%${search}%`);
       paramIndex++;
@@ -109,8 +109,8 @@ export async function GET(request: NextRequest) {
           ARRAY_AGG(t.tag_name) FILTER (WHERE t.tag_name IS NOT NULL), 
           ARRAY[]::VARCHAR[]
         ) as tags
-      FROM media_files m
-      LEFT JOIN media_tags t ON m.id = t.media_id
+      FROM public.media_files m
+      LEFT JOIN public.media_tags t ON m.id = t.media_id
       WHERE ${conditions.join(" AND ")}
       GROUP BY m.id
       ORDER BY m.${sortColumn} ${sortDir}
@@ -127,8 +127,8 @@ export async function GET(request: NextRequest) {
     // Count total
     const countQuery = `
       SELECT COUNT(DISTINCT m.id) as total
-      FROM media_files m
-      LEFT JOIN media_tags t ON m.id = t.media_id
+      FROM public.media_files m
+      LEFT JOIN public.media_tags t ON m.id = t.media_id
       WHERE ${conditions.join(" AND ")}
     `;
     const countResult = await client.query(countQuery, params.slice(0, -2));
@@ -161,8 +161,8 @@ export async function GET(request: NextRequest) {
         COUNT(*) FILTER (WHERE file_type = 'clip') as clips,
         COUNT(*) FILTER (WHERE is_favorite = TRUE) as favorites,
         COALESCE(SUM(view_count), 0) as total_views
-      FROM media_files
-      WHERE is_active = TRUE
+      FROM public.media_files
+      WHERE COALESCE(is_active, TRUE) = TRUE
     `;
     const statsResult = await client.query(statsQuery);
     const stats = statsResult.rows[0];
@@ -257,7 +257,7 @@ export async function POST(request: NextRequest) {
 
     // Insert media file
     const insertQuery = `
-      INSERT INTO media_files (
+      INSERT INTO public.media_files (
         name,
         description,
         file_type,
@@ -306,7 +306,7 @@ export async function POST(request: NextRequest) {
         .join(", ");
 
       const tagQuery = `
-        INSERT INTO media_tags (media_id, tag_name)
+        INSERT INTO public.media_tags (media_id, tag_name)
         VALUES ${tagValues}
         ON CONFLICT (media_id, tag_name) DO NOTHING
       `;

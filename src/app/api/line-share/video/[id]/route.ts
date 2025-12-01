@@ -32,7 +32,7 @@ export async function GET(
     const protocol = host.includes("localhost") ? "http" : "https";
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`;
 
-    // Fetch video details from database
+    // Fetch video details from database - use public schema explicitly
     const query = `
       SELECT 
         id,
@@ -51,8 +51,8 @@ export async function GET(
         height,
         category_name,
         view_count
-      FROM media_files
-      WHERE id = $1 AND is_active = TRUE
+      FROM public.media_files
+      WHERE id = $1 AND COALESCE(is_active, TRUE) = TRUE
     `;
 
     const result = await client.query(query, [videoId]);
@@ -68,7 +68,7 @@ export async function GET(
 
     // Increment view count
     await client.query(
-      "UPDATE media_files SET view_count = view_count + 1 WHERE id = $1",
+      "UPDATE public.media_files SET view_count = view_count + 1 WHERE id = $1",
       [videoId]
     );
 

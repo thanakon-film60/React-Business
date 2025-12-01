@@ -24,13 +24,13 @@ export async function GET(
       return new NextResponse("Invalid video ID", { status: 400 });
     }
 
-    // Fetch thumbnail from database
+    // Fetch thumbnail from database - use public schema explicitly
     const query = `
       SELECT 
         thumbnail_base64,
         name
-      FROM media_files
-      WHERE id = $1 AND is_active = TRUE
+      FROM public.media_files
+      WHERE id = $1 AND COALESCE(is_active, TRUE) = TRUE
     `;
 
     const result = await client.query(query, [videoId]);

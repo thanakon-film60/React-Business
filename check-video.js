@@ -10,19 +10,44 @@ async function checkVideos() {
   try {
     console.log("Connecting to database...");
 
-    // Set search path to BJH-Server schema
-    await pool.query('SET search_path TO "BJH-Server"');
-
-    // List ALL videos
-    const result = await pool.query(`
-      SELECT id, name, file_type, file_url, mime_type
-      FROM media_files 
-      WHERE file_type IN ('video', 'clip')
-      ORDER BY id DESC
-      LIMIT 10
+    // Check public schema - ID 12 with all columns
+    const result1 = await pool.query(`
+      SELECT id, name, file_type, is_active, mime_type,
+             CASE WHEN file_base64 IS NOT NULL THEN LENGTH(file_base64) ELSE 0 END as base64_length
+      FROM public.media_files 
+      WHERE id = 12
     `);
-    console.log("All videos (file_type = video/clip):");
-    console.log(JSON.stringify(result.rows, null, 2));
+    console.log("PUBLIC schema - File ID 12:");
+    console.log(JSON.stringify(result1.rows, null, 2));
+
+    // Also check what the current search_path is
+    const pathResult = await pool.query("SHOW search_path");
+    console.log(
+      "\nCurrent search_path:",
+      JSON.stringify(pathResult.rows, null, 2)
+    );
+
+    // Test the EXACT query that the API uses
+    const apiQuery = await pool.query(`
+      SELECT id, name, file_type, is_active, mime_type,
+             CASE WHEN file_base64 IS NOT NULL THEN LENGTH(file_base64) ELSE 0 END as base64_length
+      FROM media_files
+      WHERE id = 12 AND is_active = TRUE
+    `);
+    console.log(
+      "\nAPI Query result (media_files WHERE id=12 AND is_active=TRUE):"
+    );
+    console.log(JSON.stringify(apiQuery.rows, null, 2));
+
+    // Check without is_active filter
+    const apiQuery2 = await pool.query(`
+      SELECT id, name, file_type, is_active, mime_type,
+             CASE WHEN file_base64 IS NOT NULL THEN LENGTH(file_base64) ELSE 0 END as base64_length
+      FROM media_files
+      WHERE id = 12
+    `);
+    console.log("\nWithout is_active filter:");
+    console.log(JSON.stringify(apiQuery2.rows, null, 2));
   } catch (error) {
     console.error("Error:", error.message);
   } finally {

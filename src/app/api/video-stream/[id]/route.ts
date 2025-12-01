@@ -42,7 +42,7 @@ export async function GET(
       return new NextResponse("Invalid video ID", { status: 400 });
     }
 
-    // Fetch video from database
+    // Fetch video from database - use public schema explicitly
     const query = `
       SELECT 
         id,
@@ -52,8 +52,8 @@ export async function GET(
         file_base64,
         mime_type,
         file_size
-      FROM media_files
-      WHERE id = $1 AND is_active = TRUE
+      FROM public.media_files
+      WHERE id = $1 AND COALESCE(is_active, TRUE) = TRUE
     `;
 
     const result = await client.query(query, [videoId]);
@@ -164,8 +164,8 @@ export async function HEAD(
 
     const query = `
       SELECT mime_type, file_size, file_base64
-      FROM media_files
-      WHERE id = $1 AND is_active = TRUE
+      FROM public.media_files
+      WHERE id = $1 AND COALESCE(is_active, TRUE) = TRUE
     `;
 
     const result = await client.query(query, [videoId]);

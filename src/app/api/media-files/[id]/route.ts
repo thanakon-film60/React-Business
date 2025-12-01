@@ -32,7 +32,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     // Update view count
     await client.query(
-      "UPDATE media_files SET view_count = view_count + 1 WHERE id = $1",
+      "UPDATE public.media_files SET view_count = view_count + 1 WHERE id = $1",
       [mediaId]
     );
 
@@ -43,9 +43,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
           ARRAY_AGG(t.tag_name) FILTER (WHERE t.tag_name IS NOT NULL), 
           ARRAY[]::VARCHAR[]
         ) as tags
-      FROM media_files m
-      LEFT JOIN media_tags t ON m.id = t.media_id
-      WHERE m.id = $1 AND m.is_active = TRUE
+      FROM public.media_files m
+      LEFT JOIN public.media_tags t ON m.id = t.media_id
+      WHERE m.id = $1 AND COALESCE(m.is_active, TRUE) = TRUE
       GROUP BY m.id
     `;
 
@@ -178,9 +178,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     if (updates.length > 0) {
       const updateQuery = `
-        UPDATE media_files 
+        UPDATE public.media_files 
         SET ${updates.join(", ")}
-        WHERE id = $${paramIndex} AND is_active = TRUE
+        WHERE id = $${paramIndex} AND COALESCE(is_active, TRUE) = TRUE
         RETURNING id
       `;
       values.push(mediaId);
@@ -199,7 +199,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     // Update tags if provided
     if (body.tags && Array.isArray(body.tags)) {
       // Delete existing tags
-      await client.query("DELETE FROM media_tags WHERE media_id = $1", [
+      await client.query("DELETE FROM public.media_tags WHERE media_id = $1", [
         mediaId,
       ]);
 
@@ -210,7 +210,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
           .join(", ");
 
         const tagQuery = `
-          INSERT INTO media_tags (media_id, tag_name)
+          INSERT INTO public.media_tags (media_id, tag_name)
           VALUES ${tagValues}
         `;
 
@@ -263,7 +263,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     // Soft delete
     const result = await client.query(
-      `UPDATE media_files SET is_active = FALSE WHERE id = $1 AND is_active = TRUE RETURNING id, name`,
+      `UPDATE public.media_files SET is_active = FALSE WHERE id = $1 AND COALESCE(is_active, TRUE) = TRUE RETURNING id, name`,
       [mediaId]
     );
 
