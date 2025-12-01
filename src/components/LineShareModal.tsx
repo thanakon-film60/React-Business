@@ -69,19 +69,31 @@ const LineShareModal: React.FC<LineShareModalProps> = ({
     }
   }, []);
 
-  // Generate share links
+  // Generate share links by fetching from API
   const generateShareLinks = async () => {
     setIsLoading(true);
     setError(null);
 
     try {
+      // Fetch video data from API to get proper URLs
+      const response = await fetch(`/api/line-share/video/${file.id}`);
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || "Failed to get video info");
+      }
+
+      const videoData = result.data;
       const baseUrl =
         process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
 
-      // Direct video URL for LIFF shareTargetPicker
-      const videoUrl = `${baseUrl}/api/video-stream/${file.id}`;
-      const thumbnailUrl = `${baseUrl}/api/video-thumbnail/${file.id}`;
-      const embedUrl = `${baseUrl}/share/video/${file.id}`;
+      // Use URLs from API response
+      // For LINE native video, we need direct MP4 URL
+      const videoUrl =
+        videoData.url || `${baseUrl}/api/video-stream/${file.id}`;
+      const thumbnailUrl =
+        videoData.thumbnail || `${baseUrl}/api/video-thumbnail/${file.id}`;
+      const embedUrl = videoData.pageUrl || `${baseUrl}/share/video/${file.id}`;
 
       // LINE web share URL (fallback)
       const webShareUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(
