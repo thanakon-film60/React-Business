@@ -92,15 +92,19 @@ const LineShareModal: React.FC<LineShareModalProps> = ({
     }
   };
 
-  // Open LINE share
-  const openLineShare = (url: string) => {
-    window.open(url, "_blank", "width=600,height=600");
+  // Open LINE share (same for both mobile and desktop)
+  const openLineShare = () => {
+    if (shareLinks?.webShareUrl) {
+      window.open(shareLinks.webShareUrl, "_blank", "width=600,height=600");
+    }
   };
 
-  // Open LINE app directly (mobile)
+  // Open LINE app directly (for mobile - using web share URL)
   const openLineApp = () => {
-    if (shareLinks?.shareUrl) {
-      window.location.href = shareLinks.shareUrl;
+    if (shareLinks?.webShareUrl) {
+      // On mobile, open the same web share URL
+      // LINE will handle opening in app if installed
+      window.location.href = shareLinks.webShareUrl;
     }
   };
 
@@ -239,7 +243,7 @@ const LineShareModal: React.FC<LineShareModalProps> = ({
 
                 {/* Web Share */}
                 <button
-                  onClick={() => openLineShare(shareLinks.webShareUrl)}
+                  onClick={openLineShare}
                   className="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 hover:from-blue-500/30 hover:to-indigo-500/30 border border-blue-500/30 rounded-2xl transition-all group"
                 >
                   <div className="p-3 rounded-full bg-blue-500/20 group-hover:bg-blue-500/30 transition-colors">

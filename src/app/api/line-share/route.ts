@@ -31,8 +31,7 @@ interface LineShareResponse {
 }
 
 // LINE Share URL formats
-const LINE_SHARE_BASE = "https://social-plugins.line.me/lineit/share";
-const LINE_MSG_BASE = "line://msg/text/";
+const LINE_SHARE_WEB = "https://social-plugins.line.me/lineit/share";
 
 export async function POST(
   request: NextRequest
@@ -64,36 +63,32 @@ export async function POST(
         ? `https://${process.env.VERCEL_URL}`
         : `${protocol}://${host}`);
 
-    // Create embed URL for video playback page
-    const embedUrl = `${baseUrl}/share/video/${mediaId}`;
+    // Create video page URL - this is the URL users will share
+    const videoPageUrl = `${baseUrl}/share/video/${mediaId}`;
 
     // Create stream URL for direct video access
     const streamUrl = `${baseUrl}/api/video-stream/${mediaId}`;
 
-    // Create share message with video preview
-    const shareText = createShareMessage(title, description, mediaType);
-
     // LINE Web Share URL (for desktop/browser)
-    // This URL will make LINE fetch OG meta tags from our page
-    const webShareUrl = `${LINE_SHARE_BASE}?url=${encodeURIComponent(
-      embedUrl
+    // This uses LINE's social plugin which will fetch OG meta tags
+    const webShareUrl = `${LINE_SHARE_WEB}?url=${encodeURIComponent(
+      videoPageUrl
     )}`;
 
-    // LINE App Share URL (for mobile)
-    // Send both text and URL for better experience
-    const lineAppShareUrl = `${LINE_MSG_BASE}${encodeURIComponent(
-      shareText + "\n\n" + embedUrl
-    )}`;
+    // LINE App Share URL (for mobile) - just pass the URL, not text
+    // LINE will automatically fetch preview from OG meta tags
+    const lineAppShareUrl = webShareUrl;
 
     console.log(`📤 LINE Share generated for media ID: ${mediaId}`);
-    console.log(`📎 Embed URL: ${embedUrl}`);
+    console.log(`📎 Video Page URL: ${videoPageUrl}`);
+    console.log(`🌐 Web Share URL: ${webShareUrl}`);
     console.log(`🎥 Stream URL: ${streamUrl}`);
 
     return NextResponse.json({
       success: true,
       shareUrl: lineAppShareUrl,
       webShareUrl: webShareUrl,
-      embedUrl: embedUrl,
+      embedUrl: videoPageUrl,
       streamUrl: streamUrl,
       message: "LINE share URL generated successfully",
     });
@@ -127,8 +122,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     success: true,
     config: {
-      lineShareBase: LINE_SHARE_BASE,
-      lineMsgBase: LINE_MSG_BASE,
+      lineShareBase: LINE_SHARE_WEB,
       supportedTypes: ["image", "video", "clip"],
       maxVideoSize: "50MB",
       recommendedFormats: ["mp4", "mov", "webm"],
@@ -146,23 +140,4 @@ export async function GET(request: NextRequest) {
       },
     },
   });
-}
-
-// Helper function to create share message
-function createShareMessage(
-  title: string,
-  description: string | undefined,
-  mediaType: string
-): string {
-  const emoji =
-    mediaType === "video" ? "🎬" : mediaType === "clip" ? "🎥" : "📸";
-  let message = `${emoji} ${title}`;
-
-  if (description) {
-    message += `\n${description}`;
-  }
-
-  message += `\n\n▶️ ดูเลย:`;
-
-  return message;
 }

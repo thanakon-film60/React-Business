@@ -159,20 +159,19 @@ export default function VideoSharePage() {
     };
   }, [isPlaying]);
 
-  // Share via LINE - use the proper LINE share URL format
+  // Share via LINE - use proper LINE share URL format
   const shareToLine = () => {
-    const shareText = encodeURIComponent(`🎬 ${video?.name}\n\n▶️ ดูวิดีโอ:`);
-    const shareUrl = encodeURIComponent(window.location.href);
+    // Get the current page URL
+    const pageUrl = window.location.href;
 
-    // Use LINE's social plugin URL for proper preview
-    const lineShareUrl = `https://social-plugins.line.me/lineit/share?url=${shareUrl}&text=${shareText}`;
+    // Use LINE's social plugin for proper preview with OG meta tags
+    // This is the recommended way - LINE will fetch OG tags from our page
+    const lineShareUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(
+      pageUrl
+    )}`;
 
-    // Open in new window for desktop, or redirect for mobile
-    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      window.location.href = `line://msg/text/${shareText}%0A${shareUrl}`;
-    } else {
-      window.open(lineShareUrl, "_blank", "width=600,height=600");
-    }
+    // Open LINE share dialog
+    window.open(lineShareUrl, "_blank", "width=600,height=600");
   };
 
   if (isLoading) {
