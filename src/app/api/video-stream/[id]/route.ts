@@ -7,8 +7,26 @@ import pool from "@/lib/db";
  * This endpoint serves video content in a format compatible with LINE's in-app player
  * It handles range requests for seeking and proper streaming
  *
+ * Requirements for LINE inline playback:
+ * - MP4 format with H.264 codec
+ * - HTTPS (required in production)
+ * - Direct video URL (not HLS/streaming)
+ * - Proper CORS headers
+ * - Support for Range requests (for seeking)
+ *
  * GET /api/video-stream/[id] - Stream video content
  */
+
+// Common CORS headers for all responses
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
+  "Access-Control-Allow-Headers":
+    "Range, Accept-Ranges, Content-Range, Content-Length, Content-Type",
+  "Access-Control-Expose-Headers":
+    "Accept-Ranges, Content-Range, Content-Length",
+  "X-Content-Type-Options": "nosniff",
+};
 
 export async function GET(
   request: NextRequest,
@@ -88,10 +106,8 @@ export async function GET(
             "Accept-Ranges": "bytes",
             "Content-Length": String(chunkSize),
             "Content-Type": mimeType,
-            "Cache-Control": "public, max-age=31536000",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, OPTIONS",
-            "Access-Control-Allow-Headers": "Range",
+            "Cache-Control": "public, max-age=31536000, immutable",
+            ...corsHeaders,
           },
         });
       }
@@ -104,10 +120,8 @@ export async function GET(
           "Content-Type": mimeType,
           "Content-Length": String(contentLength),
           "Accept-Ranges": "bytes",
-          "Cache-Control": "public, max-age=31536000",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, OPTIONS",
-          "Access-Control-Allow-Headers": "Range",
+          "Cache-Control": "public, max-age=31536000, immutable",
+          ...corsHeaders,
         },
       });
     }
@@ -127,10 +141,68 @@ export async function OPTIONS() {
   return new NextResponse(null, {
     status: 204,
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, OPTIONS",
-      "Access-Control-Allow-Headers": "Range, Content-Type",
+      ...corsHeaders,
       "Access-Control-Max-Age": "86400",
     },
   });
+}
+
+// Handle HEAD requests (LINE may use this to check video info)
+export async function HEAD(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const client = await pool.connect();
+
+  try {
+    const { id } = await params;
+    const videoId = parseInt(id);
+
+    if (isNaN(videoId)) {
+      return new NextResponse(null, { status: 400 });
+    }
+
+    const query = `
+      SELECT mime_type, file_size, file_base64
+      FROM media_files
+      WHERE id = $1 AND is_active = TRUE
+    `;
+
+    const result = await client.query(query, [videoId]);
+
+    if (result.rows.length === 0) {
+      return new NextResponse(null, { status: 404 });
+    }
+
+    const video = result.rows[0];
+    const mimeType = video.mime_type || "video/mp4";
+
+    // Calculate content length from base64 if stored
+    let contentLength = video.file_size;
+    if (video.file_base64 && !contentLength) {
+      let base64Data = video.file_base64;
+      if (base64Data.startsWith("data:")) {
+        const base64Index = base64Data.indexOf("base64,");
+        if (base64Index !== -1) {
+          base64Data = base64Data.substring(base64Index + 7);
+        }
+      }
+      contentLength = Math.floor(base64Data.length * 0.75);
+    }
+
+    return new NextResponse(null, {
+      status: 200,
+      headers: {
+        "Content-Type": mimeType,
+        "Content-Length": String(contentLength || 0),
+        "Accept-Ranges": "bytes",
+        ...corsHeaders,
+      },
+    });
+  } catch (error) {
+    console.error("❌ Error in HEAD request:", error);
+    return new NextResponse(null, { status: 500 });
+  } finally {
+    client.release();
+  }
 }

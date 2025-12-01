@@ -5,8 +5,23 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
-// Generate dynamic metadata for LINE Open Graph
-// LINE requires specific OG meta tags for in-app video playback
+/**
+ * LINE Video Sharing - Open Graph Meta Tags
+ *
+ * Requirements for LINE inline video playback:
+ * 1. og:type = "video.other"
+ * 2. og:video = direct MP4 URL (HTTPS required)
+ * 3. og:video:secure_url = same as og:video
+ * 4. og:video:type = "video/mp4"
+ * 5. og:video:width and og:video:height
+ * 6. og:image = thumbnail URL
+ *
+ * The video must be:
+ * - MP4 format with H.264 codec
+ * - Served over HTTPS
+ * - Optimized for mobile (under 10MB recommended)
+ * - Direct URL (not HLS/streaming)
+ */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
 
@@ -41,15 +56,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       video?.description ||
       `Watch ${video?.type === "clip" ? "clip" : "video"} - Media Gallery`;
 
+    // Embed URL for player iframe
+    const embedUrl = `${baseUrl}/share/video/${id}/embed`;
+
     return {
       title: title,
       description: description,
-      // Standard Open Graph for LINE
+      // Standard Open Graph for LINE Video
       openGraph: {
         title: title,
         description: description,
         url: pageUrl,
-        siteName: "Media Gallery",
+        siteName: "BJH Media Gallery",
         type: "video.other",
         images: [
           {
@@ -70,7 +88,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         ],
         locale: "th_TH",
       },
-      // Twitter Player Card (also used by LINE)
+      // Twitter Player Card (LINE uses this for inline player)
       twitter: {
         card: "player",
         title: title,
@@ -78,22 +96,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         images: [thumbnailUrl],
         players: [
           {
-            playerUrl: pageUrl,
+            playerUrl: embedUrl,
             streamUrl: videoStreamUrl,
             width: video?.width || 1280,
             height: video?.height || 720,
           },
         ],
       },
-      // Additional meta tags for LINE
+      // Additional meta tags for LINE and other platforms
       other: {
+        // Primary video meta tags
+        "og:video": videoStreamUrl,
         "og:video:url": videoStreamUrl,
         "og:video:secure_url": videoStreamUrl,
         "og:video:type": video?.mimeType || "video/mp4",
         "og:video:width": String(video?.width || 1280),
         "og:video:height": String(video?.height || 720),
         "og:video:duration": String(video?.durationSeconds || 0),
-        // LINE specific
+
+        // Twitter player tags (LINE compatible)
+        "twitter:player": embedUrl,
+        "twitter:player:width": String(video?.width || 1280),
+        "twitter:player:height": String(video?.height || 720),
+        "twitter:player:stream": videoStreamUrl,
+        "twitter:player:stream:content_type": video?.mimeType || "video/mp4",
+
+        // LINE specific meta tags
         "line:title": title,
         "line:description": description,
         "line:image": thumbnailUrl,
