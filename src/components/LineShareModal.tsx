@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   X,
   Share2,
@@ -10,7 +10,11 @@ import {
   Monitor,
   Loader2,
   Play,
+  Video,
+  Link,
+  MessageCircle,
 } from "lucide-react";
+import liff from "@line/liff";
 
 interface LineShareModalProps {
   isOpen: boolean;
@@ -29,7 +33,12 @@ interface ShareLinks {
   shareUrl: string;
   webShareUrl: string;
   embedUrl: string;
+  videoUrl: string;
+  thumbnailUrl: string;
 }
+
+// LIFF App ID - Created in LINE Developers Console
+const LIFF_ID = process.env.NEXT_PUBLIC_LIFF_ID || "2008600295-3nnyKWlv";
 
 const LineShareModal: React.FC<LineShareModalProps> = ({
   isOpen,
@@ -37,47 +46,249 @@ const LineShareModal: React.FC<LineShareModalProps> = ({
   file,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isLiffReady, setIsLiffReady] = useState(false);
+  const [isLiffLoggedIn, setIsLiffLoggedIn] = useState(false);
   const [shareLinks, setShareLinks] = useState<ShareLinks | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [shareMode, setShareMode] = useState<"native" | "link">("native");
+  const [shareStatus, setShareStatus] = useState<string | null>(null);
 
-  // Generate LINE share links
+  // Initialize LIFF
+  const initLiff = useCallback(async () => {
+    try {
+      console.log("🔄 Initializing LIFF...");
+      await liff.init({ liffId: LIFF_ID });
+      setIsLiffReady(true);
+      setIsLiffLoggedIn(liff.isLoggedIn());
+      console.log("✅ LIFF initialized, logged in:", liff.isLoggedIn());
+    } catch (err) {
+      console.error("❌ LIFF initialization failed:", err);
+      // Fall back to link sharing mode
+      setShareMode("link");
+    }
+  }, []);
+
+  // Generate share links
   const generateShareLinks = async () => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await fetch("/api/line-share", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          mediaId: file.id,
-          mediaType: file.type,
-          title: file.name,
-          description: file.description,
-          thumbnailUrl: file.thumbnail,
-          mediaUrl: file.thumbnail, // Will be replaced with actual URL
-        }),
+      const baseUrl =
+        process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
+
+      // Direct video URL for LIFF shareTargetPicker
+      const videoUrl = `${baseUrl}/api/video-stream/${file.id}`;
+      const thumbnailUrl = `${baseUrl}/api/video-thumbnail/${file.id}`;
+      const embedUrl = `${baseUrl}/share/video/${file.id}`;
+
+      // LINE web share URL (fallback)
+      const webShareUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(
+        embedUrl
+      )}`;
+
+      setShareLinks({
+        shareUrl: embedUrl,
+        webShareUrl: webShareUrl,
+        embedUrl: embedUrl,
+        videoUrl: videoUrl,
+        thumbnailUrl: thumbnailUrl,
       });
-
-      const result = await response.json();
-
-      if (result.success) {
-        setShareLinks({
-          shareUrl: result.shareUrl,
-          webShareUrl: result.webShareUrl,
-          embedUrl: result.embedUrl,
-        });
-      } else {
-        throw new Error(result.error || "Failed to generate share links");
-      }
     } catch (err) {
       console.error("Error generating share links:", err);
       setError(err instanceof Error ? err.message : "เกิดข้อผิดพลาด");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Share as native video message using LIFF
+  const shareAsNativeVideo = async () => {
+    if (!isLiffReady || !shareLinks) {
+      setError("LIFF ยังไม่พร้อม กรุณาลองใหม่");
+      return;
+    }
+
+    setShareStatus("กำลังเปิด LINE...");
+
+    try {
+      // Check if shareTargetPicker is available
+      if (!liff.isApiAvailable("shareTargetPicker")) {
+        console.log(
+          "shareTargetPicker not available, falling back to link share"
+        );
+        setShareMode("link");
+        openLineShare();
+        return;
+      }
+
+      // For video type, send video message
+      if (file.type === "video" || file.type === "clip") {
+        const result = await liff.shareTargetPicker([
+          {
+            type: "video",
+            originalContentUrl: shareLinks.videoUrl,
+            previewImageUrl: shareLinks.thumbnailUrl,
+          },
+        ]);
+
+        if (result) {
+          setShareStatus("✅ ส่งวิดีโอสำเร็จ!");
+          setTimeout(() => {
+            onClose();
+          }, 1500);
+        } else {
+          setShareStatus("ยกเลิกการแชร์");
+        }
+      } else {
+        // For images
+        const result = await liff.shareTargetPicker([
+          {
+            type: "image",
+            originalContentUrl: shareLinks.thumbnailUrl,
+            previewImageUrl: shareLinks.thumbnailUrl,
+          },
+        ]);
+
+        if (result) {
+          setShareStatus("✅ ส่งรูปภาพสำเร็จ!");
+          setTimeout(() => {
+            onClose();
+          }, 1500);
+        } else {
+          setShareStatus("ยกเลิกการแชร์");
+        }
+      }
+    } catch (err) {
+      console.error("Error sharing via LIFF:", err);
+      setError("ไม่สามารถแชร์ได้ กรุณาลองใช้วิธีอื่น");
+      setShareMode("link");
+    } finally {
+      setShareStatus(null);
+    }
+  };
+
+  // Share with Flex Message (alternative method)
+  const shareAsFlexMessage = async () => {
+    if (!isLiffReady || !shareLinks) {
+      setError("LIFF ยังไม่พร้อม กรุณาลองใหม่");
+      return;
+    }
+
+    setShareStatus("กำลังเปิด LINE...");
+
+    try {
+      if (!liff.isApiAvailable("shareTargetPicker")) {
+        setShareMode("link");
+        openLineShare();
+        return;
+      }
+
+      // Create a Flex Message with video preview
+      // Using type assertion for LIFF SDK compatibility
+      const flexMessage = {
+        type: "flex",
+        altText: `🎬 ${file.name}`,
+        contents: {
+          type: "bubble",
+          hero: {
+            type: "image",
+            url: shareLinks.thumbnailUrl,
+            size: "full",
+            aspectRatio: "16:9",
+            aspectMode: "cover",
+            action: {
+              type: "uri",
+              uri: shareLinks.embedUrl,
+            },
+          },
+          body: {
+            type: "box",
+            layout: "vertical",
+            contents: [
+              {
+                type: "text",
+                text: file.name,
+                weight: "bold",
+                size: "lg",
+                wrap: true,
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "text",
+                    text: file.type === "clip" ? "🎬 คลิป" : "📹 วิดีโอ",
+                    size: "sm",
+                    color: "#888888",
+                  },
+                  ...(file.duration
+                    ? [
+                        {
+                          type: "text",
+                          text: `⏱️ ${file.duration}`,
+                          size: "sm",
+                          color: "#888888",
+                          align: "end",
+                        },
+                      ]
+                    : []),
+                ],
+              },
+            ],
+          },
+          footer: {
+            type: "box",
+            layout: "vertical",
+            contents: [
+              {
+                type: "button",
+                style: "primary",
+                color: "#00B900",
+                action: {
+                  type: "uri",
+                  label: "▶️ ดูวิดีโอ",
+                  uri: shareLinks.embedUrl,
+                },
+              },
+            ],
+          },
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any;
+
+      const result = await liff.shareTargetPicker([flexMessage]);
+
+      if (result) {
+        setShareStatus("✅ ส่งสำเร็จ!");
+        setTimeout(() => {
+          onClose();
+        }, 1500);
+      } else {
+        setShareStatus("ยกเลิกการแชร์");
+      }
+    } catch (err) {
+      console.error("Error sharing Flex Message:", err);
+      // Try simple text message as last resort
+      try {
+        await liff.shareTargetPicker([
+          {
+            type: "text",
+            text: `🎬 ${file.name}\n\n▶️ ดูวิดีโอ: ${shareLinks.embedUrl}`,
+          },
+        ]);
+        setShareStatus("✅ ส่งสำเร็จ!");
+        setTimeout(() => {
+          onClose();
+        }, 1500);
+      } catch {
+        setError("ไม่สามารถแชร์ได้ กรุณาลองใช้วิธีอื่น");
+        setShareMode("link");
+      }
+    } finally {
+      setShareStatus(null);
     }
   };
 
@@ -92,35 +303,28 @@ const LineShareModal: React.FC<LineShareModalProps> = ({
     }
   };
 
-  // Open LINE share (same for both mobile and desktop)
+  // Open LINE share via web (fallback)
   const openLineShare = () => {
     if (shareLinks?.webShareUrl) {
       window.open(shareLinks.webShareUrl, "_blank", "width=600,height=600");
     }
   };
 
-  // Open LINE app directly (for mobile - using web share URL)
-  const openLineApp = () => {
-    if (shareLinks?.webShareUrl) {
-      // On mobile, open the same web share URL
-      // LINE will handle opening in app if installed
-      window.location.href = shareLinks.webShareUrl;
-    }
-  };
-
-  // Generate on open
-  React.useEffect(() => {
-    if (isOpen && !shareLinks) {
+  // Initialize on open
+  useEffect(() => {
+    if (isOpen) {
+      initLiff();
       generateShareLinks();
     }
-  }, [isOpen]);
+  }, [isOpen, initLiff]);
 
   // Reset on close
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isOpen) {
       setShareLinks(null);
       setError(null);
       setCopied(null);
+      setShareStatus(null);
     }
   }, [isOpen]);
 
@@ -153,7 +357,9 @@ const LineShareModal: React.FC<LineShareModalProps> = ({
               <div>
                 <h2 className="text-xl font-bold text-white">แชร์ไปยัง LINE</h2>
                 <p className="text-sm text-white/80">
-                  ส่งวิดีโอให้เพื่อนดูได้ทันที
+                  {shareMode === "native"
+                    ? "ส่งวิดีโอแบบ Native"
+                    : "แชร์ลิงก์วิดีโอ"}
                 </p>
               </div>
             </div>
@@ -199,11 +405,19 @@ const LineShareModal: React.FC<LineShareModalProps> = ({
             </div>
           </div>
 
+          {/* Share Status */}
+          {shareStatus && (
+            <div className="flex items-center justify-center gap-3 p-4 bg-green-500/20 border border-green-500/30 rounded-xl">
+              <Loader2 className="w-5 h-5 text-green-400 animate-spin" />
+              <p className="text-green-200">{shareStatus}</p>
+            </div>
+          )}
+
           {/* Loading State */}
-          {isLoading && (
+          {isLoading && !shareStatus && (
             <div className="flex flex-col items-center justify-center py-8">
               <Loader2 className="w-10 h-10 text-green-400 animate-spin mb-3" />
-              <p className="text-purple-200/60">กำลังสร้างลิงก์แชร์...</p>
+              <p className="text-purple-200/60">กำลังเตรียมข้อมูล...</p>
             </div>
           )}
 
@@ -212,7 +426,10 @@ const LineShareModal: React.FC<LineShareModalProps> = ({
             <div className="p-4 bg-red-500/20 border border-red-500/30 rounded-xl text-red-300 text-center">
               <p>{error}</p>
               <button
-                onClick={generateShareLinks}
+                onClick={() => {
+                  setError(null);
+                  generateShareLinks();
+                }}
                 className="mt-2 text-sm text-red-200 underline hover:text-white"
               >
                 ลองใหม่
@@ -220,71 +437,112 @@ const LineShareModal: React.FC<LineShareModalProps> = ({
             </div>
           )}
 
-          {/* Share Links */}
-          {shareLinks && !isLoading && (
+          {/* Share Options */}
+          {shareLinks && !isLoading && !shareStatus && (
             <div className="space-y-4">
-              {/* Share Buttons */}
-              <div className="grid grid-cols-2 gap-3">
-                {/* Mobile Share */}
-                <button
-                  onClick={openLineApp}
-                  className="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-green-500/20 to-emerald-500/20 hover:from-green-500/30 hover:to-emerald-500/30 border border-green-500/30 rounded-2xl transition-all group"
-                >
-                  <div className="p-3 rounded-full bg-green-500/20 group-hover:bg-green-500/30 transition-colors">
-                    <Smartphone className="w-6 h-6 text-green-400" />
-                  </div>
-                  <span className="text-sm font-medium text-white">
-                    เปิดแอพ LINE
-                  </span>
-                  <span className="text-xs text-purple-200/50">
-                    สำหรับมือถือ
-                  </span>
-                </button>
+              {/* Native Video Share (Main Option) */}
+              {shareMode === "native" && isLiffReady && (
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-purple-200">
+                    📹 ส่งเป็นวิดีโอใน LINE
+                  </p>
+                  <div className="grid grid-cols-2 gap-3">
+                    {/* Send as Video */}
+                    <button
+                      onClick={shareAsNativeVideo}
+                      className="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-green-500/20 to-emerald-500/20 hover:from-green-500/30 hover:to-emerald-500/30 border border-green-500/30 rounded-2xl transition-all group"
+                    >
+                      <div className="p-3 rounded-full bg-green-500/20 group-hover:bg-green-500/30 transition-colors">
+                        <Video className="w-6 h-6 text-green-400" />
+                      </div>
+                      <span className="text-sm font-medium text-white">
+                        ส่งวิดีโอ
+                      </span>
+                      <span className="text-xs text-purple-200/50">
+                        เล่นได้ทันที
+                      </span>
+                    </button>
 
-                {/* Web Share */}
-                <button
-                  onClick={openLineShare}
-                  className="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 hover:from-blue-500/30 hover:to-indigo-500/30 border border-blue-500/30 rounded-2xl transition-all group"
-                >
-                  <div className="p-3 rounded-full bg-blue-500/20 group-hover:bg-blue-500/30 transition-colors">
-                    <Monitor className="w-6 h-6 text-blue-400" />
+                    {/* Send as Flex Message */}
+                    <button
+                      onClick={shareAsFlexMessage}
+                      className="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 hover:from-blue-500/30 hover:to-indigo-500/30 border border-blue-500/30 rounded-2xl transition-all group"
+                    >
+                      <div className="p-3 rounded-full bg-blue-500/20 group-hover:bg-blue-500/30 transition-colors">
+                        <MessageCircle className="w-6 h-6 text-blue-400" />
+                      </div>
+                      <span className="text-sm font-medium text-white">
+                        ส่งการ์ด
+                      </span>
+                      <span className="text-xs text-purple-200/50">
+                        พร้อมปุ่มดู
+                      </span>
+                    </button>
                   </div>
-                  <span className="text-sm font-medium text-white">
-                    เปิดใน Browser
-                  </span>
-                  <span className="text-xs text-purple-200/50">
-                    สำหรับคอมพิวเตอร์
-                  </span>
-                </button>
-              </div>
+                </div>
+              )}
 
-              {/* Embed URL (for copying) */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-purple-200">
-                  ลิงก์สำหรับแชร์
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={shareLinks.embedUrl}
-                    readOnly
-                    className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm"
-                  />
+              {/* Link Share (Fallback or alternative) */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-purple-200">
+                    🔗 แชร์ลิงก์
+                  </p>
+                  {shareMode === "native" && (
+                    <button
+                      onClick={() => setShareMode("link")}
+                      className="text-xs text-purple-300 hover:text-white underline"
+                    >
+                      ใช้วิธีนี้แทน
+                    </button>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {/* Mobile Share */}
+                  <button
+                    onClick={openLineShare}
+                    className="flex flex-col items-center gap-2 p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all group"
+                  >
+                    <div className="p-3 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors">
+                      <Smartphone className="w-6 h-6 text-purple-300" />
+                    </div>
+                    <span className="text-sm font-medium text-white">
+                      เปิด LINE
+                    </span>
+                    <span className="text-xs text-purple-200/50">มือถือ</span>
+                  </button>
+
+                  {/* Copy Link */}
                   <button
                     onClick={() =>
                       copyToClipboard(shareLinks.embedUrl, "embed")
                     }
-                    className={`px-4 py-2.5 rounded-xl transition-all ${
+                    className={`flex flex-col items-center gap-2 p-4 border rounded-2xl transition-all group ${
                       copied === "embed"
-                        ? "bg-green-500 text-white"
-                        : "bg-white/10 hover:bg-white/20 text-purple-300"
+                        ? "bg-green-500/20 border-green-500/30"
+                        : "bg-white/5 hover:bg-white/10 border-white/10"
                     }`}
                   >
-                    {copied === "embed" ? (
-                      <Check className="w-5 h-5" />
-                    ) : (
-                      <Copy className="w-5 h-5" />
-                    )}
+                    <div
+                      className={`p-3 rounded-full transition-colors ${
+                        copied === "embed"
+                          ? "bg-green-500/20"
+                          : "bg-white/5 group-hover:bg-white/10"
+                      }`}
+                    >
+                      {copied === "embed" ? (
+                        <Check className="w-6 h-6 text-green-400" />
+                      ) : (
+                        <Copy className="w-6 h-6 text-purple-300" />
+                      )}
+                    </div>
+                    <span className="text-sm font-medium text-white">
+                      {copied === "embed" ? "คัดลอกแล้ว!" : "คัดลอกลิงก์"}
+                    </span>
+                    <span className="text-xs text-purple-200/50">
+                      แปะที่ไหนก็ได้
+                    </span>
                   </button>
                 </div>
               </div>
@@ -294,9 +552,9 @@ const LineShareModal: React.FC<LineShareModalProps> = ({
                 <p className="text-sm text-green-200/80 flex items-start gap-2">
                   <span className="shrink-0">💡</span>
                   <span>
-                    เมื่อแชร์ลิงก์นี้ไปยัง LINE ผู้รับสามารถดู
-                    {file.type === "image" ? "รูปภาพ" : "วิดีโอ"}
-                    ได้ทันทีในแอพโดยไม่ต้องออกจาก LINE
+                    {shareMode === "native"
+                      ? "ส่งเป็นวิดีโอจะเล่นได้ทันทีใน LINE โดยไม่ต้องเปิด browser"
+                      : "แชร์ลิงก์จะแสดงเป็น preview card ใน LINE"}
                   </span>
                 </p>
               </div>
@@ -308,7 +566,9 @@ const LineShareModal: React.FC<LineShareModalProps> = ({
         <div className="p-4 bg-white/5 border-t border-white/10">
           <div className="flex items-center justify-center gap-6 text-xs text-purple-200/40">
             <span>✓ รองรับ iOS & Android</span>
-            <span>✓ เล่นในแอพได้</span>
+            <span>
+              ✓ {shareMode === "native" ? "เล่นใน LINE" : "Preview Card"}
+            </span>
             <span>✓ แชร์ได้ไม่จำกัด</span>
           </div>
         </div>
