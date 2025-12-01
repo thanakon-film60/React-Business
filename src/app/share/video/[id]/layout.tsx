@@ -1,20 +1,18 @@
 import { Metadata } from "next";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 // Generate dynamic metadata for LINE Open Graph
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
   try {
-    const response = await fetch(
-      `${baseUrl}/api/line-share/video/${params.id}`,
-      {
-        cache: "no-store",
-      }
-    );
+    const response = await fetch(`${baseUrl}/api/line-share/video/${id}`, {
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       return {
