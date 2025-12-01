@@ -36,8 +36,11 @@ import {
   Clock,
   HardDrive,
   Check,
+  MessageCircle,
 } from "lucide-react";
 import UserMenu from "@/components/UserMenu";
+import VideoUploadModal from "@/components/VideoUploadModal";
+import LineShareModal from "@/components/LineShareModal";
 
 // Custom scrollbar styles
 const customScrollbarStyle = `
@@ -351,6 +354,11 @@ const AllFilesGalleryPage = () => {
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  
+  // Modal states for upload and LINE share
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [showLineShareModal, setShowLineShareModal] = useState(false);
+  const [selectedFileForShare, setSelectedFileForShare] = useState<FileItem | null>(null);
 
   // Categories สำหรับ filter
   const categories = useMemo(() => {
@@ -467,6 +475,31 @@ const AllFilesGalleryPage = () => {
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
     setShowLightbox(true);
+  };
+
+  // Handle upload completion
+  const handleUploadComplete = (uploadedFile: any) => {
+    // Add the new file to the list
+    const newFile: FileItem = {
+      id: uploadedFile.id,
+      name: uploadedFile.name,
+      type: uploadedFile.type,
+      url: "",
+      thumbnail: "https://picsum.photos/seed/" + uploadedFile.id + "/400/300",
+      size: uploadedFile.size,
+      date: new Date().toISOString().split("T")[0],
+      tags: [],
+      favorite: false,
+      views: 0,
+      category: "Uncategorized",
+    };
+    setFiles((prev) => [newFile, ...prev]);
+  };
+
+  // Handle LINE share
+  const handleLineShare = (file: FileItem) => {
+    setSelectedFileForShare(file);
+    setShowLineShareModal(true);
   };
 
   const getTypeIcon = (type: string) => {
@@ -811,7 +844,10 @@ const AllFilesGalleryPage = () => {
                 </button>
               )}
 
-              <button className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white rounded-xl transition-all shadow-lg">
+              <button 
+                onClick={() => setShowUploadModal(true)}
+                className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white rounded-xl transition-all shadow-lg"
+              >
                 <Upload className="w-4 h-4" />
                 <span className="font-medium">อัพโหลด</span>
               </button>
@@ -971,8 +1007,12 @@ const AllFilesGalleryPage = () => {
                           <button className="p-2 rounded-lg bg-white/10 text-purple-300 hover:bg-white/20 transition-colors">
                             <Download className="w-4 h-4" />
                           </button>
-                          <button className="p-2 rounded-lg bg-white/10 text-purple-300 hover:bg-white/20 transition-colors">
-                            <Share2 className="w-4 h-4" />
+                          <button 
+                            onClick={() => handleLineShare(file)}
+                            className="p-2 rounded-lg bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 hover:from-green-500/30 hover:to-emerald-500/30 transition-colors"
+                            title="แชร์ไปยัง LINE"
+                          >
+                            <MessageCircle className="w-4 h-4" />
                           </button>
                         </div>
                       </td>
@@ -1131,8 +1171,15 @@ const AllFilesGalleryPage = () => {
                       <button className="p-2 rounded-xl bg-white/10 text-purple-300 hover:bg-white/20 transition-colors">
                         <Download className="w-4 h-4" />
                       </button>
-                      <button className="p-2 rounded-xl bg-white/10 text-purple-300 hover:bg-white/20 transition-colors">
-                        <Share2 className="w-4 h-4" />
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLineShare(file);
+                        }}
+                        className="p-2 rounded-xl bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 hover:from-green-500/30 hover:to-emerald-500/30 transition-colors"
+                        title="แชร์ไปยัง LINE"
+                      >
+                        <MessageCircle className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -1232,6 +1279,32 @@ const AllFilesGalleryPage = () => {
           )}
         </div>
       </div>
+
+      {/* Video Upload Modal */}
+      <VideoUploadModal
+        isOpen={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+        onUploadComplete={handleUploadComplete}
+      />
+
+      {/* LINE Share Modal */}
+      {selectedFileForShare && (
+        <LineShareModal
+          isOpen={showLineShareModal}
+          onClose={() => {
+            setShowLineShareModal(false);
+            setSelectedFileForShare(null);
+          }}
+          file={{
+            id: selectedFileForShare.id,
+            name: selectedFileForShare.name,
+            type: selectedFileForShare.type,
+            thumbnail: selectedFileForShare.thumbnail,
+            description: "",
+            duration: selectedFileForShare.duration,
+          }}
+        />
+      )}
     </>
   );
 };
