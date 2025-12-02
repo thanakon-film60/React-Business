@@ -43,7 +43,7 @@ const LIFF_ID = process.env.NEXT_PUBLIC_LIFF_ID || "2008600295-3nnyKWlv";
 
 // LINE Bot ID for native video sharing
 // Get this from LINE Developers Console > Your Channel > Messaging API > Bot basic ID
-const LINE_BOT_ID = process.env.NEXT_PUBLIC_LINE_BOT_ID || "@871teleq";
+const LINE_BOT_ID = process.env.NEXT_PUBLIC_LINE_BOT_ID || "@753uuxhp";
 
 const LineShareModal: React.FC<LineShareModalProps> = ({
   isOpen,
