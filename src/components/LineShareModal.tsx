@@ -13,6 +13,7 @@ import {
   Video,
   Link,
   MessageCircle,
+  Bot,
 } from "lucide-react";
 import liff from "@line/liff";
 
@@ -39,6 +40,10 @@ interface ShareLinks {
 
 // LIFF App ID - Created in LINE Developers Console
 const LIFF_ID = process.env.NEXT_PUBLIC_LIFF_ID || "2008600295-3nnyKWlv";
+
+// LINE Bot ID for native video sharing
+// Get this from LINE Developers Console > Your Channel > Messaging API > Bot basic ID
+const LINE_BOT_ID = process.env.NEXT_PUBLIC_LINE_BOT_ID || "@871teleq";
 
 const LineShareModal: React.FC<LineShareModalProps> = ({
   isOpen,
@@ -322,6 +327,27 @@ const LineShareModal: React.FC<LineShareModalProps> = ({
     }
   };
 
+  // Share via LINE Bot (Native Video Playback!)
+  const shareViaBot = () => {
+    if (!shareLinks) return;
+
+    // Create message to send to bot
+    const videoLink = shareLinks.embedUrl;
+
+    // Open LINE chat with Bot and pre-fill the video link
+    // Using LINE's URL scheme to open chat with the bot
+    const botChatUrl = `https://line.me/R/oaMessage/${LINE_BOT_ID}/?${encodeURIComponent(
+      videoLink
+    )}`;
+
+    window.open(botChatUrl, "_blank");
+
+    setShareStatus("✅ เปิด LINE แล้ว! ส่งข้อความเพื่อรับวิดีโอ");
+    setTimeout(() => {
+      setShareStatus(null);
+    }, 3000);
+  };
+
   // Initialize on open
   useEffect(() => {
     if (isOpen) {
@@ -452,6 +478,33 @@ const LineShareModal: React.FC<LineShareModalProps> = ({
           {/* Share Options */}
           {shareLinks && !isLoading && !shareStatus && (
             <div className="space-y-4">
+              {/* Bot Share - Best Option for Native Video! */}
+              <div className="space-y-3">
+                <p className="text-sm font-medium text-purple-200">
+                  🤖 ส่งผ่าน Bot (แนะนำ!)
+                </p>
+                <button
+                  onClick={shareViaBot}
+                  className="w-full flex items-center gap-4 p-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white rounded-2xl transition-all shadow-lg shadow-green-500/30"
+                >
+                  <div className="p-3 rounded-full bg-white/20">
+                    <Bot className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <span className="block font-bold">
+                      ส่งผ่าน Bot → เล่นวิดีโอใน LINE
+                    </span>
+                    <span className="text-sm text-white/80">
+                      วิดีโอจะเล่นได้โดยตรง ไม่ต้องเปิด browser!
+                    </span>
+                  </div>
+                  <ExternalLink className="w-5 h-5" />
+                </button>
+                <p className="text-xs text-center text-purple-200/50">
+                  💡 Bot จะส่งวิดีโอกลับมาให้ดูได้เลยใน LINE
+                </p>
+              </div>
+
               {/* Native Video Share (Main Option) */}
               {shareMode === "native" && isLiffReady && (
                 <div className="space-y-3">
