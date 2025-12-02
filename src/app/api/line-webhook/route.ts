@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Client, WebhookEvent, validateSignature } from "@line/bot-sdk";
 import pool from "@/lib/db";
 
 /**
@@ -6,15 +7,16 @@ import pool from "@/lib/db";
  *
  * เมื่อ user ส่ง link วิดีโอมาที่ Bot, Bot จะส่ง native video กลับไป
  * ทำให้วิดีโอเล่นได้โดยตรงใน LINE chat
- *
- * Setup:
- * 1. สร้าง LINE Official Account ที่ https://developers.line.biz/
- * 2. เปิดใช้งาน Messaging API
- * 3. ตั้ง Webhook URL เป็น: https://tpp-thanakon.store/api/line-webhook
- * 4. ใส่ Channel Access Token ใน environment variable
  */
 
-const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN || "";
+const channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN || "";
+const channelSecret = process.env.LINE_CHANNEL_SECRET || "";
+
+// Initialize LINE client
+const lineClient = new Client({
+  channelAccessToken,
+  channelSecret,
+});
 
 // Verify webhook signature (optional but recommended)
 export async function POST(request: NextRequest) {
@@ -192,33 +194,21 @@ async function sendVideoList(replyToken: string) {
 
 // Simple text reply
 async function replyText(replyToken: string, text: string) {
-  await callLineAPI(replyToken, [{ type: "text", text }]);
+  await lineClient.replyMessage(replyToken, { type: "text", text });
 }
 
-// Call LINE Messaging API
+// Call LINE Messaging API using SDK
 async function callLineAPI(replyToken: string, messages: any[]) {
-  if (!LINE_CHANNEL_ACCESS_TOKEN) {
+  if (!channelAccessToken) {
     console.error("❌ LINE_CHANNEL_ACCESS_TOKEN not set");
     return;
   }
 
-  const response = await fetch("https://api.line.me/v2/bot/message/reply", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${LINE_CHANNEL_ACCESS_TOKEN}`,
-    },
-    body: JSON.stringify({
-      replyToken,
-      messages,
-    }),
-  });
-
-  if (!response.ok) {
-    const error = await response.text();
-    console.error("❌ LINE API error:", error);
-  } else {
+  try {
+    await lineClient.replyMessage(replyToken, messages);
     console.log("✅ LINE message sent successfully");
+  } catch (error) {
+    console.error("❌ LINE API error:", error);
   }
 }
 
