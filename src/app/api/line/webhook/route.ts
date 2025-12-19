@@ -216,7 +216,7 @@ async function replyToUser(
   const typeText = isIncome ? "เงินเข้า" : "เงินออก";
   const directionText = isIncome ? "รับเข้า" : "จ่ายออก";
 
-  let messageLines = [
+  const messageLines = [
     `${emoji} บันทึก${typeText}สำเร็จ!`,
     ``,
     `${directionEmoji} ${directionText}: ${transaction.amount.toLocaleString(
