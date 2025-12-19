@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 // SVG Icons
@@ -76,7 +76,7 @@ const categories = {
   ],
 };
 
-export default function AddTransactionPage() {
+function AddTransactionForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -379,5 +379,26 @@ export default function AddTransactionPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AddTransactionPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="expense-add-container">
+          <div className="expense-card">
+            <div
+              className="expense-card-body"
+              style={{ textAlign: "center", padding: "2rem" }}
+            >
+              กำลังโหลด...
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <AddTransactionForm />
+    </Suspense>
   );
 }
