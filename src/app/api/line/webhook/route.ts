@@ -18,19 +18,29 @@ function parseLineBKMessage(text: string): {
   amount: number;
   title: string;
   category: string;
+  accountInfo: string | null;
+  transactionTime: string | null;
 } | null {
   // Pattern for LINE BK alerts
-  // Example: "ถอน/โอนเงิน\n91.00 บาท\nโอนเงิน\n19 ธ.ค. 68 14:40"
-  // Example: "รับเงิน\n500.00 บาท\nโอนเงิน\n19 ธ.ค. 68 14:40"
+  // Example: "ถอน/โอนเงิน\n91.00 บาท\nโอนเงิน\n19 ธ.ค. 68 14:40\n\nจากบัญชี บัญชีหลัก(xxx-x-x6114-x)"
 
   const lines = text.split("\n").map((l) => l.trim());
 
-  // Check for withdrawal/transfer (expense)
+  // Extract account info (บัญชีหลัก xxx-x-x6114-x)
+  const accountMatch = text.match(/บัญชี[หลัก]*\s*\(?([x\d-]+)\)?/i);
+  const accountInfo = accountMatch ? accountMatch[1] : null;
+
+  // Extract transaction time (19 ธ.ค. 68 14:40)
+  const timeMatch = text.match(/(\d{1,2}\s+\S+\.?\s+\d{2,4}\s+\d{1,2}:\d{2})/);
+  const transactionTime = timeMatch ? timeMatch[1] : null;
+
+  // Check for withdrawal/transfer (expense) - เงินออก
   if (
     text.includes("ถอน") ||
     text.includes("โอนเงิน") ||
     text.includes("จ่าย") ||
-    text.includes("ชำระ")
+    text.includes("ชำระ") ||
+    text.includes("โอนออก")
   ) {
     const amountMatch = text.match(/(\d+(?:,\d{3})*(?:\.\d{2})?)\s*บาท/);
     if (amountMatch) {
@@ -40,12 +50,18 @@ function parseLineBKMessage(text: string): {
         amount,
         title: lines[0] || "โอนเงินออก",
         category: "transport",
+        accountInfo,
+        transactionTime,
       };
     }
   }
 
-  // Check for incoming money (income)
-  if (text.includes("รับเงิน") || text.includes("เงินเข้า")) {
+  // Check for incoming money (income) - เงินเข้า
+  if (
+    text.includes("รับเงิน") ||
+    text.includes("เงินเข้า") ||
+    text.includes("โอนเข้า")
+  ) {
     const amountMatch = text.match(/(\d+(?:,\d{3})*(?:\.\d{2})?)\s*บาท/);
     if (amountMatch) {
       const amount = parseFloat(amountMatch[1].replace(/,/g, ""));
@@ -54,11 +70,42 @@ function parseLineBKMessage(text: string): {
         amount,
         title: lines[0] || "รับเงินเข้า",
         category: "other-income",
+        accountInfo,
+        transactionTime,
       };
     }
   }
 
   return null;
+}
+
+// Save log to database
+async function saveLog(
+  transactionId: number | null,
+  userId: string,
+  rawMessage: string,
+  transaction: { type: string; amount: number } | null,
+  status: "success" | "failed" | "ignored",
+  errorMessage: string | null = null
+) {
+  try {
+    await pool.query(
+      `INSERT INTO expense_logs 
+        (transaction_id, user_id, source, raw_message, parsed_type, parsed_amount, status, error_message, created_at)
+       VALUES ($1, $2, 'line_bk', $3, $4, $5, $6, $7, NOW())`,
+      [
+        transactionId,
+        userId,
+        rawMessage,
+        transaction?.type || null,
+        transaction?.amount || null,
+        status,
+        errorMessage,
+      ]
+    );
+  } catch (error) {
+    console.error("Failed to save log:", error);
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -90,7 +137,7 @@ export async function POST(request: NextRequest) {
       }
 
       const messageText = event.message.text;
-      const userId = event.source.userId;
+      const userId = event.source.userId || "unknown";
 
       console.log("LINE Webhook - Received from", userId, ":", messageText);
 
@@ -109,15 +156,30 @@ export async function POST(request: NextRequest) {
             transaction.title,
             transaction.amount,
             transaction.category,
-            `Auto-imported from LINE BK`,
+            `LINE BK | ${transaction.accountInfo || ""} | ${
+              transaction.transactionTime || ""
+            }`,
           ]
         );
 
-        console.log("Transaction saved:", result.rows[0]);
+        const savedTransaction = result.rows[0];
+        console.log("Transaction saved:", savedTransaction);
 
-        // Reply to confirm
-        await replyToUser(event.replyToken, transaction);
+        // Save log
+        await saveLog(
+          savedTransaction.id,
+          userId,
+          messageText,
+          transaction,
+          "success"
+        );
+
+        // Reply with detailed message
+        await replyToUser(event.replyToken, transaction, savedTransaction.id);
       } else {
+        // Save log for ignored message
+        await saveLog(null, userId, messageText, null, "ignored");
+
         // Not a bank message - reply with help
         await sendHelpMessage(event.replyToken);
       }
@@ -133,22 +195,54 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Reply to confirm transaction saved
+// Reply with detailed transaction info
 async function replyToUser(
   replyToken: string,
-  transaction: { type: string; amount: number; title: string }
+  transaction: {
+    type: string;
+    amount: number;
+    title: string;
+    accountInfo: string | null;
+    transactionTime: string | null;
+  },
+  transactionId: number
 ) {
   const accessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
   if (!accessToken || !replyToken) return;
 
-  const emoji = transaction.type === "income" ? "💵" : "💸";
-  const typeText = transaction.type === "income" ? "รายรับ" : "รายจ่าย";
+  const isIncome = transaction.type === "income";
+  const emoji = isIncome ? "💵" : "💸";
+  const directionEmoji = isIncome ? "⬇️" : "⬆️";
+  const typeText = isIncome ? "เงินเข้า" : "เงินออก";
+  const directionText = isIncome ? "รับเข้า" : "จ่ายออก";
+
+  let messageLines = [
+    `${emoji} บันทึก${typeText}สำเร็จ!`,
+    ``,
+    `${directionEmoji} ${directionText}: ${transaction.amount.toLocaleString(
+      "th-TH",
+      { minimumFractionDigits: 2 }
+    )} บาท`,
+    `📝 รายการ: ${transaction.title}`,
+  ];
+
+  if (transaction.accountInfo) {
+    messageLines.push(`🏦 บัญชี: ${transaction.accountInfo}`);
+  }
+
+  if (transaction.transactionTime) {
+    messageLines.push(`🕐 เวลา: ${transaction.transactionTime}`);
+  }
+
+  messageLines.push(``);
+  messageLines.push(`🔢 รหัสรายการ: #${transactionId}`);
+  messageLines.push(``);
+  messageLines.push(`📊 ดูสรุปรายการ:`);
+  messageLines.push(`https://tpp-thanakon.store/expense`);
 
   const message = {
     type: "text",
-    text: `${emoji} บันทึก${typeText}เรียบร้อย!\n\n📝 ${
-      transaction.title
-    }\n💰 ${transaction.amount.toLocaleString()} บาท\n\n✅ ดูรายการทั้งหมดได้ที่:\nhttps://tpp-thanakon.store/expense`,
+    text: messageLines.join("\n"),
   };
 
   try {
