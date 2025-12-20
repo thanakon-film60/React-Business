@@ -289,32 +289,33 @@ function AddTransactionForm() {
               <label className="expense-form-label">แนบสลิป (ถ้ามี)</label>
 
               {!slipPreview ? (
-                <div
+                <label
                   className={`expense-file-upload ${
                     isDragOver ? "dragover" : ""
                   }`}
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
-                  onClick={() => fileInputRef.current?.click()}
+                  htmlFor="slip-file-input"
+                  style={{ cursor: "pointer" }}
                 >
                   <div className="expense-file-upload-icon">
                     <UploadIcon />
                   </div>
                   <p className="expense-file-upload-text">
-                    ลากไฟล์มาวางที่นี่ หรือ <strong>คลิกเพื่อเลือกไฟล์</strong>
+                    แตะเพื่อถ่ายรูป หรือเลือกจากแกลเลอรี
                   </p>
-                  <p className="expense-file-upload-hint">
-                    รองรับไฟล์ PNG, JPG, JPEG ขนาดไม่เกิน 5MB
-                  </p>
+                  <p className="expense-file-upload-hint">รองรับ PNG, JPG</p>
                   <input
+                    id="slip-file-input"
                     ref={fileInputRef}
                     type="file"
-                    accept="image/*"
+                    accept="image/png,image/jpeg,image/jpg"
+                    capture="environment"
                     onChange={handleFileInputChange}
                     style={{ display: "none" }}
                   />
-                </div>
+                </label>
               ) : (
                 <div className="expense-slip-preview">
                   <img src={slipPreview} alt="Preview" />

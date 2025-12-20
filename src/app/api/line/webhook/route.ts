@@ -463,8 +463,7 @@ async function handleImageMessage(
     );
 
     const visionData = await visionResponse.json();
-    const ocrText =
-      visionData.responses?.[0]?.fullTextAnnotation?.text || "";
+    const ocrText = visionData.responses?.[0]?.fullTextAnnotation?.text || "";
 
     console.log("OCR Text:", ocrText);
 
@@ -545,7 +544,8 @@ function parseSlipOCR(text: string): {
     text.includes("ได้รับ");
 
   // Default to expense if unclear
-  const type: "income" | "expense" = isIncome && !isExpense ? "income" : "expense";
+  const type: "income" | "expense" =
+    isIncome && !isExpense ? "income" : "expense";
 
   // Extract title/description
   let title = "โอนเงิน";
@@ -553,7 +553,8 @@ function parseSlipOCR(text: string): {
   if (text.includes("ชำระ")) title = "ชำระเงิน";
   if (text.includes("โอนเงิน")) title = "โอนเงิน";
   if (text.includes("ค่าอาหาร")) title = "ค่าอาหาร";
-  if (text.includes("TrueMoney") || text.includes("ทรูมันนี่")) title = "เติมเงิน TrueMoney";
+  if (text.includes("TrueMoney") || text.includes("ทรูมันนี่"))
+    title = "เติมเงิน TrueMoney";
 
   // Extract account info
   const accountMatch = text.match(/xxx-?x?-?x?\d{4}-?x?/i);
