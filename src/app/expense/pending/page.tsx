@@ -731,15 +731,31 @@ export default function PendingTransactionsPage() {
                     <div className="type-toggle">
                       <button
                         type="button"
-                        className={`type-btn expense ${editForm.type === "expense" ? "active" : ""}`}
-                        onClick={() => setEditForm({ ...editForm, type: "expense", category: "" })}
+                        className={`type-btn expense ${
+                          editForm.type === "expense" ? "active" : ""
+                        }`}
+                        onClick={() =>
+                          setEditForm({
+                            ...editForm,
+                            type: "expense",
+                            category: "",
+                          })
+                        }
                       >
                         💸 รายจ่าย
                       </button>
                       <button
                         type="button"
-                        className={`type-btn income ${editForm.type === "income" ? "active" : ""}`}
-                        onClick={() => setEditForm({ ...editForm, type: "income", category: "" })}
+                        className={`type-btn income ${
+                          editForm.type === "income" ? "active" : ""
+                        }`}
+                        onClick={() =>
+                          setEditForm({
+                            ...editForm,
+                            type: "income",
+                            category: "",
+                          })
+                        }
                       >
                         💰 รายรับ
                       </button>
@@ -799,15 +815,21 @@ export default function PendingTransactionsPage() {
                       ยกเลิก
                     </button>
                     <button
-                      className={`btn btn-sm ${editForm.type === "income" ? "btn-income" : "btn-success"}`}
+                      className={`btn btn-sm ${
+                        editForm.type === "income"
+                          ? "btn-income"
+                          : "btn-success"
+                      }`}
                       onClick={() => handleConvert(tx.id)}
                     >
                       <CheckIcon />
-                      {editForm.type === "income" ? "บันทึกเป็นรายรับ" : "บันทึกเป็นรายจ่าย"}
+                      {editForm.type === "income"
+                        ? "บันทึกเป็นรายรับ"
+                        : "บันทึกเป็นรายจ่าย"}
                     </button>
                   </div>
                 </div>
-              )}}
+              )}
 
               {/* Actions */}
               {tx.status === "pending" && editingId !== tx.id && (
