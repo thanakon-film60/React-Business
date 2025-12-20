@@ -4,6 +4,23 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 // SVG Icons
+const ClockIcon = () => (
+  <svg
+    width="20"
+    height="20"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+    />
+  </svg>
+);
+
 const TrendUpIcon = () => (
   <svg
     width="20"
@@ -296,6 +313,13 @@ export default function ExpenseDashboard() {
         >
           <PlusIcon />
           เพิ่มรายจ่าย
+        </Link>
+        <Link
+          href="/expense/pending"
+          className="expense-btn expense-btn-warning expense-btn-lg"
+        >
+          <ClockIcon />
+          รายการรอจัดสรร
         </Link>
       </div>
 

@@ -12,6 +12,39 @@ function verifySignature(body: string, signature: string): boolean {
   return hash === signature;
 }
 
+// Parse Thai datetime (19 ธ.ค. 68 14:40) to ISO string
+function parseThaiDateTime(thaiDate: string): string {
+  const thaiMonths: Record<string, number> = {
+    "ม.ค.": 0,
+    "ก.พ.": 1,
+    "มี.ค.": 2,
+    "เม.ย.": 3,
+    "พ.ค.": 4,
+    "มิ.ย.": 5,
+    "ก.ค.": 6,
+    "ส.ค.": 7,
+    "ก.ย.": 8,
+    "ต.ค.": 9,
+    "พ.ย.": 10,
+    "ธ.ค.": 11,
+  };
+
+  const match = thaiDate.match(
+    /(\d{1,2})\s*(\S+\.?)\s*(\d{2,4})\s*(\d{1,2}):(\d{2})/
+  );
+  if (!match) return new Date().toISOString();
+
+  const day = parseInt(match[1]);
+  const month = thaiMonths[match[2]] ?? 0;
+  let year = parseInt(match[3]);
+  if (year < 100) year += 2500;
+  if (year > 2500) year -= 543;
+  const hour = parseInt(match[4]);
+  const minute = parseInt(match[5]);
+
+  return new Date(year, month, day, hour, minute).toISOString();
+}
+
 // Parse LINE BK message to extract transaction data
 function parseLineBKMessage(text: string): {
   type: "income" | "expense";
@@ -137,33 +170,40 @@ export async function POST(request: NextRequest) {
       }
 
       const messageText = event.message.text;
+      const sourceType = event.source.type; // user, group, room
       const userId = event.source.userId || "unknown";
+      const groupId = event.source.groupId || event.source.roomId || null;
 
-      console.log("LINE Webhook - Received from", userId, ":", messageText);
+      console.log(
+        `LINE Webhook - Source: ${sourceType}, Group: ${groupId}, User: ${userId}`
+      );
+      console.log("Message:", messageText);
 
-      // Try to parse as LINE BK message
+      // Try to parse as LINE BK message (ตรวจจับข้อความแจ้งเตือนธนาคาร)
       const transaction = parseLineBKMessage(messageText);
 
       if (transaction) {
-        // Save to database
+        // Save to pending_transactions (รอจัดสรร)
         const result = await pool.query(
-          `INSERT INTO expense_transactions 
-            (type, title, amount, category, date, note, created_at, updated_at)
-           VALUES ($1, $2, $3, $4, CURRENT_DATE, $5, NOW(), NOW())
+          `INSERT INTO pending_transactions 
+            (transaction_type, amount, account_number, transaction_datetime, source, raw_message, description, created_at)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
            RETURNING *`,
           [
-            transaction.type,
             transaction.title,
             transaction.amount,
-            transaction.category,
-            `LINE BK | ${transaction.accountInfo || ""} | ${
-              transaction.transactionTime || ""
-            }`,
+            transaction.accountInfo || null,
+            transaction.transactionTime
+              ? parseThaiDateTime(transaction.transactionTime)
+              : new Date().toISOString(),
+            groupId ? "LINE BK (Group Auto)" : "LINE BK (Auto)",
+            messageText,
+            transaction.title,
           ]
         );
 
         const savedTransaction = result.rows[0];
-        console.log("Transaction saved:", savedTransaction);
+        console.log("Pending transaction saved:", savedTransaction);
 
         // Save log
         await saveLog(
@@ -174,14 +214,26 @@ export async function POST(request: NextRequest) {
           "success"
         );
 
-        // Reply with detailed message
-        await replyToUser(event.replyToken, transaction, savedTransaction.id);
+        // Reply (ในกลุ่มอาจไม่ต้อง reply ทุกครั้ง)
+        if (sourceType === "user") {
+          await replyToUser(event.replyToken, transaction, savedTransaction.id);
+        } else {
+          // ในกลุ่ม ตอบสั้นๆ หรือไม่ตอบก็ได้
+          await replyToGroup(
+            event.replyToken,
+            transaction,
+            savedTransaction.id
+          );
+        }
       } else {
-        // Save log for ignored message
-        await saveLog(null, userId, messageText, null, "ignored");
-
-        // Not a bank message - reply with help
-        await sendHelpMessage(event.replyToken);
+        // ไม่ใช่ข้อความธนาคาร
+        // ในกลุ่ม: ไม่ต้องทำอะไร (ไม่ reply)
+        // แชทส่วนตัว: ส่ง help message
+        if (sourceType === "user") {
+          await saveLog(null, userId, messageText, null, "ignored");
+          await sendHelpMessage(event.replyToken);
+        }
+        // ถ้าเป็นกลุ่ม ไม่ต้อง reply ข้อความปกติ
       }
     }
 
@@ -210,20 +262,15 @@ async function replyToUser(
   const accessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
   if (!accessToken || !replyToken) return;
 
-  const isIncome = transaction.type === "income";
-  const emoji = isIncome ? "💵" : "💸";
-  const directionEmoji = isIncome ? "⬇️" : "⬆️";
-  const typeText = isIncome ? "เงินเข้า" : "เงินออก";
-  const directionText = isIncome ? "รับเข้า" : "จ่ายออก";
+  const emoji = "📝";
 
   const messageLines = [
-    `${emoji} บันทึก${typeText}สำเร็จ!`,
+    `${emoji} บันทึกรายการสำเร็จ! (รอจัดสรร)`,
     ``,
-    `${directionEmoji} ${directionText}: ${transaction.amount.toLocaleString(
-      "th-TH",
-      { minimumFractionDigits: 2 }
-    )} บาท`,
-    `📝 รายการ: ${transaction.title}`,
+    `💰 จำนวน: ${transaction.amount.toLocaleString("th-TH", {
+      minimumFractionDigits: 2,
+    })} บาท`,
+    `📋 รายการ: ${transaction.title}`,
   ];
 
   if (transaction.accountInfo) {
@@ -235,10 +282,11 @@ async function replyToUser(
   }
 
   messageLines.push(``);
-  messageLines.push(`🔢 รหัสรายการ: #${transactionId}`);
+  messageLines.push(`🔢 รหัสรอจัดสรร: #${transactionId}`);
+  messageLines.push(`⏳ สถานะ: รอระบุว่าใช้ไปกับอะไร`);
   messageLines.push(``);
-  messageLines.push(`📊 ดูสรุปรายการ:`);
-  messageLines.push(`https://tpp-thanakon.store/expense`);
+  messageLines.push(`📊 จัดสรรรายการ:`);
+  messageLines.push(`https://tpp-thanakon.store/expense/pending`);
 
   const message = {
     type: "text",
@@ -286,6 +334,47 @@ async function sendHelpMessage(replyToken: string) {
     });
   } catch (error) {
     console.error("LINE Reply error:", error);
+  }
+}
+
+// Reply in group (short message)
+async function replyToGroup(
+  replyToken: string,
+  transaction: {
+    type: string;
+    amount: number;
+    title: string;
+    accountInfo: string | null;
+    transactionTime: string | null;
+  },
+  transactionId: number
+) {
+  const accessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+  if (!accessToken || !replyToken) return;
+
+  // ข้อความสั้นๆ สำหรับกลุ่ม
+  const message = {
+    type: "text",
+    text: `✅ บันทึกแล้ว #${transactionId}\n💰 ${transaction.amount.toLocaleString(
+      "th-TH",
+      { minimumFractionDigits: 2 }
+    )} บาท`,
+  };
+
+  try {
+    await fetch("https://api.line.me/v2/bot/message/reply", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        replyToken,
+        messages: [message],
+      }),
+    });
+  } catch (error) {
+    console.error("LINE Group Reply error:", error);
   }
 }
 

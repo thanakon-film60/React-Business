@@ -508,6 +508,15 @@
   background: var(--exp-danger-700);
 }
 
+.expense-btn-warning {
+  background: #f59e0b;
+  color: #000;
+}
+
+.expense-btn-warning:hover:not(:disabled) {
+  background: #d97706;
+}
+
 .expense-btn-outline {
   background: transparent;
   border: 1px solid var(--exp-gray-300);
@@ -997,6 +1006,23 @@
 
 .expense-empty-text {
   color: var(--exp-gray-500);
+}
+
+/* Loading Spinner */
+.expense-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--exp-gray-200);
+  border-top-color: var(--exp-primary-500);
+  border-radius: 50%;
+  animation: expense-spin 1s linear infinite;
+  margin: 0 auto var(--exp-space-4);
+}
+
+@keyframes expense-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ===== Responsive ===== */

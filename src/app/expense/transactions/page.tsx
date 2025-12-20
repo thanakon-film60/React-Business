@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 // SVG Icons
 const SearchIcon = () => (
@@ -149,102 +149,84 @@ const formatCurrency = (amount: number) => {
   }).format(amount);
 };
 
-// Sample data
-const sampleTransactions = [
-  {
-    id: 1,
-    type: "income",
-    title: "เงินเดือนประจำเดือน",
-    category: "เงินเดือน",
-    amount: 45000,
-    date: "2024-12-19",
-    hasSlip: true,
-    note: "เงินเดือนเดือนธันวาคม",
-  },
-  {
-    id: 2,
-    type: "expense",
-    title: "ค่าอาหารกลางวัน",
-    category: "อาหาร",
-    amount: 150,
-    date: "2024-12-19",
-    hasSlip: false,
-    note: "",
-  },
-  {
-    id: 3,
-    type: "expense",
-    title: "ค่าน้ำมันรถ",
-    category: "ยานพาหนะ",
-    amount: 1200,
-    date: "2024-12-18",
-    hasSlip: true,
-    note: "เติมน้ำมัน 40 ลิตร",
-  },
-  {
-    id: 4,
-    type: "income",
-    title: "รายได้เสริมจากงานฟรีแลนซ์",
-    category: "รายได้เสริม",
-    amount: 8500,
-    date: "2024-12-17",
-    hasSlip: true,
-    note: "งานออกแบบเว็บไซต์",
-  },
-  {
-    id: 5,
-    type: "expense",
-    title: "ค่าไฟฟ้าประจำเดือน",
-    category: "สาธารณูปโภค",
-    amount: 1850,
-    date: "2024-12-16",
-    hasSlip: true,
-    note: "ค่าไฟเดือนพฤศจิกายน",
-  },
-  {
-    id: 6,
-    type: "expense",
-    title: "ค่าน้ำประปา",
-    category: "สาธารณูปโภค",
-    amount: 350,
-    date: "2024-12-15",
-    hasSlip: true,
-    note: "",
-  },
-  {
-    id: 7,
-    type: "expense",
-    title: "ค่าอินเทอร์เน็ต",
-    category: "สาธารณูปโภค",
-    amount: 599,
-    date: "2024-12-14",
-    hasSlip: false,
-    note: "แพ็กเกจ 500Mbps",
-  },
-  {
-    id: 8,
-    type: "income",
-    title: "ดอกเบี้ยเงินฝาก",
-    category: "การลงทุน",
-    amount: 250,
-    date: "2024-12-13",
-    hasSlip: false,
-    note: "",
-  },
-];
+// Category mapping
+const categoryMap: Record<string, string> = {
+  salary: "เงินเดือน",
+  bonus: "โบนัส",
+  freelance: "รายได้เสริม",
+  investment: "การลงทุน",
+  "other-income": "รายได้อื่นๆ",
+  food: "อาหาร",
+  transport: "ยานพาหนะ",
+  utilities: "สาธารณูปโภค",
+  shopping: "ช้อปปิ้ง",
+  entertainment: "ความบันเทิง",
+  health: "สุขภาพ",
+  education: "การศึกษา",
+  "other-expense": "รายจ่ายอื่นๆ",
+};
+
+interface Transaction {
+  id: number;
+  type: string;
+  title: string;
+  category: string;
+  amount: number;
+  date: string;
+  slip_url?: string;
+  note?: string;
+}
 
 export default function TransactionsPage() {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
 
-  const categories = [...new Set(sampleTransactions.map((t) => t.category))];
+  const fetchTransactions = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/expense/transactions?limit=100");
+      const data = await response.json();
+      if (data.success) {
+        setTransactions(data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-  const filteredTransactions = sampleTransactions.filter((t) => {
+  useEffect(() => {
+    fetchTransactions();
+  }, [fetchTransactions]);
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("ต้องการลบรายการนี้หรือไม่?")) return;
+
+    try {
+      const response = await fetch(`/api/expense/transactions?id=${id}`, {
+        method: "DELETE",
+      });
+      const data = await response.json();
+      if (data.success) {
+        fetchTransactions();
+      }
+    } catch (error) {
+      console.error("Error deleting transaction:", error);
+    }
+  };
+
+  const categories = [...new Set(transactions.map((t) => t.category))];
+
+  const filteredTransactions = transactions.filter((t) => {
+    const categoryLabel = categoryMap[t.category] || t.category;
     const matchesSearch =
       t.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.category.toLowerCase().includes(searchTerm.toLowerCase());
+      categoryLabel.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = filterType === "all" || t.type === filterType;
     const matchesCategory =
       filterCategory === "all" || t.category === filterCategory;
@@ -324,7 +306,7 @@ export default function TransactionsPage() {
                   <option value="all">ทั้งหมด</option>
                   {categories.map((cat) => (
                     <option key={cat} value={cat}>
-                      {cat}
+                      {categoryMap[cat] || cat}
                     </option>
                   ))}
                 </select>
@@ -369,7 +351,12 @@ export default function TransactionsPage() {
           <h2 className="expense-card-title">รายการทั้งหมด</h2>
         </div>
 
-        {filteredTransactions.length === 0 ? (
+        {isLoading ? (
+          <div className="expense-empty-state">
+            <div className="expense-loading-spinner"></div>
+            <p className="expense-empty-text">กำลังโหลดข้อมูล...</p>
+          </div>
+        ) : filteredTransactions.length === 0 ? (
           <div className="expense-empty-state">
             <EmptyIcon />
             <h3 className="expense-empty-title">ไม่พบรายการ</h3>
@@ -395,7 +382,8 @@ export default function TransactionsPage() {
                   </div>
                   <div className="expense-transaction-meta">
                     <span className="expense-transaction-category">
-                      {transaction.category}
+                      {categoryMap[transaction.category] ||
+                        transaction.category}
                     </span>
                     <span>•</span>
                     <span>{formatDate(transaction.date)}</span>
@@ -411,7 +399,7 @@ export default function TransactionsPage() {
                 </div>
 
                 <div className="expense-transaction-actions">
-                  {transaction.hasSlip && (
+                  {transaction.slip_url && (
                     <button className="expense-action-btn" title="ดูสลิป">
                       <ImageIcon />
                     </button>
@@ -419,7 +407,11 @@ export default function TransactionsPage() {
                   <button className="expense-action-btn" title="แก้ไข">
                     <EditIcon />
                   </button>
-                  <button className="expense-action-btn delete" title="ลบ">
+                  <button
+                    className="expense-action-btn delete"
+                    title="ลบ"
+                    onClick={() => handleDelete(transaction.id)}
+                  >
                     <TrashIcon />
                   </button>
                 </div>
