@@ -297,15 +297,35 @@ function AddTransactionForm() {
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                   htmlFor="slip-file-input"
-                  style={{ cursor: "pointer" }}
+                  style={{
+                    cursor: "pointer",
+                    border: "2px dashed #4b5563",
+                    borderRadius: "12px",
+                    padding: "2rem",
+                    textAlign: "center",
+                    background: "#1e1e32",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: "150px",
+                  }}
                 >
-                  <div className="expense-file-upload-icon">
+                  <div style={{ color: "#9ca3af", marginBottom: "1rem" }}>
                     <UploadIcon />
                   </div>
-                  <p className="expense-file-upload-text">
+                  <p
+                    style={{
+                      color: "#e5e7eb",
+                      marginBottom: "0.5rem",
+                      fontSize: "1rem",
+                    }}
+                  >
                     แตะเพื่อถ่ายรูป หรือเลือกจากแกลเลอรี
                   </p>
-                  <p className="expense-file-upload-hint">รองรับ PNG, JPG</p>
+                  <p style={{ color: "#6b7280", fontSize: "0.875rem" }}>
+                    รองรับ PNG, JPG
+                  </p>
                   <input
                     id="slip-file-input"
                     ref={fileInputRef}

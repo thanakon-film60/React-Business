@@ -38,14 +38,16 @@ export async function GET(request: NextRequest) {
 
     const totals = totalsResult.rows[0];
 
+    const totalIncome = parseFloat(totals.total_income) || 0;
+    const totalExpense = parseFloat(totals.total_expense) || 0;
+
     return NextResponse.json({
       success: true,
       data: result.rows,
       totals: {
-        income: parseFloat(totals.total_income),
-        expense: parseFloat(totals.total_expense),
-        balance:
-          parseFloat(totals.total_income) - parseFloat(totals.total_expense),
+        income: totalIncome,
+        expense: totalExpense,
+        balance: totalIncome - totalExpense,
       },
     });
   } catch (error) {

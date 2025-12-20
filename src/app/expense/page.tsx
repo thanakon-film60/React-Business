@@ -229,9 +229,9 @@ export default function ExpenseDashboard() {
     }
   };
 
-  const totalIncome = totals.income;
-  const totalExpense = totals.expense;
-  const balance = totals.balance;
+  const totalIncome = totals.income || 0;
+  const totalExpense = totals.expense || 0;
+  const balance = totals.balance || 0;
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
