@@ -519,13 +519,40 @@ function parseSlipOCR(text: string): {
   accountInfo: string | null;
   datetime: string | null;
 } | null {
-  // Find amount (look for patterns like "100.00 บาท" or "100.00")
-  const amountMatch = text.match(
-    /(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s*(?:บาท|THB|฿)?/
-  );
-  if (!amountMatch) return null;
+  // Find amount - prioritize patterns with "บาท" or after "จำนวน"
+  let amount = 0;
 
-  const amount = parseFloat(amountMatch[1].replace(/,/g, ""));
+  // Pattern 1: Look for "จำนวน" followed by amount (highest priority)
+  const amountAfterLabel = text.match(
+    /จำนวน[:\s]*(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s*(?:บาท|THB|฿)?/i
+  );
+
+  // Pattern 2: Look for amount followed by "บาท"
+  const amountWithBaht = text.match(/(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s*บาท/);
+
+  // Pattern 3: Look for amount after THB or ฿ symbol
+  const amountWithSymbol = text.match(
+    /(?:THB|฿)\s*(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)/
+  );
+
+  // Pattern 4: Look for larger decimal numbers (likely money amounts)
+  const allAmounts = text.matchAll(/(\d{1,3}(?:,\d{3})*\.\d{2})/g);
+  const amountsList = [...allAmounts].map((m) =>
+    parseFloat(m[1].replace(/,/g, ""))
+  );
+
+  // Priority: จำนวน > บาท > THB/฿ > largest decimal number
+  if (amountAfterLabel) {
+    amount = parseFloat(amountAfterLabel[1].replace(/,/g, ""));
+  } else if (amountWithBaht) {
+    amount = parseFloat(amountWithBaht[1].replace(/,/g, ""));
+  } else if (amountWithSymbol) {
+    amount = parseFloat(amountWithSymbol[1].replace(/,/g, ""));
+  } else if (amountsList.length > 0) {
+    // Take the largest amount (usually the transaction amount)
+    amount = Math.max(...amountsList);
+  }
+
   if (amount <= 0 || amount > 10000000) return null;
 
   // Determine type based on keywords
@@ -536,7 +563,9 @@ function parseSlipOCR(text: string): {
     text.includes("ชำระ") ||
     text.includes("เติมเงิน") ||
     text.includes("ซื้อ") ||
-    text.includes("Transfer");
+    text.includes("Transfer") ||
+    text.includes("TrueMoney") ||
+    text.includes("ทรูมันนี่");
 
   const isIncome =
     text.includes("รับเงิน") ||
@@ -548,13 +577,19 @@ function parseSlipOCR(text: string): {
     isIncome && !isExpense ? "income" : "expense";
 
   // Extract title/description
+  // Extract title/description - order matters, more specific first
   let title = "โอนเงิน";
-  if (text.includes("เติมเงิน")) title = "เติมเงิน";
-  if (text.includes("ชำระ")) title = "ชำระเงิน";
-  if (text.includes("โอนเงิน")) title = "โอนเงิน";
-  if (text.includes("ค่าอาหาร")) title = "ค่าอาหาร";
-  if (text.includes("TrueMoney") || text.includes("ทรูมันนี่"))
+  if (text.includes("TrueMoney") || text.includes("ทรูมันนี่")) {
     title = "เติมเงิน TrueMoney";
+  } else if (text.includes("เติมเงิน")) {
+    title = "เติมเงิน";
+  } else if (text.includes("ค่าอาหาร")) {
+    title = "ค่าอาหาร";
+  } else if (text.includes("ชำระ")) {
+    title = "ชำระเงิน";
+  } else if (text.includes("โอนเงิน")) {
+    title = "โอนเงิน";
+  }
 
   // Extract account info
   const accountMatch = text.match(/xxx-?x?-?x?\d{4}-?x?/i);
