@@ -139,6 +139,23 @@ const EmptyIcon = () => (
   </svg>
 );
 
+const CloseIcon = () => (
+  <svg
+    width="24"
+    height="24"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M6 18L18 6M6 6l12 12"
+    />
+  </svg>
+);
+
 // Format currency
 const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat("th-TH", {
@@ -184,6 +201,8 @@ export default function TransactionsPage() {
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
 
   const fetchTransactions = useCallback(async () => {
     try {
@@ -238,6 +257,16 @@ export default function TransactionsPage() {
     return date.toLocaleDateString("th-TH", {
       day: "numeric",
       month: "short",
+      year: "numeric",
+    });
+  };
+
+  const formatFullDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("th-TH", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
       year: "numeric",
     });
   };
@@ -367,7 +396,12 @@ export default function TransactionsPage() {
         ) : (
           <ul className="expense-transaction-list">
             {filteredTransactions.map((transaction) => (
-              <li key={transaction.id} className="expense-transaction-item">
+              <li
+                key={transaction.id}
+                className="expense-transaction-item"
+                onClick={() => setSelectedTransaction(transaction)}
+                style={{ cursor: "pointer" }}
+              >
                 <div className={`expense-transaction-icon ${transaction.type}`}>
                   {transaction.type === "income" ? (
                     <ArrowDownIcon />
@@ -427,6 +461,129 @@ export default function TransactionsPage() {
           </ul>
         )}
       </div>
+
+      {/* Transaction Detail Modal */}
+      {selectedTransaction && (
+        <div
+          className="expense-modal-overlay"
+          onClick={() => setSelectedTransaction(null)}
+        >
+          <div
+            className="expense-modal expense-detail-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="expense-modal-header">
+              <h3 className="expense-modal-title">รายละเอียดรายการ</h3>
+              <button
+                className="expense-modal-close"
+                onClick={() => setSelectedTransaction(null)}
+              >
+                <CloseIcon />
+              </button>
+            </div>
+
+            <div className="expense-modal-body">
+              {/* Amount Display */}
+              <div
+                className={`expense-detail-amount ${selectedTransaction.type}`}
+              >
+                {selectedTransaction.type === "income" ? "+" : "-"}
+                {formatCurrency(selectedTransaction.amount)}
+              </div>
+
+              {/* Type Badge */}
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: "var(--exp-space-6)",
+                }}
+              >
+                <span
+                  className={`expense-type-badge ${selectedTransaction.type}`}
+                >
+                  {selectedTransaction.type === "income" ? "รายรับ" : "รายจ่าย"}
+                </span>
+              </div>
+
+              {/* Details Grid */}
+              <div className="expense-detail-grid">
+                <div className="expense-detail-row">
+                  <span className="expense-detail-label">ชื่อรายการ</span>
+                  <span className="expense-detail-value">
+                    {selectedTransaction.title}
+                  </span>
+                </div>
+
+                <div className="expense-detail-row">
+                  <span className="expense-detail-label">หมวดหมู่</span>
+                  <span className="expense-detail-value">
+                    {categoryMap[selectedTransaction.category] ||
+                      selectedTransaction.category}
+                  </span>
+                </div>
+
+                <div className="expense-detail-row">
+                  <span className="expense-detail-label">วันที่</span>
+                  <span className="expense-detail-value">
+                    {formatFullDate(selectedTransaction.date)}
+                  </span>
+                </div>
+
+                {selectedTransaction.note && (
+                  <div className="expense-detail-row">
+                    <span className="expense-detail-label">หมายเหตุ</span>
+                    <span className="expense-detail-value">
+                      {selectedTransaction.note}
+                    </span>
+                  </div>
+                )}
+
+                <div className="expense-detail-row">
+                  <span className="expense-detail-label">รหัสรายการ</span>
+                  <span className="expense-detail-value">
+                    #{selectedTransaction.id}
+                  </span>
+                </div>
+              </div>
+
+              {/* Slip Image */}
+              {selectedTransaction.slip_url && (
+                <div className="expense-detail-slip">
+                  <p
+                    className="expense-detail-label"
+                    style={{ marginBottom: "var(--exp-space-3)" }}
+                  >
+                    สลิป/หลักฐาน
+                  </p>
+                  <img
+                    src={selectedTransaction.slip_url}
+                    alt="สลิป"
+                    className="expense-slip-image"
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="expense-modal-footer">
+              <button
+                className="expense-btn expense-btn-outline"
+                onClick={() => setSelectedTransaction(null)}
+              >
+                ปิด
+              </button>
+              <button
+                className="expense-btn expense-btn-danger"
+                onClick={() => {
+                  handleDelete(selectedTransaction.id);
+                  setSelectedTransaction(null);
+                }}
+              >
+                <TrashIcon /> ลบรายการ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
