@@ -9,7 +9,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { description, category, status, action } = body;
+    const { description, category, status, action, type: requestType } = body;
 
     // ถ้า action = 'convert' จะ convert เป็น expense_transactions
     if (action === "convert") {
@@ -34,14 +34,20 @@ export async function PUT(
 
         const pending = pendingResult.rows[0];
 
-        // กำหนด type ตาม transaction_type
-        let type = "expense";
-        if (
-          pending.transaction_type === "รับเงิน" ||
-          pending.transaction_type === "เงินเข้า"
-        ) {
-          type = "income";
+        // ใช้ type จาก request ถ้ามี, ไม่งั้นกำหนดตาม transaction_type
+        let type = requestType || "expense";
+        if (!requestType) {
+          if (
+            pending.transaction_type === "รับเงิน" ||
+            pending.transaction_type === "เงินเข้า"
+          ) {
+            type = "income";
+          }
         }
+
+        // กำหนด default category ตาม type
+        const defaultCategory =
+          type === "income" ? "other-income" : "other-expense";
 
         // สร้าง expense_transactions
         const expenseResult = await client.query(
@@ -53,7 +59,7 @@ export async function PUT(
             type,
             description || pending.transaction_type,
             pending.amount,
-            category || "other-expense",
+            category || defaultCategory,
             new Date(pending.transaction_datetime).toISOString().split("T")[0],
             `${pending.transaction_type} จากบัญชี ${
               pending.account_number || "-"

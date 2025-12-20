@@ -188,7 +188,11 @@ export default function PendingTransactionsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<string>("pending");
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState({ description: "", category: "" });
+  const [editForm, setEditForm] = useState({
+    description: "",
+    category: "",
+    type: "expense" as "income" | "expense",
+  });
   const [showAddForm, setShowAddForm] = useState(false);
   const [showSlipUpload, setShowSlipUpload] = useState(false);
   const [slipProcessing, setSlipProcessing] = useState(false);
@@ -233,15 +237,22 @@ export default function PendingTransactionsPage() {
         body: JSON.stringify({
           action: "convert",
           description: editForm.description,
-          category: editForm.category || "other-expense",
+          category:
+            editForm.category ||
+            (editForm.type === "income" ? "other-income" : "other-expense"),
+          type: editForm.type,
         }),
       });
       const data = await response.json();
       if (data.success) {
         setEditingId(null);
-        setEditForm({ description: "", category: "" });
+        setEditForm({ description: "", category: "", type: "expense" });
         fetchTransactions();
-        alert("บันทึกเป็นรายจ่ายสำเร็จ!");
+        alert(
+          editForm.type === "income"
+            ? "บันทึกเป็นรายรับสำเร็จ!"
+            : "บันทึกเป็นรายจ่ายสำเร็จ!"
+        );
       } else {
         alert(data.error);
       }
@@ -714,6 +725,26 @@ export default function PendingTransactionsPage() {
               {/* Edit Form (for pending items) */}
               {editingId === tx.id && tx.status === "pending" && (
                 <div className="edit-form">
+                  {/* Type Selection */}
+                  <div className="form-group">
+                    <label>ประเภท *</label>
+                    <div className="type-toggle">
+                      <button
+                        type="button"
+                        className={`type-btn expense ${editForm.type === "expense" ? "active" : ""}`}
+                        onClick={() => setEditForm({ ...editForm, type: "expense", category: "" })}
+                      >
+                        💸 รายจ่าย
+                      </button>
+                      <button
+                        type="button"
+                        className={`type-btn income ${editForm.type === "income" ? "active" : ""}`}
+                        onClick={() => setEditForm({ ...editForm, type: "income", category: "" })}
+                      >
+                        💰 รายรับ
+                      </button>
+                    </div>
+                  </div>
                   <div className="form-group">
                     <label>คำอธิบาย (ใช้ไปกับอะไร) *</label>
                     <input
@@ -738,11 +769,26 @@ export default function PendingTransactionsPage() {
                       }
                     >
                       <option value="">-- เลือกหมวดหมู่ --</option>
-                      {categoryOptions.map((cat) => (
-                        <option key={cat.value} value={cat.value}>
-                          {cat.label}
-                        </option>
-                      ))}
+                      {editForm.type === "expense" ? (
+                        <>
+                          <option value="food">🍔 อาหาร</option>
+                          <option value="transport">🚗 ยานพาหนะ</option>
+                          <option value="utilities">💡 สาธารณูปโภค</option>
+                          <option value="shopping">🛒 ช้อปปิ้ง</option>
+                          <option value="entertainment">🎬 ความบันเทิง</option>
+                          <option value="health">🏥 สุขภาพ</option>
+                          <option value="education">📚 การศึกษา</option>
+                          <option value="other-expense">📝 อื่นๆ</option>
+                        </>
+                      ) : (
+                        <>
+                          <option value="salary">💰 เงินเดือน</option>
+                          <option value="bonus">🎁 โบนัส</option>
+                          <option value="freelance">💻 รายได้เสริม</option>
+                          <option value="investment">📈 การลงทุน</option>
+                          <option value="other-income">💵 อื่นๆ</option>
+                        </>
+                      )}
                     </select>
                   </div>
                   <div className="edit-actions">
@@ -753,15 +799,15 @@ export default function PendingTransactionsPage() {
                       ยกเลิก
                     </button>
                     <button
-                      className="btn btn-success btn-sm"
+                      className={`btn btn-sm ${editForm.type === "income" ? "btn-income" : "btn-success"}`}
                       onClick={() => handleConvert(tx.id)}
                     >
                       <CheckIcon />
-                      บันทึกเป็นรายจ่าย
+                      {editForm.type === "income" ? "บันทึกเป็นรายรับ" : "บันทึกเป็นรายจ่าย"}
                     </button>
                   </div>
                 </div>
-              )}
+              )}}
 
               {/* Actions */}
               {tx.status === "pending" && editingId !== tx.id && (
@@ -773,6 +819,7 @@ export default function PendingTransactionsPage() {
                       setEditForm({
                         description: tx.description || "",
                         category: tx.category || "",
+                        type: "expense",
                       });
                     }}
                   >
@@ -1043,6 +1090,49 @@ export default function PendingTransactionsPage() {
           padding: 16px;
           border-radius: 8px;
           margin-bottom: 12px;
+        }
+
+        .type-toggle {
+          display: flex;
+          gap: 8px;
+        }
+
+        .type-btn {
+          flex: 1;
+          padding: 10px;
+          border: 2px solid #333;
+          border-radius: 8px;
+          background: #0d0d1a;
+          color: #888;
+          font-size: 0.9rem;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .type-btn.expense.active {
+          border-color: #ef4444;
+          background: rgba(239, 68, 68, 0.2);
+          color: #ef4444;
+        }
+
+        .type-btn.income.active {
+          border-color: #22c55e;
+          background: rgba(34, 197, 94, 0.2);
+          color: #22c55e;
+        }
+
+        .type-btn:hover:not(.active) {
+          border-color: #555;
+          color: #ccc;
+        }
+
+        .btn-income {
+          background: #22c55e;
+          color: white;
+        }
+
+        .btn-income:hover {
+          background: #16a34a;
         }
 
         .form-group {
