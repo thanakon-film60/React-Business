@@ -924,12 +924,12 @@
 .expense-search-row {
   display: flex;
   gap: var(--exp-space-3);
-  flex-wrap: wrap;
+  align-items: center;
 }
 
 .expense-search-wrapper {
   flex: 1;
-  min-width: 200px;
+  min-width: 0;
   position: relative;
 }
 
@@ -939,10 +939,19 @@
   top: 50%;
   transform: translateY(-50%);
   color: var(--exp-gray-400);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .expense-search-input {
   padding-left: 44px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.expense-search-row > .expense-btn {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .expense-filter-options {
