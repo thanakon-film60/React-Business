@@ -522,6 +522,11 @@ function parseSlipOCR(text: string): {
   // Find amount - prioritize patterns with "บาท" or after "จำนวน"
   let amount = 0;
 
+  // Pattern 0: TrueMoney 7-Eleven receipt - "ยอดชำระทั้งหมด ฿ 126.00"
+  const trueMoneyTotal = text.match(
+    /ยอดชำระทั้งหมด\s*[฿B]?\s*(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)/i
+  );
+
   // Pattern 1: Look for "จำนวน" followed by amount (highest priority)
   const amountAfterLabel = text.match(
     /จำนวน[:\s]*(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s*(?:บาท|THB|฿)?/i
@@ -541,8 +546,10 @@ function parseSlipOCR(text: string): {
     parseFloat(m[1].replace(/,/g, ""))
   );
 
-  // Priority: จำนวน > บาท > THB/฿ > largest decimal number
-  if (amountAfterLabel) {
+  // Priority: ยอดชำระทั้งหมด > จำนวน > บาท > THB/฿ > largest decimal number
+  if (trueMoneyTotal) {
+    amount = parseFloat(trueMoneyTotal[1].replace(/,/g, ""));
+  } else if (amountAfterLabel) {
     amount = parseFloat(amountAfterLabel[1].replace(/,/g, ""));
   } else if (amountWithBaht) {
     amount = parseFloat(amountWithBaht[1].replace(/,/g, ""));
@@ -565,7 +572,11 @@ function parseSlipOCR(text: string): {
     text.includes("ซื้อ") ||
     text.includes("Transfer") ||
     text.includes("TrueMoney") ||
-    text.includes("ทรูมันนี่");
+    text.includes("truemoney") ||
+    text.includes("ทรูมันนี่") ||
+    text.includes("7-Eleven") ||
+    text.includes("เซเว่น") ||
+    text.includes("ยอดชำระทั้งหมด");
 
   const isIncome =
     text.includes("รับเงิน") ||
@@ -576,11 +587,27 @@ function parseSlipOCR(text: string): {
   const type: "income" | "expense" =
     isIncome && !isExpense ? "income" : "expense";
 
-  // Extract title/description
   // Extract title/description - order matters, more specific first
   let title = "โอนเงิน";
-  if (text.includes("TrueMoney") || text.includes("ทรูมันนี่")) {
+
+  // TrueMoney 7-Eleven payment
+  if (
+    (text.includes("truemoney") ||
+      text.includes("TrueMoney") ||
+      text.includes("ทรูมันนี่")) &&
+    (text.includes("7-Eleven") ||
+      text.includes("เซเว่น") ||
+      text.includes("Thailand"))
+  ) {
+    title = "ชำระเงิน 7-Eleven (TrueMoney)";
+  } else if (
+    text.includes("TrueMoney") ||
+    text.includes("truemoney") ||
+    text.includes("ทรูมันนี่")
+  ) {
     title = "เติมเงิน TrueMoney";
+  } else if (text.includes("7-Eleven") || text.includes("เซเว่น อีเลฟเว่น")) {
+    title = "ซื้อของ 7-Eleven";
   } else if (text.includes("เติมเงิน")) {
     title = "เติมเงิน";
   } else if (text.includes("ค่าอาหาร")) {
@@ -593,14 +620,62 @@ function parseSlipOCR(text: string): {
 
   // Extract account info
   const accountMatch = text.match(/xxx-?x?-?x?\d{4}-?x?/i);
-  const accountInfo = accountMatch ? accountMatch[0] : null;
+  // Also try to match TrueMoney account pattern: 2512********0212
+  const trueMoneyAccountMatch = text.match(/(\d{4})\*+(\d{4})/);
+  const accountInfo = accountMatch
+    ? accountMatch[0]
+    : trueMoneyAccountMatch
+    ? `${trueMoneyAccountMatch[1]}****${trueMoneyAccountMatch[2]}`
+    : null;
 
   // Extract datetime
+  // Pattern 1: Standard format "DD/MM/YYYY HH:MM" or "DD-MM-YYYY HH:MM"
   const dateMatch = text.match(
     /(\d{1,2})\s*[\/\-\.]\s*(\d{1,2})\s*[\/\-\.]\s*(\d{2,4})\s*(\d{1,2}):(\d{2})/
   );
+
+  // Pattern 2: Thai month format "21 ธ.ค. 2568 14:22:49" (TrueMoney style)
+  const thaiMonthMap: { [key: string]: number } = {
+    "ม.ค.": 0,
+    มกราคม: 0,
+    "ก.พ.": 1,
+    กุมภาพันธ์: 1,
+    "มี.ค.": 2,
+    มีนาคม: 2,
+    "เม.ย.": 3,
+    เมษายน: 3,
+    "พ.ค.": 4,
+    พฤษภาคม: 4,
+    "มิ.ย.": 5,
+    มิถุนายน: 5,
+    "ก.ค.": 6,
+    กรกฎาคม: 6,
+    "ส.ค.": 7,
+    สิงหาคม: 7,
+    "ก.ย.": 8,
+    กันยายน: 8,
+    "ต.ค.": 9,
+    ตุลาคม: 9,
+    "พ.ย.": 10,
+    พฤศจิกายน: 10,
+    "ธ.ค.": 11,
+    ธันวาคม: 11,
+  };
+
+  const thaiDateMatch = text.match(
+    /(\d{1,2})\s*(ม\.ค\.|ก\.พ\.|มี\.ค\.|เม\.ย\.|พ\.ค\.|มิ\.ย\.|ก\.ค\.|ส\.ค\.|ก\.ย\.|ต\.ค\.|พ\.ย\.|ธ\.ค\.|มกราคม|กุมภาพันธ์|มีนาคม|เมษายน|พฤษภาคม|มิถุนายน|กรกฎาคม|สิงหาคม|กันยายน|ตุลาคม|พฤศจิกายน|ธันวาคม)\s*(\d{4})\s*(\d{1,2}):(\d{2})(?::(\d{2}))?/
+  );
+
   let datetime = null;
-  if (dateMatch) {
+  if (thaiDateMatch) {
+    const day = parseInt(thaiDateMatch[1]);
+    const month = thaiMonthMap[thaiDateMatch[2]] ?? 0;
+    let year = parseInt(thaiDateMatch[3]);
+    if (year > 2500) year -= 543; // Convert Buddhist Era to CE
+    const hour = parseInt(thaiDateMatch[4]);
+    const minute = parseInt(thaiDateMatch[5]);
+    datetime = new Date(year, month, day, hour, minute).toISOString();
+  } else if (dateMatch) {
     const day = parseInt(dateMatch[1]);
     const month = parseInt(dateMatch[2]) - 1;
     let year = parseInt(dateMatch[3]);
